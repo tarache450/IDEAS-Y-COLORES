@@ -1,0 +1,883 @@
+import {
+  ProjectItem,
+  SolutionItem,
+  ServiceItem,
+  PromotionItem,
+  MultiServiceCategory,
+  SectorItem,
+  ExtendedServiceCategory,
+} from '../types';
+
+export const BUSINESS_INFO = {
+  name: 'Ideas & Colores Multi-Servicios',
+  shortName: 'Ideas & Colores',
+  slogan: 'Color que transforma espacios.',
+  sloganPrimary: 'Color que transforma espacios.',
+  secondarySlogan: 'Pintura, mantenimiento y soluciones para cada espacio.',
+  sloganSecondary: 'Pintura, mantenimiento y soluciones para cada espacio.',
+  positioning:
+    'Ideas & Colores Multi-Servicios transforma, protege y mantiene espacios con soluciones profesionales integrales.',
+  experienceText:
+    'Más de 10 años de experiencia en pintura, impresión digital, carpintería, plomería, resina epóxica y mantenimiento.',
+  foundationYear: 2014,
+  phone: '+502 5485-8471',
+  phoneClean: '+50254858471',
+  whatsapp: '+502 5485-8471',
+  whatsappNumber: '50254858471',
+  whatsappUrl:
+    'https://wa.me/50254858471?text=Hola%20Ideas%20%26%20Colores%2C%20quiero%20cotizar%20mi%20proyecto.',
+  location: 'Carretera a El Salvador, Guatemala',
+  addressFull: 'Carretera a El Salvador, Guatemala',
+  email: 'gerencia@ideasycoloresgt.com',
+  website: 'www.ideasycoloresgt.com',
+  hoursWeekday: 'Lunes a viernes: 8:00 a.m. a 6:00 p.m.',
+  hoursWeekend: 'Sábado y domingo: cita previa',
+  scheduleWeekdays: 'Lunes a viernes: 8:00 a.m. a 6:00 p.m.',
+  scheduleSaturdays: 'Sábado: 8:00 a.m. a 1:00 p.m.',
+  partnerBrand: 'Sherwin-Williams, Paleta y Sika',
+  partnerBrandsList: ['Sherwin-Williams', 'Paleta', 'Sika'],
+};
+
+// Proceso de Trabajo Exacto según Requerimiento
+export const PROCESS_STEPS = [
+  {
+    step: '01',
+    title: 'Cuéntanos tu proyecto.',
+    desc: 'Compártenos tu idea, medidas aproximadas, tipo de espacio o fotos para iniciar el diagnóstico técnico de inmediato.',
+    detail: 'Contacto directo vía formulario o WhatsApp en minutos',
+    badge: 'Diagnóstico inicial',
+    actionText: 'Escríbenos tu idea',
+  },
+  {
+    step: '02',
+    title: 'Recibe asesoría y cotización.',
+    desc: 'Evaluamos requerimientos y patologías de superficies para entregarte un presupuesto transparente, detallado y sin costos ocultos.',
+    detail: 'Presupuesto claro desglosando producto y mano de obra',
+    badge: 'Transparencia',
+    actionText: 'Propuesta formal en <24h',
+  },
+  {
+    step: '03',
+    title: 'Definimos la solución adecuada.',
+    desc: 'Validamos los colores con muestras físicas en sitio, definimos acabados idóneos y acordamos el cronograma exacto de ejecución.',
+    detail: 'Muestras reales y especificación química validada',
+    badge: 'Planificación',
+    actionText: 'Aprobación de muestras',
+  },
+  {
+    step: '04',
+    title: 'Transformamos tu espacio.',
+    desc: 'Ejecución con personal técnico calificado, protección de áreas, orden riguroso y entrega final con garantía formal por escrito.',
+    detail: 'Entrega limpia con respaldo por escrito',
+    badge: 'Garantía por escrito',
+    actionText: 'Espacio renovado',
+  },
+];
+
+// 5 Razones Clave: Por qué elegir Ideas & Colores (Bloque de Confianza)
+export const WHY_CHOOSE_US = [
+  {
+    id: 'asesoria',
+    number: '01',
+    title: 'Asesoría clara y honesta',
+    desc: 'Te recomendamos exactamente el producto y proceso técnico que tu superficie necesita, sin costos ocultos ni sobrecostos innecesarios.',
+    icon: 'Sparkles',
+    badge: 'Sin costos ocultos',
+    accent: '#0059FF',
+  },
+  {
+    id: 'calidad',
+    number: '02',
+    title: 'Calidad profesional',
+    desc: 'Personal técnico calificado y productos de marcas líderes para asegurar adherencia, lavabilidad y durabilidad superior.',
+    icon: 'ShieldCheck',
+    badge: 'Marcas líderes',
+    accent: '#FF5738',
+  },
+  {
+    id: 'respuesta',
+    number: '03',
+    title: 'Respuesta ágil',
+    desc: 'Atendemos con sentido de urgencia. Cotizaciones en menos de 24 horas y coordinación inmediata para el inicio de tu proyecto.',
+    icon: 'Clock',
+    badge: 'Menos de 24 horas',
+    accent: '#FAB82A',
+  },
+  {
+    id: 'precio',
+    number: '04',
+    title: 'Alto valor a precio justo',
+    desc: 'Equilibrio óptimo entre mano de obra calificada, materiales de alto rendimiento y tarifas transparentes y competitivas.',
+    icon: 'Scale',
+    badge: 'Inversión protegida',
+    accent: '#00A3FF',
+  },
+  {
+    id: 'aliado',
+    number: '05',
+    title: 'Aplicación y entrega en un mismo aliado',
+    desc: 'Un solo equipo integral para suministro de materiales, logística a domicilio, aplicación experta y garantía formal por escrito.',
+    icon: 'Layers',
+    badge: 'Solución integral',
+    accent: '#10B981',
+  },
+];
+
+// Servicios Ampliados: Las 5 Categorías Estructuradas (Bento Grid)
+export const EXTENDED_SERVICES: ExtendedServiceCategory[] = [
+  {
+    id: 'asesoria-planificacion',
+    name: 'Asesoría y planificación',
+    badge: 'Diagnóstico & Colorimetría',
+    shortDesc:
+      'Evaluación técnica en sitio, análisis de sustratos, colorimetría arquitectónica y formulación precisa de presupuesto.',
+    mainBenefit:
+      'Evita errores de adherencia, desperdicio de material y sobrecostos con una prescripción técnica exacta desde el día uno.',
+    ctaText: 'Cotizar esta solución',
+    keyServices: [
+      'Visita técnica y diagnóstico de sustratos',
+      'Asesoría de color y muestras físicas en muro',
+      'Cálculo de rendimiento por metro cuadrado',
+      'Definición de sistemas de pintura y recubrimientos',
+    ],
+    materialsOrApps: ['Concreto', 'Tablayeso', 'Estructuras metálicas', 'Madera', 'Pisos'],
+    accentColor: '#0059FF',
+    icon: 'Compass',
+  },
+  {
+    id: 'pintura-recubrimientos',
+    name: 'Pintura y recubrimientos',
+    badge: 'Suministro & Líneas Especializadas',
+    shortDesc:
+      'Venta y suministro de recubrimientos arquitectónicos, industriales, automotrices, maderas y resinas epóxicas con marcas de confianza.',
+    mainBenefit:
+      'Productos con alta lavabilidad, poder cubriente superior y resistencia química y climática garantizada.',
+    ctaText: 'Cotizar esta solución',
+    keyServices: [
+      'Línea Arquitectónica (mate, satín, semibrillante)',
+      'Línea Impermeabilización de losas y techos',
+      'Línea Industrial anticorrosiva y epóxicos',
+      'Línea Automotriz y acabados poliuretano',
+      'Línea Maderas con tintes, selladores y barnices',
+    ],
+    materialsOrApps: ['ACM', 'Aluzinc', 'Fibra de vidrio', 'Plásticos técnicos', 'Concreto armado'],
+    accentColor: '#FF5738',
+    icon: 'Palette',
+  },
+  {
+    id: 'aplicacion-profesional',
+    name: 'Aplicación profesional',
+    badge: 'Mano de Obra Calificada',
+    shortDesc:
+      'Pintores certificados para aplicación de pintura, colocación de resinas epóxicas autonivelantes y carpintería fina a la medida.',
+    mainBenefit:
+      'Enmascarado minucioso, preparación profunda de superficies, acabado uniforme sin marcas y orden impecable.',
+    ctaText: 'Cotizar esta solución',
+    keyServices: [
+      'Aplicación con brocha, rodillo y airless de alta presión',
+      'Preparación de superficies: lijado, resane y sellado',
+      'Instalación de pisos epóxicos y tops decorativos 3D',
+      'Fabricación y montaje de muebles y pérgolas a medida',
+    ],
+    materialsOrApps: ['Residencias', 'Edificios comerciales', 'Gimnasios', 'Complejos deportivos'],
+    accentColor: '#FAB82A',
+    icon: 'Paintbrush',
+  },
+  {
+    id: 'proteccion-mantenimiento',
+    name: 'Protección y mantenimiento',
+    badge: 'Preservación de Estructuras',
+    shortDesc:
+      'Impermeabilización de losas, reparación hidrosanitaria (plomería), desobstrucción y mantenimiento correctivo/preventivo.',
+    mainBenefit:
+      'Protege tu patrimonio ante filtraciones de lluvia, humedad, fugas hidráulicas y deterioro prematuro.',
+    ctaText: 'Cotizar esta solución',
+    keyServices: [
+      'Impermeabilización elasto-fibratada para terrazas',
+      'Plomería técnica, desobstrucción y grifería',
+      'Mantenimiento de bajadas pluviales y trampas de grasa',
+      'Preservación de maderas con barniz marino y preservantes',
+    ],
+    materialsOrApps: ['Terrazas', 'Losas', 'Baños y cocinas', 'Estructuras exteriores'],
+    accentColor: '#00A3FF',
+    icon: 'ShieldCheck',
+  },
+  {
+    id: 'logistica-soporte',
+    name: 'Logística y soporte',
+    badge: 'Entrega & Garantía Formal',
+    shortDesc:
+      'Entrega a domicilio de pintura en Carretera a El Salvador y toda Guatemala, cobro contra entrega e impresión digital.',
+    mainBenefit:
+      'Abastecimiento directo en obra sin demoras operativas, respaldado por factura formal y garantía por escrito.',
+    ctaText: 'Cotizar esta solución',
+    keyServices: [
+      'Despacho y cobro con POS a domicilio',
+      'Impresión digital en gran formato (lonas, viniles, rótulos)',
+      'Instalación de luminarias, cuadros y soportes TV',
+      'Emisión de garantía formal por escrito en mano de obra y productos',
+    ],
+    materialsOrApps: ['Lonas', 'Vinil', 'Acrílicos', 'PVC', 'MDF'],
+    accentColor: '#10B981',
+    icon: 'Truck',
+  },
+];
+
+export const TRUST_BENEFITS = [
+  {
+    id: 'asesoria',
+    title: 'Asesoría técnica personalizada',
+    desc: 'Técnicos certificados para orientarte en acabados arquitectónicos, industriales, automotrices y madera.',
+    icon: 'Sparkles',
+  },
+  {
+    id: 'materiales',
+    title: 'Materiales confiables',
+    desc: 'Productos de marcas líderes que garantizan adherencia, lavabilidad y durabilidad superior.',
+    icon: 'ShieldCheck',
+  },
+  {
+    id: 'calidad',
+    title: 'Mano de obra calificada',
+    desc: 'Personal técnico con experiencia en aplicación, carpintería, plomería y resinas epóxicas.',
+    icon: 'Paintbrush',
+  },
+  {
+    id: 'garantia',
+    title: 'Garantía por escrito',
+    desc: 'Respaldo formal en mano de obra y productos seleccionados para tu total tranquilidad.',
+    icon: 'Truck',
+  },
+];
+
+// 4 Pilares verificados del PDF: "Un solo equipo para cada etapa de tu proyecto."
+export const TRUST_FOUR_PILLARS = [
+  {
+    id: 'asesoria',
+    number: '01',
+    title: 'Asesoría técnica personalizada',
+    subtitle: 'Diagnóstico y selección precisa',
+    desc: 'Asesoramiento y soporte personalizado por técnicos certificados en líneas Arquitectónico, Industrial, Automotriz y Madera.',
+    icon: 'Sparkles',
+    badge: 'Técnicos certificados',
+    accent: '#0059FF',
+  },
+  {
+    id: 'calidad',
+    number: '02',
+    title: 'Personal calificado y materiales confiables',
+    subtitle: 'Marcas líderes y durabilidad',
+    desc: 'Consolidándonos con marcas locales e internacionales de productos y equipos, para garantizar mano de obra calificada y durabilidad superior.',
+    icon: 'ShieldCheck',
+    badge: 'Marcas reconocidas',
+    accent: '#FF5738',
+  },
+  {
+    id: 'ejecucion',
+    number: '03',
+    title: 'Ejecución de principio a fin',
+    subtitle: 'Concepción hasta el acabado final',
+    desc: 'Ejecutamos cada proyecto desde su concepción, preparación profunda de superficies hasta el acabado final con orden y limpieza.',
+    icon: 'Layers',
+    badge: 'Servicio integral',
+    accent: '#FAB82A',
+  },
+  {
+    id: 'garantia',
+    number: '04',
+    title: 'Garantía por escrito',
+    subtitle: 'Productos y mano de obra',
+    desc: 'Garantía por escrito tanto de productos como de mano de obra en cada solución residencial, comercial o industrial.',
+    icon: 'FileCheck',
+    badge: 'Respaldo formal',
+    accent: '#00A3FF',
+  },
+];
+
+// Las 6 Categorías Oficiales de Multi-Servicios (PDF Verificado)
+export const MULTI_SERVICES_CATEGORIES: MultiServiceCategory[] = [
+  {
+    id: 'pintura',
+    number: '01',
+    title: 'Pintura y Recubrimientos',
+    shortTitle: 'Pintura & Recubrimientos',
+    tagline: 'Venta y aplicación para decoración, mantenimiento y preservación',
+    description:
+      'Venta y/o aplicación de productos para decoración, mantenimiento o preservación de estructuras con acabados profesionales y duraderos.',
+    surfacesOrApps: [
+      'Concreto',
+      'Tablayeso',
+      'Estructuras metálicas',
+      'Madera',
+      'Plástico',
+      'ACM',
+      'Fibra de vidrio',
+    ],
+    linesOrServices: [
+      'Arquitectónica',
+      'Impermeabilización',
+      'Industrial',
+      'Automotriz',
+      'Madera',
+    ],
+    ctaText: 'Cotizar pintura y aplicación',
+    accentColor: '#0059FF',
+    accentGlow: 'rgba(0, 89, 255, 0.25)',
+    image:
+      'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=900&q=80',
+    isFeatured: true,
+  },
+  {
+    id: 'impresion',
+    number: '02',
+    title: 'Impresión Digital',
+    shortTitle: 'Impresión Digital',
+    tagline: 'Alta resolución para pequeño y gran formato',
+    description:
+      'Impresión digital en alta resolución para pequeño y gran formato en diversos materiales con fidelidad cromática, durabilidad y visibilidad superior.',
+    surfacesOrApps: [
+      'Lonas',
+      'Vinil',
+      'Mesh',
+      'Backlight',
+      'Adhesivos',
+      'Acrílicos',
+      'PVC',
+      'MDF',
+      'Plywood',
+      'Coroplast',
+      'Lámina aluzinc',
+      'Vehículos',
+      'Pisos',
+    ],
+    linesOrServices: [
+      'Gran formato exterior e interior',
+      'Rotulación vehicular corporativa',
+      'Señalización arquitectónica',
+      'Adhesivos y viniles gráficos',
+    ],
+    ctaText: 'Cotizar impresión digital',
+    accentColor: '#FF5738',
+    accentGlow: 'rgba(255, 87, 56, 0.25)',
+    image:
+      'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=900&q=80',
+    isFeatured: false,
+  },
+  {
+    id: 'carpinteria',
+    number: '03',
+    title: 'Carpintería a Medida',
+    shortTitle: 'Carpintería a Medida',
+    tagline: 'Diseño, elaboración y mantenimiento en madera fina',
+    description:
+      'Trabajos en madera a la medida para elaboración y mantenimiento de soluciones residenciales y comerciales con acabados de alta ebanistería.',
+    surfacesOrApps: [
+      'Muebles personalizados',
+      'Cocinas integrales',
+      'Closets y vestidores',
+      'Armarios',
+      'Tops de madera tratada',
+      'Pérgolas para exterior',
+      'Decks residenciales y comerciales',
+      'Mantenimiento de madera',
+    ],
+    linesOrServices: [
+      'Elaboración desde cero',
+      'Mantenimiento con preservantes y poliuretanos',
+      'Restauración de superficies',
+      'Estructuras para pérgolas',
+    ],
+    ctaText: 'Cotizar carpintería',
+    accentColor: '#FAB82A',
+    accentGlow: 'rgba(250, 184, 42, 0.25)',
+    image:
+      'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=900&q=80',
+    isFeatured: false,
+  },
+  {
+    id: 'plomeria',
+    number: '04',
+    title: 'Plomería y Mantenimiento',
+    shortTitle: 'Plomería & Mantenimiento',
+    tagline: 'Instalación, reparación y desobstrucción de redes hidrosanitarias',
+    description:
+      'Desde instalación, reparación o mantenimiento hidrosanitario hasta limpieza de obstrucciones con diagnóstico oportuno para evitar daños mayores.',
+    surfacesOrApps: [
+      'Lavatrastos',
+      'Lavamanos',
+      'Duchas',
+      'Sanitarios',
+      'Limpieza de obstrucciones',
+      'Bajadas de agua pluvial',
+      'Trampas de grasa',
+      'Tuberías de agua potable y drenaje',
+    ],
+    linesOrServices: [
+      'Mantenimiento correctivo urgente',
+      'Mantenimiento preventivo para locales',
+      'Sustitución de grifería y accesorios',
+      'Desobstrucción técnica',
+    ],
+    ctaText: 'Solicitar mantenimiento',
+    accentColor: '#00A3FF',
+    accentGlow: 'rgba(0, 163, 255, 0.25)',
+    image:
+      'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=900&q=80',
+    isFeatured: false,
+  },
+  {
+    id: 'resinas',
+    number: '05',
+    title: 'Resinas Epóxicas',
+    shortTitle: 'Resinas Epóxicas',
+    tagline: 'Revestimiento decorativo, pisos industriales y piezas exclusivas',
+    description:
+      'Revestimiento y mantenimiento de pisos domiciliares, pisos industriales, tops decorativos y diseños 3D. También elaboración de artículos, muebles y mesas de río.',
+    surfacesOrApps: [
+      'Pisos domiciliares de lujo',
+      'Pisos industriales de alta resistencia',
+      'Tops decorativos para cocina y baño',
+      'Diseños tridimensionales (3D)',
+      'Artículos y piezas decorativas',
+      'Muebles contemporáneos',
+      'Mesas de río en madera y epoxi',
+    ],
+    linesOrServices: [
+      'Acabados efecto espejo',
+      'Sistemas epóxicos autonivelantes',
+      'Protección química y mecánica',
+      'Arte funcional a medida',
+    ],
+    ctaText: 'Cotizar resina epóxica',
+    accentColor: '#0059FF',
+    accentGlow: 'rgba(0, 89, 255, 0.25)',
+    image:
+      'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&w=900&q=80',
+    isFeatured: true,
+  },
+  {
+    id: 'instalaciones',
+    number: '06',
+    title: 'Instalaciones y Otros Servicios',
+    shortTitle: 'Instalaciones & Otros',
+    tagline: 'Soluciones prácticas para completar la mejora de cada espacio',
+    description:
+      'Instalación técnica de complementos, mantenimiento eléctrico básico y limpieza profunda para entregar tu inmueble totalmente habitable y funcional.',
+    surfacesOrApps: [
+      'Instalación de lámparas y luminarias',
+      'Instalación de cuadros y decoración',
+      'Soportes para TV y pantallas',
+      'Cambio de switches y tomacorrientes eléctricos',
+      'Limpieza profunda de vidrios',
+      'Limpieza y desmanchado de paredes',
+      'Limpieza y preparación de terrazas',
+      'Otros servicios de mantenimiento',
+    ],
+    linesOrServices: [
+      'Montajes de precisión',
+      'Mantenimiento locativo',
+      'Limpieza técnica de superficies',
+      'Servicios complementarios',
+    ],
+    ctaText: 'Consultar mi necesidad',
+    accentColor: '#64748B',
+    accentGlow: 'rgba(100, 116, 139, 0.25)',
+    image:
+      'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=900&q=80',
+    isFeatured: false,
+  },
+];
+
+// Sectores que atendemos (PDF Verificado)
+export const SECTORS_LIST: SectorItem[] = [
+  {
+    id: 'residencial',
+    title: 'Hogar y Residencial',
+    badge: 'Condominios & Residencias',
+    tagline: 'Ambientes cálidos, protegidos y confortables para tu familia',
+    description:
+      'Soluciones pensadas para casas particulares, apartamentos y residenciales en Guatemala. Cuidamos cada detalle protegiendo muebles y pisos.',
+    relevantSolutions: [
+      'Pintura arquitectónica lavable y bajo olor',
+      'Impermeabilización de losas y techos',
+      'Carpintería a medida (closets, cocinas y pérgolas)',
+      'Plomería doméstica y reparación de grifería',
+      'Resinas epóxicas decorativas y mesas de río',
+    ],
+    accentColor: '#0059FF',
+    image:
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'oficinas',
+    title: 'Oficinas y Corporativo',
+    badge: 'Espacios de Trabajo',
+    tagline: 'Espacios que impulsan productividad con mínimo impacto operativo',
+    description:
+      'Mantenimiento y acabados para sedes corporativas, salas de reuniones y espacios compartidos con horarios flexibles que no interrumpen tu operación.',
+    relevantSolutions: [
+      'Pintura de rápida aplicación y bajo olor',
+      'Impresión digital, rotulación y señalización interna',
+      'Muebles a medida y divisiones en madera',
+      'Instalación de soportes TV y cambio de interruptores',
+      'Limpieza de vidrios y mantenimiento general',
+    ],
+    accentColor: '#00A3FF',
+    image:
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'comercios',
+    title: 'Comercios y Locales',
+    badge: 'Puntos de Venta & Retail',
+    tagline: 'Imagen de marca impecable para atraer clientes y resistir alto tráfico',
+    description:
+      'Transformación y mantenimiento de fachadas, locales de centros comerciales, restaurantes y franquicias con materiales resistentes al uso continuo.',
+    relevantSolutions: [
+      'Pintura de alto tránsito y fácil limpieza',
+      'Impresión en lona, vinil, mesh y backlight',
+      'Pisos epóxicos brillantes de alta resistencia',
+      'Mantenimiento hidrosanitario y trampas de grasa',
+      'Instalación de iluminación y cuadros comerciales',
+    ],
+    accentColor: '#FF5738',
+    image:
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'recreativos',
+    title: 'Espacios Recreativos y Deportivos',
+    badge: 'Clubes & Gimnasios',
+    tagline: 'Durabilidad y estética para áreas de alta intensidad física',
+    description:
+      'Soluciones para complejos deportivos, gimnasios, clubes de golf y áreas de esparcimiento con revestimientos antiderrapantes y señalización visual.',
+    relevantSolutions: [
+      'Pisos continuos con resinas y recubrimientos técnicos',
+      'Pintura resistente al sudor, humedad y lavado diario',
+      'Demarcación de canchas y señalización en vinil',
+      'Pérgolas y decks de madera para exteriores',
+      'Mantenimiento preventivo de áreas comunes',
+    ],
+    accentColor: '#FAB82A',
+    image:
+      'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'instituciones',
+    title: 'Instituciones y Entidades',
+    badge: 'Público & Privado',
+    tagline: 'Cumplimiento normativo, formalidad contable y ejecución precisa',
+    description:
+      'Atención a colegios, universidades, embajadas y organizaciones que requieren procesos formales de cotización, facturación SAT y estándares de seguridad.',
+    relevantSolutions: [
+      'Mantenimiento preventivo y correctivo programado',
+      'Pinturas certificadas de baja toxicidad y alta lavabilidad',
+      'Rotulación institucional y señalética en PVC / acrílico',
+      'Reparación hidrosanitaria de baterías de baños',
+      'Contratos de mantenimiento integral con garantía',
+    ],
+    accentColor: '#0059FF',
+    image:
+      'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'industria',
+    title: 'Industria y Bodegas',
+    badge: 'Manufactura & Logística',
+    tagline: 'Resistencia mecánica, química y demarcación de seguridad vial',
+    description:
+      'Pisos epóxicos autonivelantes, protección anticorrosiva para cerchas metálicas y mantenimiento correctivo en plantas de almacenamiento y producción.',
+    relevantSolutions: [
+      'Pisos epóxicos autonivelantes para tráfico de montacargas',
+      'Demarcación vial y zonas seguras con normas visuales',
+      'Protección anticorrosiva de estructuras metálicas',
+      'Sellado de losas industriales contra filtraciones',
+      'Limpieza técnica de naves y estructuras altas',
+    ],
+    accentColor: '#64748B',
+    image:
+      'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=900&q=80',
+  },
+];
+
+// Clientes y Experiencia Verificada (Texto sobrio y formal con Casos de Éxito)
+export const EXPERIENCE_CLIENTS = {
+  sectionTitle: 'Espacios que hemos transformado.',
+  statement:
+    'Nuestra experiencia incluye proyectos para espacios comerciales, deportivos e institucionales.',
+  featuredProjects: [
+    {
+      id: 'pulte-golf',
+      name: 'El Pulté Golf',
+      category: 'Espacio Deportivo & Recreativo',
+      scope:
+        'Soluciones integrales de mantenimiento, pintura arquitectónica y preservación de instalaciones de alto estándar.',
+      status: 'Proyecto destacado',
+      badge: 'Proyecto destacado',
+      image:
+        'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=1200&q=80',
+      note: 'Instalaciones deportivas y áreas recreativas de alto estándar en Guatemala.',
+      isPlaceholderReady: true,
+    },
+    {
+      id: 'futeca-gym',
+      name: 'FUTECA Gym',
+      category: 'Complejo Deportivo & Fitness',
+      scope:
+        'Recubrimientos resistentes a alto tráfico físico, mantenimiento y renovación de áreas de entrenamiento.',
+      status: 'Proyecto destacado',
+      badge: 'Proyecto destacado',
+      image:
+        'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80',
+      note: 'Espacios de acondicionamiento físico de alta exigencia.',
+      isPlaceholderReady: true,
+    },
+    {
+      id: 'plaza-fraijanes',
+      name: 'Plaza Fraijanes',
+      category: 'Centro Comercial & Retail',
+      scope:
+        'Mantenimiento locativo, pintura de fachadas, preservación de áreas comunes y señalética comercial.',
+      status: 'Proyecto destacado',
+      badge: 'Proyecto destacado',
+      image:
+        'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80',
+      note: 'Espacio comercial y de servicios de alta afluencia en Fraijanes.',
+      isPlaceholderReady: true,
+    },
+  ],
+  secondaryBlockTitle: 'Experiencia que respalda nuestro trabajo.',
+  previousExperience: [
+    {
+      name: 'Little Caesars',
+      type: 'Comercial / Franquicia de Alimentos',
+      scope:
+        'Participación en proyectos de mantenimiento y acabados comerciales bajo tiempos de entrega rigurosos.',
+    },
+    {
+      name: 'Wendy’s',
+      type: 'Comercial / Cadena de Restaurantes',
+      scope:
+        'Experiencia en acabados de alto tráfico y servicio en áreas operativas y de atención.',
+    },
+    {
+      name: 'Embajada de Estados Unidos',
+      type: 'Institucional / Diplomático',
+      scope:
+        'Servicios de mantenimiento y aplicación bajo estrictos requerimientos técnicos de seguridad y calidad.',
+    },
+  ],
+};
+
+// Galería de Proyectos con Filtros Solicitados: Residencial, Comercial, Deportivo, Institucional, Antes y después
+export const PROJECTS_GALLERY: ProjectItem[] = [
+  {
+    id: 'proj-1',
+    title: 'Fachada Residencial en Carretera a El Salvador',
+    category: 'residencial',
+    categoryLabel: 'Residencial',
+    filterType: 'residencial',
+    solutionApplied:
+      'Pintura arquitectónica satinada para exteriores y sellador hidrófugo',
+    result:
+      'Fachada protegida con tonos neutros cálidos que armonizan con el entorno y resisten la lluvia.',
+    image:
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+    beforeImage:
+      'https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=1200&q=80',
+    location: 'Carretera a El Salvador, km 18.5',
+    hasBeforeAfter: true,
+    isReferenceVisualization: true,
+  },
+  {
+    id: 'proj-2',
+    title: 'Señalización Gráfica y Gran Formato Comercial',
+    category: 'comercial',
+    categoryLabel: 'Comercial',
+    filterType: 'comercial',
+    solutionApplied:
+      'Impresión en lona backlight, vinil adhesivo mate y acrílico rotulado',
+    result:
+      'Alta visibilidad publicitaria con colores vivos y resistencia a la decoloración por rayos UV en exterior.',
+    image:
+      'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1200&q=80',
+    location: 'Zona 10, Ciudad de Guatemala',
+    hasBeforeAfter: false,
+    isReferenceVisualization: true,
+  },
+  {
+    id: 'proj-3',
+    title: 'Revitalización y Pintura de Áreas de Gimnasio',
+    category: 'deportivo',
+    categoryLabel: 'Deportivo',
+    filterType: 'deportivo',
+    solutionApplied:
+      'Pintura acrílica de alta lavabilidad, demarcación de zonas de peso libre y recubrimiento antideslizante',
+    result:
+      'Espacios energizantes de acondicionamiento físico con alta resistencia al roce y fácil mantenimiento.',
+    image:
+      'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80',
+    beforeImage:
+      'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=1200&q=80',
+    location: 'Fraijanes / Ciudad de Guatemala',
+    hasBeforeAfter: true,
+    isReferenceVisualization: true,
+  },
+  {
+    id: 'proj-4',
+    title: 'Impermeabilización de Losa y Terraza Residencial',
+    category: 'residencial',
+    categoryLabel: 'Residencial',
+    filterType: 'residencial',
+    solutionApplied:
+      'Sistema elasto-impermeabilizante fibratado con acabado termorreflejante',
+    result:
+      'Cero filtraciones en temporada de lluvias y reducción de temperatura en los ambientes interiores.',
+    image:
+      'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
+    beforeImage:
+      'https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=1200&q=80',
+    location: 'Santa Catarina Pinula, Guatemala',
+    hasBeforeAfter: true,
+    isReferenceVisualization: true,
+  },
+  {
+    id: 'proj-5',
+    title: 'Mantenimiento y Pintura Institucional de Alta Lavabilidad',
+    category: 'institucional',
+    categoryLabel: 'Institucional',
+    filterType: 'institucional',
+    solutionApplied:
+      'Pintura antibacterial de alta retención de color, señalética interna y esmalte anticorrosivo',
+    result:
+      'Entorno institucional pulcro, higiénico y con normativas de colorimetría y durabilidad.',
+    image:
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80',
+    location: 'Zona 9, Ciudad de Guatemala',
+    hasBeforeAfter: false,
+    isReferenceVisualization: true,
+  },
+  {
+    id: 'proj-6',
+    title: 'Piso Epóxico Autonivelante de Alto Tráfico',
+    category: 'comercial',
+    categoryLabel: 'Comercial',
+    filterType: 'comercial',
+    solutionApplied:
+      'Revestimiento epóxico multicapa autonivelante con sellador de poliuretano',
+    result:
+      'Superficie continua sin juntas, fácil de esterilizar y resistente a grasas, químicos y tráfico constante.',
+    image:
+      'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80',
+    location: 'Carretera a El Salvador, Guatemala',
+    hasBeforeAfter: false,
+    isReferenceVisualization: true,
+  },
+  {
+    id: 'proj-7',
+    title: 'Demarcación y Recubrimiento para Complejo Deportivo',
+    category: 'deportivo',
+    categoryLabel: 'Deportivo',
+    filterType: 'deportivo',
+    solutionApplied:
+      'Recubrimiento elastomérico antideslizante con pintura epoxi-acrílica para canchas deportivas',
+    result:
+      'Superficie deportiva segura con amortiguación adecuada y líneas reglamentarias nítidas.',
+    image:
+      'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80',
+    location: 'Guatemala',
+    hasBeforeAfter: false,
+    isReferenceVisualization: true,
+  },
+  {
+    id: 'proj-8',
+    title: 'Señalética y Rotulación Institucional para Dependencias',
+    category: 'institucional',
+    categoryLabel: 'Institucional',
+    filterType: 'institucional',
+    solutionApplied:
+      'Rotulación en acrílico, vinil mate de alta adherencia y placas de identificación',
+    result:
+      'Navegabilidad clara y formal para visitantes cumpliendo guías institucionales.',
+    image:
+      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
+    location: 'Ciudad de Guatemala',
+    hasBeforeAfter: false,
+    isReferenceVisualization: true,
+  },
+  {
+    id: 'proj-9',
+    title: 'Pérgola y Deck en Madera Tratada',
+    category: 'residencial',
+    categoryLabel: 'Residencial',
+    filterType: 'residencial',
+    solutionApplied:
+      'Fabricación e instalación de pérgola con barniz marino y preservante de poro abierto',
+    result:
+      'Espacio exterior integrado al jardín con resistencia a hongos, termitas y humedad.',
+    image:
+      'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=1200&q=80',
+    location: 'Fraijanes, Guatemala',
+    hasBeforeAfter: false,
+    isReferenceVisualization: true,
+  },
+];
+
+// Promociones Verificadas (Prompt: "Color que transforma, ahora con hasta 20% de descuento.")
+export const PROMOTIONS_LIST: PromotionItem[] = [
+  {
+    id: 'promo-principal',
+    title: 'Color que transforma, ahora con hasta 20% de descuento.',
+    discount: 'Hasta 20% de descuento',
+    description:
+      'Pregunta por nuestras promociones en pintura y aplicación. Asesoría técnica en sitio, suministro de producto de calidad y mano de obra garantizada.',
+    validUntil: 'Promoción activa en pintura y aplicación',
+    highlight: true,
+    terms:
+      'Aplica en proyectos de pintura y aplicación residencial o comercial en Guatemala.',
+  },
+  {
+    id: 'promo-multiservicios',
+    title: 'Paquete de Mantenimiento Integral',
+    discount: 'Tarifa especial combinada',
+    description:
+      'Combina pintura con servicios de carpintería, plomería o resinas epóxicas con un solo equipo coordinado y garantía por escrito.',
+    validUntil: 'Consultar disponibilidad con tu asesor',
+    highlight: false,
+    terms: 'Válido para mantenimiento de residencias, oficinas y locales comerciales.',
+  },
+  {
+    id: 'promo-domicilio',
+    title: 'Entrega y Cobro a Domicilio',
+    discount: 'Envío sin complicaciones',
+    description:
+      'Despachamos productos y pinturas directamente a tu proyecto con opción de cobro seguro contra entrega.',
+    validUntil: 'Disponible todo el año',
+    highlight: false,
+    terms: 'Válido en rutas metropolitanas y Carretera a El Salvador.',
+  },
+];
+
+// Valores de la Empresa
+export const ABOUT_VALUES = [
+  {
+    title: 'Claridad',
+    desc: 'Hablamos con la verdad sobre qué producto y servicio necesitas realmente. Sin costos ocultos ni tecnicismos confusos.',
+    icon: 'Eye',
+  },
+  {
+    title: 'Sentido de urgencia',
+    desc: 'Sabemos que tu tiempo y el cronograma de tu espacio son prioritarios. Respondemos rápido y cumplimos los plazos acordados.',
+    icon: 'Clock',
+  },
+  {
+    title: 'Alto valor a precio justo',
+    desc: 'Unimos materiales confiables con mano de obra calificada a una tarifa balanceada que rinde y protege tu inversión.',
+    icon: 'Scale',
+  },
+  {
+    title: 'Compromiso y garantía',
+    desc: 'Acompañamos cada etapa y respondemos por escrito tanto en productos como en mano de obra. No desaparecemos al terminar.',
+    icon: 'CheckCircle2',
+  },
+];

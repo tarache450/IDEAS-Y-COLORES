@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 260" fill="none">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@800&amp;display=swap');
+      .brand-title {
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 800;
+      }
+      .country-sub {
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 800;
+        letter-spacing: 0.38em;
+      }
+    </style>
+  </defs>
+
+  <!-- Brush Group tilted at 45 deg -->
+  <g transform="translate(18, 12)">
+    <!-- Handle & Ferrule (Light Slate #F8FAFC) -->
+    <!-- Handle bottom tip with circular hole -->
+    <path
+      d="M74 214 C65 223 51 223 42 214 C33 205 33 191 42 182 L64 160 C68 156 71 150 72 144 L75 130 C76 126 80 123 84 125 L125 166 C127 170 124 174 120 175 L106 178 C100 179 94 182 90 186 Z"
+      fill="#F8FAFC"
+    />
+    <!-- Handle hole cutout -->
+    <circle cx="58" cy="198" r="9" fill="#0F172A" />
+
+    <!-- Ferrule Metal Collar Band -->
+    <path
+      d="M74 128 L86 116 C90 112 96 112 100 116 L134 150 C138 154 138 160 134 164 L122 176 Z"
+      fill="#F8FAFC"
+    />
+    <path
+      d="M82 124 L94 112 C96 110 100 110 102 112 L138 148 C140 150 140 154 138 156 L126 168 C124 170 120 170 118 168 L82 132 C80 130 80 126 82 124 Z"
+      fill="#334155"
+      stroke="#F8FAFC"
+      stroke-width="5"
+      stroke-linejoin="round"
+    />
+    <!-- Inner line inside ferrule -->
+    <line x1="94" y1="126" x2="128" y2="160" stroke="#F8FAFC" stroke-width="3" stroke-linecap="round" />
+
+    <!-- 4 Fan Bristles (Curve Outward) -->
+    <!-- Bristle 1: Royal Blue (#3884FF) -->
+    <path
+      d="M93 110 C88 95 86 65 92 36 C94 28 103 24 109 29 C126 44 140 68 144 94 C145 99 141 104 136 104 L110 106 C103 107 96 108 93 110 Z"
+      fill="#3884FF"
+    />
+    <!-- Bristle 2: Sky Cyan Blue (#38BDF8) -->
+    <path
+      d="M116 104 C122 84 132 58 148 40 C154 34 164 36 168 44 C178 63 184 85 186 106 C186 111 182 115 177 115 L144 115 C136 115 124 112 116 104 Z"
+      fill="#38BDF8"
+    />
+    <!-- Bristle 3: Golden Amber Yellow (#FAB82A) -->
+    <path
+      d="M138 116 C148 100 162 76 182 60 C188 55 197 58 200 66 C210 88 214 110 215 130 C215 135 210 139 205 138 L170 132 C160 130 148 126 138 116 Z"
+      fill="#FAB82A"
+    />
+    <!-- Bristle 4: Coral Orange (#FF5738) -->
+    <path
+      d="M148 136 C162 128 184 112 206 98 C213 93 222 98 223 106 C225 128 221 150 213 168 C211 173 205 175 200 172 L164 152 C156 148 151 142 148 136 Z"
+      fill="#FF5738"
+    />
+  </g>
+
+  <!-- Typography: Ideas & Colores GUATEMALA -->
+  <g transform="translate(242, 36)">
+    <!-- Line 1: Ideas & -->
+    <text x="0" y="105" class="brand-title" font-size="80" fill="#3884FF" letter-spacing="-0.02em">Ideas</text>
+    <text x="194" y="105" class="brand-title" font-size="80" fill="#FF5738">&amp;</text>
+
+    <!-- Line 2: Colores -->
+    <text x="0" y="174" class="brand-title" font-size="82" fill="#F8FAFC" letter-spacing="-0.03em">Colores</text>
+
+    <!-- Line 3: G U A T E M A L A -->
+    <text x="8" y="210" class="country-sub" font-size="18" fill="#E2E8F0">GUATEMALA</text>
+  </g>
+</svg>

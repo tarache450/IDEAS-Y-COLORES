@@ -1,0 +1,6 @@
+{
+  "name": "Ideas & Colores Multi-Servicios Guatemala",
+  "description": "Ideas & Colores Multi-Servicios transforma, protege y mantiene espacios con soluciones profesionales integrales. Pintura, carpintería, plomería, resinas epóxicas e impresión digital.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
