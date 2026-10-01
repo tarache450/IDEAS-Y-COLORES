@@ -11,6 +11,8 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/content';
+import { SpotlightCard } from './ui/SpotlightCard';
+import { StaggeredText } from './ui/StaggeredText';
 
 export const ContactSection: React.FC = () => {
   const [contactForm, setContactForm] = useState({
@@ -29,16 +31,20 @@ export const ContactSection: React.FC = () => {
   const directWhatsAppUrl = `https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=Hola%20Ideas%20%26%20Colores%2C%20quiero%20cotizar%20mi%20proyecto.`;
 
   return (
-    <section id="contacto" className="py-20 bg-white border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="contacto" className="py-20 sm:py-24 bg-transparent border-b border-slate-200/50 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
           <span className="text-xs font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-3.5 py-1 rounded-full border border-amber-200">
             Canales Verificados
           </span>
-          <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight font-display">
-            Hablemos de tu proyecto hoy mismo.
-          </h2>
+          <div className="mt-3">
+            <StaggeredText
+              text="Hablemos de tu proyecto hoy mismo."
+              as="h2"
+              className="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight font-display"
+            />
+          </div>
           <p className="mt-3 text-base sm:text-lg text-slate-600">
             Ideas & Colores Multi-Servicios transforma, protege y mantiene espacios con soluciones
             profesionales integrales en Carretera a El Salvador y toda Guatemala.
@@ -48,10 +54,13 @@ export const ContactSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left: Contact Info Cards + WhatsApp Large CTA */}
           <div className="lg:col-span-6 space-y-6">
-            {/* Direct Information 4-Grid */}
+            {/* Direct Information 4-Grid with SpotlightCard */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Phone Card */}
-              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <SpotlightCard
+                className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 shadow-2xs hover:shadow-md transition-all"
+                spotlightColor="rgba(251, 191, 36, 0.15)"
+              >
                 <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center mb-3">
                   <Phone className="w-5 h-5" />
                 </div>
@@ -65,10 +74,13 @@ export const ContactSection: React.FC = () => {
                   {BUSINESS_INFO.phone}
                 </a>
                 <p className="text-xs text-slate-500 mt-1">Llamadas y coordinación de visitas</p>
-              </div>
+              </SpotlightCard>
 
               {/* WhatsApp Card */}
-              <div className="p-6 rounded-2xl bg-emerald-50/70 border border-emerald-200">
+              <SpotlightCard
+                className="p-6 rounded-3xl bg-emerald-50/70 border border-emerald-200 shadow-2xs hover:shadow-md transition-all"
+                spotlightColor="rgba(16, 185, 129, 0.18)"
+              >
                 <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-3">
                   <MessageCircle className="w-5 h-5" />
                 </div>
@@ -84,10 +96,13 @@ export const ContactSection: React.FC = () => {
                   {BUSINESS_INFO.phone}
                 </a>
                 <p className="text-xs text-emerald-700 mt-1">Asesoría inmediata y cotizaciones</p>
-              </div>
+              </SpotlightCard>
 
               {/* Email Card */}
-              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <SpotlightCard
+                className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 shadow-2xs hover:shadow-md transition-all"
+                spotlightColor="rgba(0, 89, 255, 0.12)"
+              >
                 <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-900 flex items-center justify-center mb-3">
                   <Mail className="w-5 h-5" />
                 </div>
@@ -101,10 +116,13 @@ export const ContactSection: React.FC = () => {
                   {BUSINESS_INFO.email}
                 </a>
                 <p className="text-xs text-slate-500 mt-1">Gerencia y presupuestos formales</p>
-              </div>
+              </SpotlightCard>
 
               {/* Location Card */}
-              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <SpotlightCard
+                className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 shadow-2xs hover:shadow-md transition-all"
+                spotlightColor="rgba(168, 85, 247, 0.12)"
+              >
                 <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-900 flex items-center justify-center mb-3">
                   <MapPin className="w-5 h-5" />
                 </div>
@@ -115,7 +133,7 @@ export const ContactSection: React.FC = () => {
                   {BUSINESS_INFO.addressFull}
                 </p>
                 <p className="text-xs text-slate-500 mt-1">Cobertura en toda Guatemala</p>
-              </div>
+              </SpotlightCard>
             </div>
 
             {/* Required Large WhatsApp CTA Button */}

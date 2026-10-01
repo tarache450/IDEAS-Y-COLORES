@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
+import { AnimatedTabs } from './ui/AnimatedTabs';
+import { SpotlightCard } from './ui/SpotlightCard';
 
 interface PaintCalculatorProps {
   onTransferToQuote: (details: string) => void;
@@ -132,7 +134,7 @@ export const PaintCalculator: React.FC<PaintCalculatorProps> = ({ onTransferToQu
   };
 
   return (
-    <section id="calculadora" className="py-20 bg-slate-50 border-b border-slate-200">
+    <section id="calculadora" className="py-20 bg-transparent border-b border-slate-200/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
@@ -153,35 +155,20 @@ export const PaintCalculator: React.FC<PaintCalculatorProps> = ({ onTransferToQu
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-5xl mx-auto">
           {/* Controls Column (7 cols) */}
           <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-lg space-y-6">
-            {/* Mode Selector */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+            {/* Mode Selector using AnimatedTabs */}
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 flex-wrap gap-2">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                 Método de cálculo:
               </span>
-              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
-                <button
-                  type="button"
-                  onClick={() => setMode('area')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    mode === 'area'
-                      ? 'bg-white text-slate-950 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Metros cuadrados (m²)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMode('dimensions')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    mode === 'dimensions'
-                      ? 'bg-white text-slate-950 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Por medidas de paredes
-                </button>
-              </div>
+              <AnimatedTabs
+                tabs={[
+                  { id: 'area', label: 'Metros cuadrados (m²)' },
+                  { id: 'dimensions', label: 'Por medidas de paredes' },
+                ]}
+                activeId={mode}
+                onChange={(id) => setMode(id as 'area' | 'dimensions')}
+                layoutId="calc-mode-indicator"
+              />
             </div>
 
             {/* Mode A: Direct Area Slider */}
@@ -365,7 +352,10 @@ export const PaintCalculator: React.FC<PaintCalculatorProps> = ({ onTransferToQu
           </div>
 
           {/* Results Summary Column (5 cols) */}
-          <div className="lg:col-span-5 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 rounded-3xl p-6 sm:p-8 text-white shadow-2xl border border-slate-800 space-y-6 flex flex-col justify-between">
+          <SpotlightCard
+            spotlightColor="rgba(250, 184, 42, 0.18)"
+            className="lg:col-span-5 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 rounded-3xl p-6 sm:p-8 text-white shadow-2xl border border-slate-800 space-y-6 flex flex-col justify-between"
+          >
             <div>
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">
@@ -475,7 +465,7 @@ export const PaintCalculator: React.FC<PaintCalculatorProps> = ({ onTransferToQu
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
-          </div>
+          </SpotlightCard>
         </div>
       </div>
     </section>

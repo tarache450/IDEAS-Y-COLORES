@@ -20,6 +20,12 @@ import { BeforeAfterSlider } from './BeforeAfterSlider';
 import { useColorMood } from '../context/ColorMoodContext';
 import { PROJECTS_GALLERY, BUSINESS_INFO } from '../data/content';
 import { ProjectGalleryFilter } from '../types';
+import { AnimatedTabs } from './ui/AnimatedTabs';
+import { SpotlightCard } from './ui/SpotlightCard';
+import { StaggeredText } from './ui/StaggeredText';
+import { BlurHighlight } from './ui/BlurHighlight';
+import FadeIn from './ui/FadeIn';
+import GlareHover from './ui/GlareHover';
 
 interface ProjectsGalleryProps {
   onRequestSimilar: (projectTitle: string, category: string) => void;
@@ -43,6 +49,23 @@ interface BeforeAfterProject {
 }
 
 const BEFORE_AFTER_CASES: BeforeAfterProject[] = [
+  {
+    id: 'futeca-concepcion',
+    categoryLabel: 'Infraestructura Deportiva & Comercial',
+    title: 'Futeca Concepción: Renovación perimetral y cerramientos deportivos',
+    location: 'C.C. Pradera Concepción, Km 15.5 Carretera a El Salvador, Guatemala',
+    summary:
+      'Restauración de mampostería perimetral con tratamiento contra humedad, recubrimiento anticorrosivo en cerramientos metálicos y postes, y demarcación de líneas deportivas con esmalte de alta durabilidad climática.',
+    beforeImage: '/projects/futeca-concepcion-antes.jpg',
+    afterImage: '/projects/futeca-concepcion-despues.jpg',
+    technicalSheet: {
+      colorsUsed: 'Azul Institucional Futeca, Gris Grafito Mate y Blanco Tráfico',
+      productApplied: 'Pintura Elastómerica para Mampostería & Esmalte Poliuretano Anticorrosivo',
+      executionTime: '6 días hábiles (horario nocturno sin interrumpir torneos)',
+      finishType: 'Resistente a rayos UV, humedad de montaña y alto impacto deportivo',
+      warranty: 'Garantía por escrito en adherencia y protección anticorrosiva',
+    },
+  },
   {
     id: 'fachada-residencial',
     categoryLabel: 'Paredes y Fachada Residencial',
@@ -104,7 +127,7 @@ const BEFORE_AFTER_CASES: BeforeAfterProject[] = [
 
 export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onRequestSimilar }) => {
   const [activeFilter, setActiveFilter] = useState<ProjectGalleryFilter>('todos');
-  const [activeBeforeAfterId, setActiveBeforeAfterId] = useState<string>('fachada-residencial');
+  const [activeBeforeAfterId, setActiveBeforeAfterId] = useState<string>('futeca-concepcion');
   const { currentMood } = useColorMood();
 
   // Exact filters required by user prompt: Residencial, Comercial, Deportivo, Institucional, Antes y después
@@ -128,21 +151,28 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onRequestSimil
     BEFORE_AFTER_CASES.find((p) => p.id === activeBeforeAfterId) || BEFORE_AFTER_CASES[0];
 
   return (
-    <section id="proyectos" className="py-20 sm:py-24 bg-slate-50 border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="proyectos" className="py-20 sm:py-24 bg-transparent border-b border-slate-200/50 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-slate-200 text-slate-800 text-xs font-bold uppercase tracking-wider shadow-2xs mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>Proyectos & Portafolio de Soluciones</span>
+        <FadeIn direction="up" distance={24}>
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-800 shadow-2xs mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>Proyectos &amp; Portafolio de Soluciones</span>
+            </div>
+
+            <StaggeredText
+              text="Transformaciones y capacidad técnica comprobada."
+              as="h2"
+              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight font-display"
+            />
+
+            <p className="mt-4 text-base sm:text-lg text-slate-600 font-normal">
+              Explora proyectos residenciales, comerciales, deportivos e institucionales con{' '}
+              <BlurHighlight color="#FAB82A">garantía formal por escrito</BlurHighlight>.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight font-display">
-            Transformaciones y capacidad técnica.
-          </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 font-normal">
-            Explora proyectos residenciales, comerciales, deportivos e institucionales, y evalúa transformaciones reales con el slider interactivo.
-          </p>
-        </div>
+        </FadeIn>
 
         {/* Transparency note about reference visualizations */}
         <div className="max-w-4xl mx-auto mb-10 p-4 rounded-2xl bg-amber-50/80 border border-amber-200/80 flex items-start gap-3 text-xs text-amber-900 leading-relaxed">
@@ -153,37 +183,19 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onRequestSimil
         </div>
 
         {/* Filters Tabs: Residencial, Comercial, Deportivo, Institucional, Antes y después */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-12">
-          {filterOptions.map((f) => {
-            const isActive = activeFilter === f.id;
-            return (
-              <button
-                key={f.id}
-                type="button"
-                id={`gallery-filter-${f.id}`}
-                onClick={() => setActiveFilter(f.id)}
-                className={`px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 flex items-center gap-2 ${
-                  isActive
-                    ? 'bg-slate-950 text-white shadow-md scale-102'
-                    : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-                }`}
-              >
-                {isActive && (
-                  <span
-                    className="w-2 h-2 rounded-full"
-                    style={{ backgroundColor: currentMood.color }}
-                  />
-                )}
-                <span>{f.label}</span>
-              </button>
-            );
-          })}
+        <div className="flex items-center justify-center mb-12">
+          <AnimatedTabs
+            tabs={filterOptions}
+            activeId={activeFilter}
+            onChange={(id) => setActiveFilter(id as ProjectGalleryFilter)}
+            layoutId="gallery-filter-indicator"
+          />
         </div>
 
         {/* Section A: Interactive Before / After Slider (When filter is 'antes-despues' or default 'todos') */}
         {(activeFilter === 'antes-despues' || activeFilter === 'todos') && (
           <div className="mb-14">
-            <div className="bg-white rounded-3xl p-6 sm:p-8 lg:p-10 border border-slate-200/90 shadow-xl">
+            <div className="bg-white/90 rounded-3xl p-5 sm:p-8 lg:p-10 shadow-[0_26px_60px_-48px_rgba(15,23,42,.55)]">
               <div className="flex items-center justify-between flex-wrap gap-3 mb-6 pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
                   <SlidersHorizontal className="w-4 h-4 text-amber-500" />
@@ -288,17 +300,18 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onRequestSimil
         {activeFilter !== 'antes-despues' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProjects.map((project) => (
-              <div
+              <SpotlightCard
                 key={project.id}
+                spotlightColor="rgba(250, 184, 42, 0.15)"
                 className="bg-white rounded-3xl border border-slate-200/90 shadow-2xs hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col justify-between group"
               >
                 <div>
                   {/* Image with Transparency Badge */}
-                  <div className="relative h-56 w-full overflow-hidden bg-slate-900">
+                  <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-900">
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-95"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.035] opacity-95"
                       loading="lazy"
                       referrerPolicy="no-referrer"
                     />
@@ -359,7 +372,7 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onRequestSimil
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
-              </div>
+              </SpotlightCard>
             ))}
           </div>
         )}

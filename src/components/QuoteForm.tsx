@@ -29,6 +29,8 @@ import {
 } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
+import { motion, AnimatePresence } from 'motion/react';
+import { SpotlightCard } from './ui/SpotlightCard';
 
 interface QuoteFormProps {
   initialProjectType?: string;
@@ -188,6 +190,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
   useEffect(() => {
     if (initialMessage) {
       setDescription(initialMessage);
+      setCurrentStep(3);
     }
   }, [initialMessage]);
 
@@ -272,7 +275,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
   };
 
   return (
-    <section id="cotizar" className="py-20 sm:py-24 bg-slate-50 border-b border-slate-200">
+    <section id="cotizar" className="py-20 sm:py-24 bg-transparent border-b border-slate-200/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
@@ -349,6 +352,42 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
             ) : (
               /* Wizard Steps */
               <form onSubmit={handleSubmitWeb}>
+                {/* Imported Configuration Alert */}
+                {description && (
+                  <div className="mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                        <Sparkles className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-amber-900 block">
+                          Datos cargados desde la herramienta interactiva
+                        </span>
+                        <p className="text-xs text-slate-700 font-medium line-clamp-2 mt-0.5">
+                          {description}
+                        </p>
+                      </div>
+                    </div>
+                    {currentStep !== 3 ? (
+                      <button
+                        type="button"
+                        onClick={() => setCurrentStep(3)}
+                        className="px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs shrink-0 transition-colors"
+                      >
+                        Ir directo a enviar
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setCurrentStep(1)}
+                        className="text-xs font-semibold text-amber-900 hover:underline shrink-0"
+                      >
+                        Ajustar opciones
+                      </button>
+                    )}
+                  </div>
+                )}
+
                 {/* Step Progress Bar */}
                 <div className="mb-8">
                   <div className="grid grid-cols-3 gap-2">
@@ -389,17 +428,26 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                   </div>
                 )}
 
-                {/* --- STEP 1: ¿Qué necesitas? --- */}
-                {currentStep === 1 && (
-                  <div className="space-y-6 animate-in fade-in duration-200">
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-950 mb-1">
-                        Paso 1: ¿Qué necesitas para tu espacio?
-                      </h3>
-                      <p className="text-xs sm:text-sm text-slate-500">
-                        Selecciona el servicio o especialidad de tu interés:
-                      </p>
-                    </div>
+                {/* --- STEPS ANIMATED CONTAINER --- */}
+                <AnimatePresence mode="wait">
+                  {/* --- STEP 1: ¿Qué necesitas? --- */}
+                  {currentStep === 1 && (
+                    <motion.div
+                      key="step-1"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2 }}
+                      className="space-y-6"
+                    >
+                      <div>
+                        <h3 className="text-lg font-bold text-slate-950 mb-1">
+                          Paso 1: ¿Qué necesitas para tu espacio?
+                        </h3>
+                        <p className="text-xs sm:text-sm text-slate-500">
+                          Selecciona el servicio o especialidad de tu interés:
+                        </p>
+                      </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {SERVICE_OPTIONS.map((item) => {
@@ -462,12 +510,19 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                         <ArrowRight className="w-4 h-4" />
                       </button>
                     </div>
-                  </div>
+                  </motion.div>
                 )}
 
                 {/* --- STEP 2: Tipo de espacio --- */}
                 {currentStep === 2 && (
-                  <div className="space-y-6 animate-in fade-in duration-200">
+                  <motion.div
+                    key="step-2"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2 }}
+                    className="space-y-6"
+                  >
                     <div>
                       <h3 className="text-lg font-bold text-slate-950 mb-1">
                         Paso 2: Tipo de espacio a intervenir
@@ -586,12 +641,19 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                         <ArrowRight className="w-4 h-4" />
                       </button>
                     </div>
-                  </div>
+                  </motion.div>
                 )}
 
                 {/* --- STEP 3: Datos de contacto & proyecto --- */}
                 {currentStep === 3 && (
-                  <div className="space-y-6 animate-in fade-in duration-200">
+                  <motion.div
+                    key="step-3"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2 }}
+                    className="space-y-6"
+                  >
                     <div>
                       <h3 className="text-lg font-bold text-slate-950 mb-1">
                         Paso 3: Tus datos de contacto y detalles
@@ -787,16 +849,20 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                         </button>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 )}
-              </form>
-            )}
+              </AnimatePresence>
+            </form>
+          )}
           </div>
 
           {/* Right Summary & Guarantees Card (4 cols) */}
           <div className="lg:col-span-4 space-y-6">
             {/* Live Quotation Summary */}
-            <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <SpotlightCard
+              className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4"
+              spotlightColor="rgba(0, 89, 255, 0.1)"
+            >
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
                   <Layers className="w-3.5 h-3.5" style={{ color: formAccentColor }} />
@@ -831,10 +897,13 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                   </div>
                 )}
               </div>
-            </div>
+            </SpotlightCard>
 
             {/* Direct Contact Card */}
-            <div className="p-6 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-lg space-y-4">
+            <SpotlightCard
+              className="p-6 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-lg space-y-4"
+              spotlightColor="rgba(251, 191, 36, 0.12)"
+            >
               <span className="text-xs font-bold uppercase tracking-wider text-amber-400 block">
                 Atención Inmediata
               </span>
@@ -845,7 +914,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
               <div className="space-y-2 text-xs">
                 <a
                   href={`tel:${BUSINESS_INFO.phone}`}
-                  className="flex items-center gap-2.5 text-slate-200 hover:text-white p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60"
+                  className="flex items-center gap-2.5 text-slate-200 hover:text-white p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 transition-colors"
                 >
                   <Phone className="w-4 h-4 text-amber-400 shrink-0" />
                   <span className="font-semibold">{BUSINESS_INFO.phone}</span>
@@ -853,7 +922,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
 
                 <a
                   href={`mailto:${BUSINESS_INFO.email}`}
-                  className="flex items-center gap-2.5 text-slate-200 hover:text-white p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60"
+                  className="flex items-center gap-2.5 text-slate-200 hover:text-white p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 transition-colors"
                 >
                   <span className="font-semibold truncate">{BUSINESS_INFO.email}</span>
                 </a>
@@ -863,7 +932,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                 <Clock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                 <span>Horario: {BUSINESS_INFO.scheduleWeekdays}</span>
               </div>
-            </div>
+            </SpotlightCard>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
 import { PROCESS_STEPS } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
+import { SpotlightCard } from './ui/SpotlightCard';
 
 interface ProcessSectionProps {
   onQuoteClick: () => void;
@@ -36,9 +37,10 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({ onQuoteClick }) 
             const isActive = activeStepIndex === idx;
 
             return (
-              <div
+              <SpotlightCard
                 key={item.step}
                 onClick={() => setActiveStepIndex(idx)}
+                spotlightColor={isActive ? 'rgba(251, 191, 36, 0.25)' : 'rgba(255, 255, 255, 0.08)'}
                 className={`rounded-3xl p-6 sm:p-7 border transition-all duration-300 flex flex-col justify-between cursor-pointer relative group ${
                   isActive
                     ? 'bg-slate-800 border-amber-400/80 shadow-xl -translate-y-1'
@@ -85,7 +87,7 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({ onQuoteClick }) 
                 >
                   {item.detail}
                 </div>
-              </div>
+              </SpotlightCard>
             );
           })}
         </div>

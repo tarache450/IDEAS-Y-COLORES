@@ -1,28 +1,269 @@
 @import "tailwindcss";
 
 @layer base {
+  :root {
+    --motion-micro: 180ms;
+    --motion-ui: 260ms;
+    --motion-section: 520ms;
+    --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --surface-0: rgba(249, 249, 246, 0.74);
+    --surface-1: rgba(255, 255, 255, 0.64);
+    --surface-2: rgba(255, 255, 255, 0.82);
+    --surface-3: #0f172a;
+    --surface-line: rgba(255, 255, 255, 0.72);
+    --mood-color: #0059FF;
+  }
+
   html {
     scroll-behavior: smooth;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
-  
+
   h1, h2, h3, h4, .font-display {
     font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
   }
+
+  /* Accessible focus indicators for keyboard navigation */
+  :focus-visible {
+    outline: 2px solid #0059FF;
+    outline-offset: 2px;
+  }
+
+  button, a, input, select, textarea {
+    touch-action: manipulation;
+  }
+
+  body {
+    background: #f7f7f3;
+  }
+
+  main h2 {
+    letter-spacing: -0.032em;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  main p {
+    line-height: 1.65;
+  }
 }
 
-/* Custom subtle scrollbar */
+/* Sections share one painted ground; spacing carries their separation. */
+main > section.bg-transparent {
+  border-bottom-color: transparent;
+}
+
+main > section.bg-transparent:nth-of-type(even) {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.promo-light {
+  background:
+    radial-gradient(ellipse at 82% 14%, rgba(250, 184, 42, 0.23), transparent 43%),
+    linear-gradient(115deg, #0f172a 18%, #142640 72%, #0f172a);
+}
+
+.cta-ambient {
+  background-image:
+    radial-gradient(ellipse at 80% 20%, rgba(0, 89, 255, 0.22), transparent 48%),
+    radial-gradient(ellipse at 14% 86%, rgba(250, 184, 42, 0.12), transparent 45%);
+}
+
+/* A small, consistent surface scale keeps cards integrated with the painted ground. */
+.surface-1 {
+  background: var(--surface-1);
+  border: 1px solid var(--surface-line);
+  box-shadow: 0 12px 28px -25px rgba(15, 23, 42, 0.48);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+}
+
+.surface-2 {
+  background: var(--surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  box-shadow: 0 20px 44px -32px rgba(15, 23, 42, 0.5);
+}
+
+.ambient-canvas {
+  background:
+    linear-gradient(125deg, #f6f7f5 4%, #f4f6f3 48%, #f9f4e8 100%);
+}
+
+.ambient-wash,
+.ambient-lightfall {
+  position: absolute;
+  inset: auto;
+  pointer-events: none;
+}
+
+.ambient-wash {
+  width: min(92vw, 1050px);
+  height: min(72vw, 800px);
+  border-radius: 48% 52% 44% 56% / 55% 45% 55% 45%;
+  filter: blur(42px);
+  opacity: 0.18;
+}
+
+.ambient-wash-primary {
+  top: -16%;
+  left: -18%;
+  background: color-mix(in srgb, var(--mood-color) 75%, white);
+  animation: paint-drift 34s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.ambient-wash-secondary {
+  right: -22%;
+  top: 23%;
+  background: #f2b847;
+  opacity: 0.14;
+  animation: paint-drift-reverse 42s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.ambient-lightfall {
+  width: 72vw;
+  height: 118vh;
+  right: -35vw;
+  top: -20vh;
+  opacity: 0.34;
+  background: linear-gradient(108deg, transparent 30%, rgba(255, 255, 255, 0.88) 53%, transparent 69%);
+  transform: rotate(-11deg);
+}
+
+@keyframes paint-drift {
+  from { transform: translate3d(0, 0, 0) rotate(-6deg) scale(1); }
+  to { transform: translate3d(10vw, 12vh, 0) rotate(5deg) scale(1.08); }
+}
+
+@keyframes paint-drift-reverse {
+  from { transform: translate3d(0, 0, 0) rotate(10deg) scale(1.04); }
+  to { transform: translate3d(-11vw, 16vh, 0) rotate(-4deg) scale(0.96); }
+}
+
+@keyframes nav-drawer-in {
+  from { opacity: 0; transform: translateY(-8px); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+.nav-drawer-enter { animation: nav-drawer-in 260ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Accessible reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .ambient-wash { animation: none; filter: blur(35px); opacity: 0.11; }
+  .ambient-lightfall { opacity: 0.12; }
+  .mobile-mood-picker button { width: 44px; height: 44px; }
+  main > section { scroll-margin-top: 72px; }
+}
+
+/* ─── Custom subtle scrollbar ──────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: rgba(148, 163, 184, 0.5);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(100, 116, 139, 0.7);
+}
+
+/* ─── Animations ────────────────────────────────────────────── */
+@keyframes shine {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-shine {
+  animation: shine 5s linear infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2.5s ease-in-out infinite;
+}
+
+/* ─── Modern Architectural Grid & Dot Patterns ───────────────── */
+.bg-grid-subtle {
+  background-size: 32px 32px;
+  background-image:
+    linear-gradient(to right, rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+}
+
+.bg-dots-subtle {
+  background-size: 24px 24px;
+  background-image: radial-gradient(rgba(15, 23, 42, 0.06) 1.2px, transparent 1.2px);
+}
+
+.bg-dark-grid {
+  background-size: 32px 32px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+/* ─── Glass surface utility ─────────────────────────────────── */
+.glass-surface {
+  background: var(--surface-1);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  border: 1px solid var(--surface-line);
+}
+
+.glass-surface-dark {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ─── Premium card hover ─────────────────────────────────────── */
+.card-lift {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+}
+.card-lift:hover {
+  transform: translateY(-3px);
+}
+
+/* ─── Section separator with gradient ───────────────────────── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(148, 163, 184, 0.3), transparent);
 }

@@ -16,7 +16,7 @@ export const FloatingColorDock: React.FC<FloatingColorDockProps> = ({
   };
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 hidden sm:flex items-center gap-1.5 p-1.5 rounded-2xl bg-slate-900/90 backdrop-blur-lg border border-slate-700/80 shadow-2xl text-white">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 hidden 2xl:flex items-center gap-1.5 p-1.5 rounded-2xl bg-slate-900/90 backdrop-blur-lg border border-slate-700/80 shadow-2xl text-white">
       {/* Estudio de Color */}
       <button
         type="button"

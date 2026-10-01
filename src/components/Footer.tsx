@@ -38,11 +38,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <ul className="space-y-2 text-xs sm:text-sm">
               {[
                 { id: 'inicio', label: 'Inicio' },
+                { id: 'confianza', label: 'Confianza & Respaldo' },
                 { id: 'soluciones', label: 'Multi-Servicios' },
                 { id: 'sectores', label: 'Sectores' },
-                { id: 'servicios', label: 'Confianza & Pilares' },
                 { id: 'proyectos', label: 'Galería de Proyectos' },
                 { id: 'promociones', label: 'Promociones' },
+                { id: 'faq', label: 'Preguntas Frecuentes' },
                 { id: 'cotizar', label: 'Cotización Inteligente' },
                 { id: 'contacto', label: 'Contacto' },
               ].map((item) => (

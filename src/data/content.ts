@@ -323,8 +323,7 @@ export const MULTI_SERVICES_CATEGORIES: MultiServiceCategory[] = [
     ctaText: 'Cotizar pintura y aplicación',
     accentColor: '#0059FF',
     accentGlow: 'rgba(0, 89, 255, 0.25)',
-    image:
-      'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=900&q=80',
+    image: '/services/servicio-pintura-interiores.jpg',
     isFeatured: true,
   },
   {
@@ -359,8 +358,7 @@ export const MULTI_SERVICES_CATEGORIES: MultiServiceCategory[] = [
     ctaText: 'Cotizar impresión digital',
     accentColor: '#FF5738',
     accentGlow: 'rgba(255, 87, 56, 0.25)',
-    image:
-      'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=900&q=80',
+    image: '/services/servicio-mantenimiento-oficinas.jpg',
     isFeatured: false,
   },
   {
@@ -390,8 +388,7 @@ export const MULTI_SERVICES_CATEGORIES: MultiServiceCategory[] = [
     ctaText: 'Cotizar carpintería',
     accentColor: '#FAB82A',
     accentGlow: 'rgba(250, 184, 42, 0.25)',
-    image:
-      'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=900&q=80',
+    image: '/services/servicio-carpinteria-medida.jpg',
     isFeatured: false,
   },
   {
@@ -421,8 +418,7 @@ export const MULTI_SERVICES_CATEGORIES: MultiServiceCategory[] = [
     ctaText: 'Solicitar mantenimiento',
     accentColor: '#00A3FF',
     accentGlow: 'rgba(0, 163, 255, 0.25)',
-    image:
-      'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=900&q=80',
+    image: '/services/servicio-plomeria-bano.jpg',
     isFeatured: false,
   },
   {
@@ -451,8 +447,7 @@ export const MULTI_SERVICES_CATEGORIES: MultiServiceCategory[] = [
     ctaText: 'Cotizar resina epóxica',
     accentColor: '#0059FF',
     accentGlow: 'rgba(0, 89, 255, 0.25)',
-    image:
-      'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&w=900&q=80',
+    image: '/services/servicio-piso-epoxico.jpg',
     isFeatured: true,
   },
   {
@@ -482,8 +477,7 @@ export const MULTI_SERVICES_CATEGORIES: MultiServiceCategory[] = [
     ctaText: 'Consultar mi necesidad',
     accentColor: '#64748B',
     accentGlow: 'rgba(100, 116, 139, 0.25)',
-    image:
-      'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=900&q=80',
+    image: '/services/servicio-drywall-cielo-falso.jpg',
     isFeatured: false,
   },
 ];
@@ -505,8 +499,7 @@ export const SECTORS_LIST: SectorItem[] = [
       'Resinas epóxicas decorativas y mesas de río',
     ],
     accentColor: '#0059FF',
-    image:
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80',
+    image: '/sectors/sector-residencial-sala-comedor.jpg',
   },
   {
     id: 'oficinas',
@@ -523,8 +516,7 @@ export const SECTORS_LIST: SectorItem[] = [
       'Limpieza de vidrios y mantenimiento general',
     ],
     accentColor: '#00A3FF',
-    image:
-      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=80',
+    image: '/sectors/sector-oficinas-sala-reuniones.jpg',
   },
   {
     id: 'comercios',
@@ -541,8 +533,7 @@ export const SECTORS_LIST: SectorItem[] = [
       'Instalación de iluminación y cuadros comerciales',
     ],
     accentColor: '#FF5738',
-    image:
-      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80',
+    image: '/services/servicio-mantenimiento-oficinas.jpg',
   },
   {
     id: 'recreativos',
@@ -559,13 +550,12 @@ export const SECTORS_LIST: SectorItem[] = [
       'Mantenimiento preventivo de áreas comunes',
     ],
     accentColor: '#FAB82A',
-    image:
-      'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=80',
+    image: '/projects/futeca-concepcion-despues.jpg',
   },
   {
     id: 'instituciones',
     title: 'Instituciones y Entidades',
-    badge: 'Público & Privado',
+    badge: 'Colegios & Entidades',
     tagline: 'Cumplimiento normativo, formalidad contable y ejecución precisa',
     description:
       'Atención a colegios, universidades, embajadas y organizaciones que requieren procesos formales de cotización, facturación SAT y estándares de seguridad.',
@@ -577,8 +567,7 @@ export const SECTORS_LIST: SectorItem[] = [
       'Contratos de mantenimiento integral con garantía',
     ],
     accentColor: '#0059FF',
-    image:
-      'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=900&q=80',
+    image: '/sectors/sector-institucional-colegio-discovery.jpg',
   },
   {
     id: 'industria',
@@ -595,8 +584,7 @@ export const SECTORS_LIST: SectorItem[] = [
       'Limpieza técnica de naves y estructuras altas',
     ],
     accentColor: '#64748B',
-    image:
-      'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=900&q=80',
+    image: '/services/servicio-piso-epoxico.jpg',
   },
 ];
 
@@ -620,17 +608,28 @@ export const EXPERIENCE_CLIENTS = {
       isPlaceholderReady: true,
     },
     {
-      id: 'futeca-gym',
-      name: 'FUTECA Gym',
-      category: 'Complejo Deportivo & Fitness',
+      id: 'futeca-concepcion',
+      name: 'FUTECA Concepción',
+      category: 'Complejo Deportivo & Canchas',
       scope:
-        'Recubrimientos resistentes a alto tráfico físico, mantenimiento y renovación de áreas de entrenamiento.',
+        'Mantenimiento integral de cerramientos perimetrales, pintura anticorrosiva en estructuras y demarcación deportiva.',
       status: 'Proyecto destacado',
-      badge: 'Proyecto destacado',
-      image:
-        'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80',
-      note: 'Espacios de acondicionamiento físico de alta exigencia.',
-      isPlaceholderReady: true,
+      badge: 'Carretera a El Salvador',
+      image: '/projects/futeca-concepcion-despues.jpg',
+      note: 'Km 15.5 C.C. Pradera Concepción, Santa Catarina Pinula.',
+      isPlaceholderReady: false,
+    },
+    {
+      id: 'colegio-discovery',
+      name: 'Colegio Discovery',
+      category: 'Institucional & Campus Educativo',
+      scope:
+        'Pintura lavable de alta durabilidad en áreas lúdicas infantiles, murales y preservación de instalaciones techadas.',
+      status: 'Proyecto destacado',
+      badge: 'Km 14.5 Carretera a El Salvador',
+      image: '/sectors/sector-institucional-colegio-discovery.jpg',
+      note: 'Campus educativo con estándares de higiene y seguridad para niños.',
+      isPlaceholderReady: false,
     },
     {
       id: 'plaza-fraijanes',
@@ -640,10 +639,9 @@ export const EXPERIENCE_CLIENTS = {
         'Mantenimiento locativo, pintura de fachadas, preservación de áreas comunes y señalética comercial.',
       status: 'Proyecto destacado',
       badge: 'Proyecto destacado',
-      image:
-        'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80',
+      image: '/services/servicio-mantenimiento-oficinas.jpg',
       note: 'Espacio comercial y de servicios de alta afluencia en Fraijanes.',
-      isPlaceholderReady: true,
+      isPlaceholderReady: false,
     },
   ],
   secondaryBlockTitle: 'Experiencia que respalda nuestro trabajo.',
@@ -671,6 +669,22 @@ export const EXPERIENCE_CLIENTS = {
 
 // Galería de Proyectos con Filtros Solicitados: Residencial, Comercial, Deportivo, Institucional, Antes y después
 export const PROJECTS_GALLERY: ProjectItem[] = [
+  {
+    id: 'proj-futeca-concepcion',
+    title: 'Futeca Concepción: Renovación de Canchas y Cerramientos Deportivos',
+    category: 'deportivo',
+    categoryLabel: 'Deportivo / Comercial',
+    filterType: 'deportivo',
+    solutionApplied:
+      'Mantenimiento integral de mampostería perimetral, esmalte anticorrosivo en cerramientos metálicos y demarcación deportiva de alto tráfico.',
+    result:
+      'Instalaciones deportivas restauradas con acabado profesional de alta durabilidad frente a intemperie y sol de montaña.',
+    image: '/projects/futeca-concepcion-despues.jpg',
+    beforeImage: '/projects/futeca-concepcion-antes.jpg',
+    location: 'C.C. Pradera Concepción, Km 15.5 Carretera a El Salvador',
+    hasBeforeAfter: true,
+    isReferenceVisualization: false,
+  },
   {
     id: 'proj-1',
     title: 'Fachada Residencial en Carretera a El Salvador',
@@ -790,20 +804,19 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
     isReferenceVisualization: true,
   },
   {
-    id: 'proj-8',
-    title: 'Señalética y Rotulación Institucional para Dependencias',
+    id: 'proj-colegio-discovery',
+    title: 'Colegio Discovery: Mantenimiento y Acabados de Campus Educativo',
     category: 'institucional',
-    categoryLabel: 'Institucional',
+    categoryLabel: 'Institucional / Educativo',
     filterType: 'institucional',
     solutionApplied:
-      'Rotulación en acrílico, vinil mate de alta adherencia y placas de identificación',
+      'Pintura arquitectónica lavable en áreas lúdicas infantiles, murales didácticos y protección de estructuras techadas de aprendizaje.',
     result:
-      'Navegabilidad clara y formal para visitantes cumpliendo guías institucionales.',
-    image:
-      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
-    location: 'Ciudad de Guatemala',
+      'Ambientes pedagógicos limpios, estimulantes y seguros con acabados certificados de bajo VOC en Carretera a El Salvador.',
+    image: '/sectors/sector-institucional-colegio-discovery.jpg',
+    location: 'Km 14.5 Carretera a El Salvador, Santa Catarina Pinula',
     hasBeforeAfter: false,
-    isReferenceVisualization: true,
+    isReferenceVisualization: false,
   },
   {
     id: 'proj-9',

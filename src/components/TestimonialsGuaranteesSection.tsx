@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ShieldCheck,
   FileText,
@@ -7,11 +7,12 @@ import {
   Building2,
   Award,
   CheckCircle2,
-  ExternalLink,
   Image as ImageIcon,
 } from 'lucide-react';
-import { EXPERIENCE_CLIENTS, BUSINESS_INFO } from '../data/content';
+import { EXPERIENCE_CLIENTS } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
+import { SpotlightCard } from './ui/SpotlightCard';
+import FadeIn from './ui/FadeIn';
 
 const GUARANTEES = [
   {
@@ -48,25 +49,28 @@ export const TestimonialsGuaranteesSection: React.FC = () => {
   const { currentMood } = useColorMood();
 
   return (
-    <section className="py-20 sm:py-24 bg-white border-b border-slate-200" id="garantias">
+    <section className="py-20 sm:py-24 bg-transparent border-b border-slate-200/50" id="garantias">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section 1: Espacios que hemos transformado (Experiencia Sobria y Verificada) */}
         <div className="mb-20">
-          <div className="text-center max-w-3xl mx-auto mb-14">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-bold uppercase tracking-wider mb-3">
-              <Building2 className="w-3.5 h-3.5" style={{ color: currentMood.color }} />
-              <span>Trayectoria y Proyectos</span>
+          <FadeIn direction="up" distance={24}>
+            <div className="text-center max-w-3xl mx-auto mb-14">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-bold uppercase tracking-wider mb-3">
+                <Building2 className="w-3.5 h-3.5" style={{ color: currentMood.color }} />
+                <span>Trayectoria y Proyectos</span>
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight font-display">
+                {EXPERIENCE_CLIENTS.sectionTitle}
+              </h2>
+
+              {/* Exact required statement from prompt */}
+              <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+                {EXPERIENCE_CLIENTS.statement}
+              </p>
             </div>
+          </FadeIn>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight font-display">
-              {EXPERIENCE_CLIENTS.sectionTitle}
-            </h2>
-
-            {/* Exact required statement from prompt */}
-            <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-              {EXPERIENCE_CLIENTS.statement}
-            </p>
-          </div>
 
           {/* Destacados Grid: El Pulté Golf, FUTECA Gym, Plaza Fraijanes */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
@@ -75,9 +79,10 @@ export const TestimonialsGuaranteesSection: React.FC = () => {
               const accent = accents[idx % accents.length];
 
               return (
-                <div
+                <SpotlightCard
                   key={project.id}
                   className="rounded-3xl p-6 sm:p-7 bg-slate-50 border border-slate-200/90 shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+                  spotlightColor="rgba(0, 89, 255, 0.08)"
                 >
                   <div>
                     {/* Header tags: Categoría y Estado visual de Proyecto Destacado */}
@@ -93,7 +98,7 @@ export const TestimonialsGuaranteesSection: React.FC = () => {
                       </span>
                     </div>
 
-                    {/* Image / Editable Placeholder */}
+                    {/* Image / Project Preview */}
                     <div className="relative aspect-16/10 rounded-2xl overflow-hidden mb-4 bg-slate-200 border border-slate-300/80 group">
                       <img
                         src={project.image}
@@ -106,7 +111,7 @@ export const TestimonialsGuaranteesSection: React.FC = () => {
                       <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-[11px] text-white/95 bg-slate-900/80 backdrop-blur-xs px-3 py-1.5 rounded-lg border border-white/20">
                         <span className="flex items-center gap-1.5 font-medium">
                           <ImageIcon className="w-3.5 h-3.5" />
-                          <span>Placeholder editable para foto real</span>
+                          <span>Obra ejecutada con garantía</span>
                         </span>
                         <span className="text-[10px] text-slate-300">GT</span>
                       </div>
@@ -128,7 +133,7 @@ export const TestimonialsGuaranteesSection: React.FC = () => {
                       <span>Verificado</span>
                     </span>
                   </div>
-                </div>
+                </SpotlightCard>
               );
             })}
           </div>
@@ -151,9 +156,10 @@ export const TestimonialsGuaranteesSection: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {EXPERIENCE_CLIENTS.previousExperience.map((item) => (
-                <div
+                <SpotlightCard
                   key={item.name}
                   className="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col justify-between hover:border-slate-700 transition-colors"
+                  spotlightColor="rgba(251, 191, 36, 0.12)"
                 >
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
@@ -170,35 +176,39 @@ export const TestimonialsGuaranteesSection: React.FC = () => {
                     <CheckCircle2 className="w-3.5 h-3.5 text-slate-500" />
                     <span>Experiencia comercial e institucional</span>
                   </div>
-                </div>
+                </SpotlightCard>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Section 2: 4 Clear Guarantees Grid */}
+        {/* Section 2: 4 Clear Guarantees Grid with SpotlightCard */}
         <div className="pt-12 border-t border-slate-200">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-bold uppercase tracking-wider mb-2">
-              <Award className="w-3.5 h-3.5 text-amber-500" />
-              <span>Compromiso de Calidad</span>
+          <FadeIn direction="up" distance={20}>
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-bold uppercase tracking-wider mb-2">
+                <Award className="w-3.5 h-3.5 text-amber-500" />
+                <span>Compromiso de Calidad</span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight font-display">
+                Cuatro garantías claras. Cero improvisaciones.
+              </h3>
+              <p className="mt-2 text-sm sm:text-base text-slate-600 font-normal">
+                Eliminamos el estrés de contratar pintura o remodelación con estándares formales de
+                ejecución y respaldo por escrito.
+              </p>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight font-display">
-              Cuatro garantías claras. Cero improvisaciones.
-            </h3>
-            <p className="mt-2 text-sm sm:text-base text-slate-600 font-normal">
-              Eliminamos el estrés de contratar pintura o remodelación con estándares formales de
-              ejecución y respaldo por escrito.
-            </p>
-          </div>
+          </FadeIn>
+
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {GUARANTEES.map((g) => {
               const Icon = g.icon;
               return (
-                <div
+                <SpotlightCard
                   key={g.title}
                   className="p-6 rounded-3xl bg-slate-50 border border-slate-200/90 shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group hover:border-slate-300"
+                  spotlightColor={`${g.accent}1f`}
                 >
                   <div>
                     <div
@@ -223,7 +233,7 @@ export const TestimonialsGuaranteesSection: React.FC = () => {
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                     <span>Estándar Ideas & Colores</span>
                   </div>
-                </div>
+                </SpotlightCard>
               );
             })}
           </div>

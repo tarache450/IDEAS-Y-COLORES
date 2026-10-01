@@ -16,7 +16,7 @@ export const MoodColorPicker: React.FC<MoodColorPickerProps> = ({
   if (variant === 'compact') {
     return (
       <div
-        className={`inline-flex items-center gap-1.5 p-1 rounded-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 shadow-xs ${className}`}
+        className={`surface-1 inline-flex items-center gap-1.5 p-1 rounded-full ${className}`}
         id="mood-selector-compact"
       >
         <span className="text-[10px] font-bold text-slate-500 pl-2 pr-1 uppercase tracking-wider hidden sm:inline">
@@ -54,7 +54,7 @@ export const MoodColorPicker: React.FC<MoodColorPickerProps> = ({
 
   return (
     <div
-      className={`rounded-2xl bg-white/80 backdrop-blur-md border border-slate-200/90 p-3 sm:p-4 shadow-sm transition-all ${className}`}
+      className={`surface-1 rounded-2xl p-3 sm:p-4 transition-all ${className}`}
       id="mood-selector-full"
     >
       <div className="flex items-center justify-between gap-2 mb-2.5">
@@ -107,8 +107,8 @@ export const MoodColorPicker: React.FC<MoodColorPickerProps> = ({
               </span>
 
               <div className="min-w-0 flex-1">
-                <div className="text-xs font-bold text-slate-900 truncate">{mood.name}</div>
-                <div className="text-[10px] text-slate-500 truncate leading-tight">
+                <div className="text-xs font-bold text-slate-900 leading-tight">{mood.name}</div>
+                <div className="hidden min-[1700px]:block text-[10px] text-slate-500 leading-tight">
                   {mood.id === 'azul'
                     ? 'Confianza & solidez'
                     : mood.id === 'naranja'

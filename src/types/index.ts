@@ -158,6 +158,9 @@ export interface RoomScene {
   category: 'interior' | 'exterior';
   image: string;
   description: string;
-  wallMaskId: string;
+  wallMask: string;
+  wallMaskId?: string;
+  aspectRatio?: string;
+  foregroundImage?: string;
 }
 

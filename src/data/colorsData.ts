@@ -304,35 +304,30 @@ export const COLOR_COLLECTIONS: ColorCollection[] = [
 
 export const ROOM_SCENES: RoomScene[] = [
   {
-    id: 'sala',
-    name: 'Sala de Estar Contemporánea',
+    id: 'sala-principal',
+    name: 'Sala de Referencia Arquitectónica',
     category: 'interior',
-    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
-    description: 'Pared principal con luz natural difusa, parquet de roble y mobiliario moderno.',
-    wallMaskId: 'mask-living-room',
-  },
-  {
-    id: 'fachada',
-    name: 'Fachada Residencial & Exterior',
-    category: 'exterior',
-    image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
-    description: 'Superficie exterior repellada con remates arquitectónicos y jardín frontal.',
-    wallMaskId: 'mask-facade',
-  },
-  {
-    id: 'dormitorio',
-    name: 'Dormitorio Master Minimalista',
-    category: 'interior',
-    image: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1200&q=80',
-    description: 'Muro cabecero de acento con iluminación cálida indirecta y textiles neutros.',
-    wallMaskId: 'mask-bedroom',
-  },
-  {
-    id: 'comercial',
-    name: 'Oficina Boutique & Local Comercial',
-    category: 'interior',
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80',
-    description: 'Espacio corporativo de alto tráfico con divisiones limpias y luz focalizada.',
-    wallMaskId: 'mask-commercial',
+    image: '/studio/referencia-sala-principal.jpg',
+    wallMask: '/masks/mask-sala-principal.png',
+    foregroundImage: '/studio/sala-principal-fg.png',
+    aspectRatio: '16 / 9',
+    description: 'Muro focal de diseño con iluminación natural lateral, mobiliario contemporáneo y vista a jardín exterior.',
   },
 ];
+
+// Flat list of all swatches across collections for instant lookups
+export const ALL_COLOR_SWATCHES: ColorSwatch[] = COLOR_COLLECTIONS.flatMap(
+  (col) => col.swatches
+);
+
+export const findColorByHex = (hex: string): ColorSwatch | undefined => {
+  const normalized = hex.trim().toUpperCase();
+  return ALL_COLOR_SWATCHES.find(
+    (c) => c.hex.toUpperCase() === normalized
+  );
+};
+
+export const findColorById = (id: string): ColorSwatch | undefined => {
+  return ALL_COLOR_SWATCHES.find((c) => c.id === id);
+};
+

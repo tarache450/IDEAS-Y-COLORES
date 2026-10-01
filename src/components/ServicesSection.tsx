@@ -16,6 +16,7 @@ import {
 import { EXTENDED_SERVICES, BUSINESS_INFO } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
 import { ExtendedServiceCategory } from '../types';
+import FadeIn from './ui/FadeIn';
 
 interface ServicesSectionProps {
   onQuoteClick: (serviceName?: string) => void;
@@ -37,24 +38,26 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onQuoteClick }
     EXTENDED_SERVICES.find((s) => s.id === selectedServiceId) || EXTENDED_SERVICES[0];
 
   return (
-    <section id="servicios" className="py-20 sm:py-24 bg-white border-b border-slate-200">
+    <section id="servicios" className="py-20 sm:py-24 bg-transparent border-b border-slate-200/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-bold uppercase tracking-wider mb-3">
-            <Sparkles className="w-3.5 h-3.5" style={{ color: currentMood.color }} />
-            <span>Servicios Ampliados • Ideas & Colores Multi-Servicios</span>
+        <FadeIn direction="up" distance={24}>
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-bold uppercase tracking-wider mb-3">
+              <Sparkles className="w-3.5 h-3.5" style={{ color: currentMood.color }} />
+              <span>Servicios Ampliados • Ideas &amp; Colores Multi-Servicios</span>
+            </div>
+
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight font-display">
+              Capacidades técnicas organizadas para tu espacio.
+            </h2>
+
+            <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
+              Desde la especificación química y diagnóstico en sitio, hasta la aplicación profesional,
+              mantenimiento locativo y logística sin demoras.
+            </p>
           </div>
-
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight font-display">
-            Capacidades técnicas organizadas para tu espacio.
-          </h2>
-
-          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
-            Desde la especificación química y diagnóstico en sitio, hasta la aplicación profesional,
-            mantenimiento locativo y logística sin demoras.
-          </p>
-        </div>
+        </FadeIn>
 
         {/* Bento Grid: 5 Categorías Estructuradas */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-12">

@@ -13,6 +13,9 @@ import {
 import { SECTORS_LIST, BUSINESS_INFO } from '../data/content';
 import { SectorType } from '../types';
 import { useColorMood } from '../context/ColorMoodContext';
+import { SpotlightCard } from './ui/SpotlightCard';
+import { StaggeredText } from './ui/StaggeredText';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface SectorsSectionProps {
   onQuoteSector: (sectorTitle: string) => void;
@@ -37,8 +40,9 @@ export const SectorsSection: React.FC<SectorsSectionProps> = ({ onQuoteSector })
   return (
     <section
       id="sectores"
-      className="py-20 sm:py-24 bg-white border-b border-slate-200 relative overflow-hidden transition-colors duration-500"
+      className="py-20 sm:py-24 bg-transparent border-b border-slate-200/50 relative overflow-hidden transition-colors duration-500"
     >
+
       {/* Ambient soft glow matching active sector */}
       <div
         className="absolute top-1/2 right-1/4 w-[600px] h-[600px] rounded-full blur-3xl pointer-events-none opacity-10 transition-all duration-700"
@@ -56,9 +60,11 @@ export const SectorsSection: React.FC<SectorsSectionProps> = ({ onQuoteSector })
             <span>Cobertura Integral</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight font-display">
-            Sectores que atendemos en Guatemala.
-          </h2>
+          <StaggeredText
+            text="Sectores que atendemos en Guatemala."
+            as="h2"
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight font-display"
+          />
 
           <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
             Adaptamos materiales, cuadrillas y horarios a las particularidades de cada entorno,
@@ -113,7 +119,10 @@ export const SectorsSection: React.FC<SectorsSectionProps> = ({ onQuoteSector })
         </div>
 
         {/* Active Sector Showcase Card */}
-        <div className="rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-stretch">
+        <SpotlightCard
+          spotlightColor={`${activeSector.accentColor}30`}
+          className="rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-stretch"
+        >
           {/* Left Column: Information & Relevant Solutions */}
           <div className="lg:col-span-7 p-8 sm:p-10 lg:p-12 flex flex-col justify-between space-y-6">
             <div>
@@ -178,16 +187,24 @@ export const SectorsSection: React.FC<SectorsSectionProps> = ({ onQuoteSector })
             </div>
           </div>
 
-          {/* Right Column: Sector Imagery Showcase */}
+          {/* Right Column: Sector Imagery Showcase with smooth crossfade */}
           <div className="lg:col-span-5 relative min-h-[300px] lg:min-h-full overflow-hidden bg-slate-950">
-            <img
-              src={activeSector.image}
-              alt={activeSector.title}
-              className="w-full h-full object-cover opacity-85 transition-transform duration-700 hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={activeSector.id}
+                src={activeSector.image}
+                alt={activeSector.title}
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 0.85, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35 }}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </AnimatePresence>
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent pointer-events-none" />
 
-            <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-black/60 backdrop-blur-md border border-white/10 text-xs text-slate-300">
+            <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-black/60 backdrop-blur-md border border-white/10 text-xs text-slate-300 pointer-events-none">
               <p className="font-semibold text-white mb-1">Supervisión técnica directa</p>
               <p className="text-[11px] text-slate-300 leading-relaxed">
                 Coordinamos mano de obra calificada y materiales certificados para entregar obras en
@@ -195,7 +212,7 @@ export const SectorsSection: React.FC<SectorsSectionProps> = ({ onQuoteSector })
               </p>
             </div>
           </div>
-        </div>
+        </SpotlightCard>
       </div>
     </section>
   );
