@@ -717,16 +717,16 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
   },
   {
     id: 'proj-3',
-    title: 'Revitalización y Pintura de Áreas de Gimnasio',
+    title: 'Futeca Gym: Pintura de Muros y Áreas de Entrenamiento',
     category: 'deportivo',
     categoryLabel: 'Deportivo',
     filterType: 'deportivo',
     solutionApplied:
-      'Pintura acrílica de alta lavabilidad, demarcación de zonas de peso libre y recubrimiento antideslizante',
+      'Pintura arquitectónica de alta lavabilidad en muros, señalética y acabados de grado comercial',
     result:
-      'Espacios energizantes de acondicionamiento físico con alta resistencia al roce y fácil mantenimiento.',
-    image: '/projects/gimnasio-area-despues.jpg',
-    location: 'Fraijanes / Ciudad de Guatemala',
+      'Instalaciones deportivas de alto estándar con alta resistencia al roce y estética corporativa.',
+    image: '/projects/futeca-gym-fuerza.jpg',
+    location: 'C.C. Pradera Concepción, Carretera a El Salvador',
     hasBeforeAfter: false,
     isReferenceVisualization: false,
   },

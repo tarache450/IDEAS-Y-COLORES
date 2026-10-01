@@ -97,22 +97,17 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
           loading="lazy"
         />
 
-        {/* Before image (Clipped to slider position) */}
+        {/* Before image (Clipped cleanly with clip-path, perfectly 1:1 aligned without stretching) */}
         <div
-          className="absolute inset-0 overflow-hidden pointer-events-none"
-          style={{ width: `${sliderPosition}%` }}
+          className="absolute inset-0 pointer-events-none"
+          style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
         >
           <img
             src={beforeImage}
             alt={`Estado previo antes - ${title}`}
-            className="absolute inset-0 w-full h-full object-cover max-w-none pointer-events-none"
-            style={{
-              width: containerRef.current ? `${containerRef.current.clientWidth}px` : '100%',
-              minWidth: '100%',
-            }}
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-black/10" />
         </div>
 
         {/* Divider line and draggable pill */}
