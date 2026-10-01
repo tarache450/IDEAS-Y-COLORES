@@ -602,10 +602,9 @@ export const EXPERIENCE_CLIENTS = {
         'Soluciones integrales de mantenimiento, pintura arquitectónica y preservación de instalaciones de alto estándar.',
       status: 'Proyecto destacado',
       badge: 'Proyecto destacado',
-      image:
-        'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=1200&q=80',
+      image: '/projects/pulte-golf-instalaciones.jpg',
       note: 'Instalaciones deportivas y áreas recreativas de alto estándar en Guatemala.',
-      isPlaceholderReady: true,
+      isPlaceholderReady: false,
     },
     {
       id: 'futeca-concepcion',
@@ -695,13 +694,11 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Pintura arquitectónica satinada para exteriores y sellador hidrófugo',
     result:
       'Fachada protegida con tonos neutros cálidos que armonizan con el entorno y resisten la lluvia.',
-    image:
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
-    beforeImage:
-      'https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=1200&q=80',
+    image: '/projects/fachada-residencial-carretera.jpg',
+    beforeImage: '/projects/fachada-residencial-antes.jpg',
     location: 'Carretera a El Salvador, km 18.5',
     hasBeforeAfter: true,
-    isReferenceVisualization: true,
+    isReferenceVisualization: false,
   },
   {
     id: 'proj-2',
@@ -713,11 +710,10 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Impresión en lona backlight, vinil adhesivo mate y acrílico rotulado',
     result:
       'Alta visibilidad publicitaria con colores vivos y resistencia a la decoloración por rayos UV en exterior.',
-    image:
-      'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1200&q=80',
+    image: '/projects/rotulacion-comercial-fachada.jpg',
     location: 'Zona 10, Ciudad de Guatemala',
     hasBeforeAfter: false,
-    isReferenceVisualization: true,
+    isReferenceVisualization: false,
   },
   {
     id: 'proj-3',
@@ -729,13 +725,11 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Pintura acrílica de alta lavabilidad, demarcación de zonas de peso libre y recubrimiento antideslizante',
     result:
       'Espacios energizantes de acondicionamiento físico con alta resistencia al roce y fácil mantenimiento.',
-    image:
-      'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80',
-    beforeImage:
-      'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=1200&q=80',
+    image: '/projects/gimnasio-area-despues.jpg',
+    beforeImage: '/projects/gimnasio-area-antes.jpg',
     location: 'Fraijanes / Ciudad de Guatemala',
     hasBeforeAfter: true,
-    isReferenceVisualization: true,
+    isReferenceVisualization: false,
   },
   {
     id: 'proj-4',
@@ -747,13 +741,11 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Sistema elasto-impermeabilizante fibratado con acabado termorreflejante',
     result:
       'Cero filtraciones en temporada de lluvias y reducción de temperatura en los ambientes interiores.',
-    image:
-      'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
-    beforeImage:
-      'https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=1200&q=80',
+    image: '/projects/impermeabilizacion-losa-despues.jpg',
+    beforeImage: '/projects/impermeabilizacion-losa-antes.jpg',
     location: 'Santa Catarina Pinula, Guatemala',
     hasBeforeAfter: true,
-    isReferenceVisualization: true,
+    isReferenceVisualization: false,
   },
   {
     id: 'proj-5',
@@ -765,11 +757,10 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Pintura antibacterial de alta retención de color, señalética interna y esmalte anticorrosivo',
     result:
       'Entorno institucional pulcro, higiénico y con normativas de colorimetría y durabilidad.',
-    image:
-      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80',
+    image: '/projects/pintura-institucional-oficinas.jpg',
     location: 'Zona 9, Ciudad de Guatemala',
     hasBeforeAfter: false,
-    isReferenceVisualization: true,
+    isReferenceVisualization: false,
   },
   {
     id: 'proj-6',
@@ -781,11 +772,10 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Revestimiento epóxico multicapa autonivelante con sellador de poliuretano',
     result:
       'Superficie continua sin juntas, fácil de esterilizar y resistente a grasas, químicos y tráfico constante.',
-    image:
-      'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80',
+    image: '/projects/piso-epoxico-alto-trafico.jpg',
     location: 'Carretera a El Salvador, Guatemala',
     hasBeforeAfter: false,
-    isReferenceVisualization: true,
+    isReferenceVisualization: false,
   },
   {
     id: 'proj-7',
@@ -797,11 +787,10 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Recubrimiento elastomérico antideslizante con pintura epoxi-acrílica para canchas deportivas',
     result:
       'Superficie deportiva segura con amortiguación adecuada y líneas reglamentarias nítidas.',
-    image:
-      'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80',
+    image: '/projects/cancha-deportiva-recubrimiento.jpg',
     location: 'Guatemala',
     hasBeforeAfter: false,
-    isReferenceVisualization: true,
+    isReferenceVisualization: false,
   },
   {
     id: 'proj-colegio-discovery',
@@ -828,11 +817,10 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Fabricación e instalación de pérgola con barniz marino y preservante de poro abierto',
     result:
       'Espacio exterior integrado al jardín con resistencia a hongos, termitas y humedad.',
-    image:
-      'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=1200&q=80',
+    image: '/projects/pergola-deck-madera.jpg',
     location: 'Fraijanes, Guatemala',
     hasBeforeAfter: false,
-    isReferenceVisualization: true,
+    isReferenceVisualization: false,
   },
 ];
 

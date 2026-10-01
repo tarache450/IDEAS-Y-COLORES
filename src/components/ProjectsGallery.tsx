@@ -73,10 +73,8 @@ const BEFORE_AFTER_CASES: BeforeAfterProject[] = [
     location: 'Carretera a El Salvador, Guatemala',
     summary:
       'Tratamiento de humedad, resane de microfisuras, sellador hidrófugo y dos manos de recubrimiento elástico satinado para máxima durabilidad ante lluvia y sol.',
-    beforeImage:
-      'https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=1200&q=80',
-    afterImage:
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+    beforeImage: '/projects/fachada-residencial-antes.jpg',
+    afterImage: '/projects/fachada-residencial-carretera.jpg',
     technicalSheet: {
       colorsUsed: 'Tonos Neutros Cálidos Arquitectónicos',
       productApplied: 'Recubrimiento Elastomérico Hidro-repelente con filtro UV',
@@ -92,10 +90,8 @@ const BEFORE_AFTER_CASES: BeforeAfterProject[] = [
     location: 'Santa Catarina Pinula, Guatemala',
     summary:
       'Retiro de capas desgastadas, calafateo de grietas con masilla poliuretánica y tendido de membrana elastomérica fibratada continua sin uniones.',
-    beforeImage:
-      'https://images.unsplash.com/photo-1541888946425-d0fbb186f5f7?auto=format&fit=crop&w=1200&q=80',
-    afterImage:
-      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80',
+    beforeImage: '/projects/impermeabilizacion-losa-antes.jpg',
+    afterImage: '/projects/impermeabilizacion-losa-despues.jpg',
     technicalSheet: {
       colorsUsed: 'Blanco Solar Termorreflejante',
       productApplied: 'Sistema Elastomérico Fibratado de Alto Desempeño',
@@ -111,10 +107,8 @@ const BEFORE_AFTER_CASES: BeforeAfterProject[] = [
     location: 'Ciudad de Guatemala',
     summary:
       'Demarcación reglamentaria de zonas, recubrimiento antideslizante de poliuretano y esmalte de alta resistencia al impacto y desgaste continuo.',
-    beforeImage:
-      'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80',
-    afterImage:
-      'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&w=1200&q=80',
+    beforeImage: '/projects/gimnasio-area-antes.jpg',
+    afterImage: '/projects/gimnasio-area-despues.jpg',
     technicalSheet: {
       colorsUsed: 'Negro Mate, Gris Concreto y Líneas de Contraste',
       productApplied: 'Epóxico de Altos Sólidos y Poliuretano Antideslizante',
