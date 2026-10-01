@@ -227,21 +227,7 @@ export const PaintCalculator: React.FC<PaintCalculatorProps> = ({ onTransferToQu
               </div>
             ) : (
               /* Mode B: Dimensions Inputs */
-              <div className="grid grid-cols-3 gap-3">
-                <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">
-                    Ancho pared (m)
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="50"
-                    step="0.5"
-                    value={width}
-                    onChange={(e) => setWidth(Number(e.target.value))}
-                    className="w-full text-sm font-bold px-3 py-2 rounded-xl border border-slate-300 focus:border-amber-500 focus:outline-none"
-                  />
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label htmlFor="calc-wall-width" className="text-xs font-bold text-slate-700 block mb-1">
                     Ancho pared (m)
@@ -250,7 +236,6 @@ export const PaintCalculator: React.FC<PaintCalculatorProps> = ({ onTransferToQu
                     type="number"
                     id="calc-wall-width"
                     name="wallWidth"
-                    aria-label="Ancho de la pared en metros"
                     min="1"
                     max="50"
                     step="0.5"
@@ -267,7 +252,6 @@ export const PaintCalculator: React.FC<PaintCalculatorProps> = ({ onTransferToQu
                     type="number"
                     id="calc-wall-height"
                     name="wallHeight"
-                    aria-label="Alto de la pared en metros"
                     min="1"
                     max="15"
                     step="0.1"
@@ -284,7 +268,6 @@ export const PaintCalculator: React.FC<PaintCalculatorProps> = ({ onTransferToQu
                     type="number"
                     id="calc-walls-count"
                     name="wallsCount"
-                    aria-label="Número de paredes a pintar"
                     min="1"
                     max="20"
                     value={wallsCount}
