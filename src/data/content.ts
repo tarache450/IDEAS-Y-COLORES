@@ -726,9 +726,8 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
     result:
       'Espacios energizantes de acondicionamiento físico con alta resistencia al roce y fácil mantenimiento.',
     image: '/projects/gimnasio-area-despues.jpg',
-    beforeImage: '/projects/gimnasio-area-antes.jpg',
     location: 'Fraijanes / Ciudad de Guatemala',
-    hasBeforeAfter: true,
+    hasBeforeAfter: false,
     isReferenceVisualization: false,
   },
   {
@@ -742,9 +741,8 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
     result:
       'Cero filtraciones en temporada de lluvias y reducción de temperatura en los ambientes interiores.',
     image: '/projects/impermeabilizacion-losa-despues.jpg',
-    beforeImage: '/projects/impermeabilizacion-losa-antes.jpg',
     location: 'Santa Catarina Pinula, Guatemala',
-    hasBeforeAfter: true,
+    hasBeforeAfter: false,
     isReferenceVisualization: false,
   },
   {
@@ -802,9 +800,10 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Pintura arquitectónica lavable en áreas lúdicas infantiles, murales didácticos y protección de estructuras techadas de aprendizaje.',
     result:
       'Ambientes pedagógicos limpios, estimulantes y seguros con acabados certificados de bajo VOC en Carretera a El Salvador.',
-    image: '/sectors/sector-institucional-colegio-discovery.jpg',
+    image: '/projects/discovery-campus-despues.jpg',
+    beforeImage: '/projects/discovery-campus-antes.jpg',
     location: 'Km 14.5 Carretera a El Salvador, Santa Catarina Pinula',
-    hasBeforeAfter: false,
+    hasBeforeAfter: true,
     isReferenceVisualization: false,
   },
   {
