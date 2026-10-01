@@ -19,6 +19,7 @@ import { ContactSection } from './components/ContactSection';
 import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { FloatingColorDock } from './components/FloatingColorDock';
+import { DynamicBackground } from './components/ui/DynamicBackground';
 
 function AppContent() {
   const [activeSection, setActiveSection] = useState('inicio');
@@ -116,12 +117,8 @@ function AppContent() {
       className="min-h-screen text-slate-900 flex flex-col antialiased relative selection:bg-blue-600 selection:text-white"
       style={{ '--mood-color': currentMood.color } as React.CSSProperties}
     >
-      {/* Lightweight ambient paint system — CSS-only, calm and responsive to the selected brand mood. */}
-      <div className="fixed inset-0 -z-50 pointer-events-none w-screen h-screen overflow-hidden ambient-canvas" aria-hidden="true">
-        <div className="ambient-wash ambient-wash-primary" />
-        <div className="ambient-wash ambient-wash-secondary" />
-        <div className="ambient-lightfall" />
-      </div>
+      {/* Fluid Dynamic Ambient Canvas with Prominent Motion & Mood-Reactive Colors */}
+      <DynamicBackground />
 
       {/* Sticky Header with local GT contact & WhatsApp integration */}
       <Header activeSection={activeSection} onNavigate={scrollToSection} />

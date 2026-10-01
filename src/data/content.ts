@@ -20,12 +20,12 @@ export const BUSINESS_INFO = {
   experienceText:
     'Más de 10 años de experiencia en pintura, impresión digital, carpintería, plomería, resina epóxica y mantenimiento.',
   foundationYear: 2014,
-  phone: '+502 5485-8471',
-  phoneClean: '+50254858471',
-  whatsapp: '+502 5485-8471',
-  whatsappNumber: '50254858471',
+  phone: '+502 6661-7592',
+  phoneClean: '+50266617592',
+  whatsapp: '+502 6661-7592',
+  whatsappNumber: '50266617592',
   whatsappUrl:
-    'https://wa.me/50254858471?text=Hola%20Ideas%20%26%20Colores%2C%20quiero%20cotizar%20mi%20proyecto.',
+    'https://wa.me/50266617592?text=Hola%20Ideas%20%26%20Colores%2C%20quiero%20cotizar%20mi%20proyecto.',
   location: 'Carretera a El Salvador, Guatemala',
   addressFull: 'Carretera a El Salvador, Guatemala',
   email: 'gerencia@ideasycoloresgt.com',

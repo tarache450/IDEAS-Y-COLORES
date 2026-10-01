@@ -689,7 +689,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           required
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
-                          placeholder="Ej: +502 5485-8471"
+                          placeholder="Ej: +502 6661-7592"
                           className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
                         />
                       </div>
