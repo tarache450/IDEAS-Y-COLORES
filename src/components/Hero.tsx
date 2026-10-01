@@ -226,13 +226,17 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
                   <motion.img
                     key={activeMood}
                     src={moodShowcases.image}
-                    alt={moodShowcases.title}
+                    alt={`${moodShowcases.title} - Proyecto de pintura y acabados por Ideas & Colores Guatemala`}
                     initial={{ opacity: 0, scale: 1.05 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.4 }}
                     className="w-full h-full object-cover"
                     loading="eager"
+                    fetchPriority="high"
+                    width="600"
+                    height="675"
+                    decoding="async"
                   />
                 </AnimatePresence>
 

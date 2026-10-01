@@ -666,55 +666,66 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Nombre */}
                       <div>
-                        <label className="text-xs font-bold text-slate-700 block mb-1">
+                        <label htmlFor="quote-fullname" className="text-xs font-bold text-slate-700 block mb-1">
                           Nombre completo: *
                         </label>
                         <input
                           type="text"
+                          id="quote-fullname"
+                          name="fullName"
                           required
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
                           placeholder="Tu nombre y apellido"
+                          autoComplete="name"
                           className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
                         />
                       </div>
 
                       {/* Teléfono / WhatsApp */}
                       <div>
-                        <label className="text-xs font-bold text-slate-700 block mb-1">
+                        <label htmlFor="quote-phone" className="text-xs font-bold text-slate-700 block mb-1">
                           Teléfono / WhatsApp: *
                         </label>
                         <input
                           type="tel"
+                          id="quote-phone"
+                          name="phone"
                           required
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
                           placeholder="Ej: +502 6661-7592"
+                          autoComplete="tel"
                           className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
                         />
                       </div>
 
                       {/* Correo */}
                       <div>
-                        <label className="text-xs font-bold text-slate-700 block mb-1">
+                        <label htmlFor="quote-email" className="text-xs font-bold text-slate-700 block mb-1">
                           Correo electrónico:
                         </label>
                         <input
                           type="email"
+                          id="quote-email"
+                          name="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="tu-correo@ejemplo.com"
+                          autoComplete="email"
                           className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
                         />
                       </div>
 
                       {/* Ubicación */}
                       <div>
-                        <label className="text-xs font-bold text-slate-700 block mb-1">
+                        <label htmlFor="quote-location" className="text-xs font-bold text-slate-700 block mb-1">
                           Ubicación / Sector en Guatemala: *
                         </label>
                         <input
                           type="text"
+                          id="quote-location"
+                          name="location"
                           required
                           value={location}
                           onChange={(e) => setLocation(e.target.value)}
@@ -726,11 +737,13 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
 
                     {/* Descripción */}
                     <div>
-                      <label className="text-xs font-bold text-slate-700 block mb-1">
+                      <label htmlFor="quote-description" className="text-xs font-bold text-slate-700 block mb-1">
                         Descripción de tu necesidad o proyecto:
                       </label>
                       <textarea
                         rows={3}
+                        id="quote-description"
+                        name="description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Detalla dimensiones, estado de la superficie, requerimientos de color o fecha de inicio..."

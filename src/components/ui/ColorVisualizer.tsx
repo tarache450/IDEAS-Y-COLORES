@@ -111,8 +111,8 @@ export const ColorVisualizer: React.FC<ColorVisualizerProps> = ({
       {/* LAYER 1: Base Architectural Photograph */}
       <img
         src={image}
-        alt={`Espacio ${roomName}`}
-        loading="eager"
+        alt={`Simulación de color en espacio arquitectónico ${roomName} - Ideas & Colores Guatemala`}
+        loading="lazy"
         decoding="async"
         className={`w-full h-full object-cover select-none pointer-events-none transition-opacity duration-300 ${
           imageLoaded ? 'opacity-100' : 'opacity-40'

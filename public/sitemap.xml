@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://ideasycoloresgt.com/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://ideasycoloresgt.com/hero-interior-sala.jpg</image:loc>
+      <image:title>Ideas y Colores Multi-Servicios Guatemala - Pintura y Mantenimiento Arquitectónico</image:title>
+      <image:caption>Servicios de pintura, acabados finos y mantenimiento integral en Carretera a El Salvador y Guatemala</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://ideasycoloresgt.com/logo.png</image:loc>
+      <image:title>Logotipo Oficial Ideas y Colores Multi-Servicios</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ideasycoloresgt.com/projects/futeca-concepcion-despues.jpg</image:loc>
+      <image:title>Proyecto Renovación Futeca Concepción - Ideas y Colores</image:title>
+      <image:caption>Mantenimiento perimetral, pintura y recubrimientos en Carretera a El Salvador</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://ideasycoloresgt.com/sectors/sector-institucional-colegio-discovery.jpg</image:loc>
+      <image:title>Proyecto Colegio Discovery Campus - Ideas y Colores</image:title>
+    </image:image>
+  </url>
+</urlset>

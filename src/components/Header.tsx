@@ -64,26 +64,32 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate }) => 
       >
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
           {/* Official Logo */}
-          <button
-            type="button"
-            onClick={() => handleNavClick('inicio')}
+          <a
+            href="#inicio"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick('inicio');
+            }}
             className="text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-lg p-1 -ml-1 transition-transform hover:opacity-95 shrink-0"
             aria-label="Ir a inicio de Ideas & Colores Guatemala"
           >
             <BrandLogo size="md" variant="dark" showSlogan={false} />
-          </button>
+          </a>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden min-[1400px]:flex items-center gap-0.5 whitespace-nowrap">
+          <nav className="hidden min-[1400px]:flex items-center gap-0.5 whitespace-nowrap" aria-label="Navegación principal">
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
               return (
-                <button
+                <a
                   key={item.id}
-                  type="button"
+                  href={`#${item.id}`}
                   id={`nav-link-${item.id}`}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`px-3 py-2 rounded-lg text-xs font-semibold transition-colors duration-200 relative ${
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(item.id);
+                  }}
+                  className={`px-3 py-2 rounded-lg text-xs font-semibold transition-colors duration-200 relative inline-block ${
                     isActive
                       ? 'text-slate-950 font-bold'
                       : 'text-slate-600 hover:text-slate-950 hover:bg-white/35'
@@ -97,7 +103,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate }) => 
                       style={{ backgroundColor: currentMood.color }}
                     />
                   )}
-                </button>
+                </a>
               );
             })}
           </nav>
@@ -123,10 +129,14 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate }) => 
             </a>
 
             {/* Main Dynamic Quote CTA */}
-            <button
-              type="button"
+            {/* Main Dynamic Quote CTA */}
+            <a
+              href="#cotizar"
               id="header-btn-quote"
-              onClick={() => handleNavClick('cotizar')}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('cotizar');
+              }}
               className="group relative inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 shadow-[0_8px_18px_-12px_rgba(15,23,42,0.55)] hover:shadow-[0_12px_24px_-14px_rgba(15,23,42,0.62)] hover:-translate-y-px active:translate-y-0 overflow-hidden"
               style={{
                 backgroundColor: currentMood.color,
@@ -138,7 +148,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate }) => 
               <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
               <span className="relative">Cotiza tu proyecto</span>
               <ArrowRight className="w-3.5 h-3.5 relative transition-transform duration-200 group-hover:translate-x-0.5" />
-            </button>
+            </a>
           </div>
 
           {/* Mobile Hamburger & WhatsApp Button */}
@@ -148,7 +158,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate }) => 
               target="_blank"
               rel="noopener noreferrer"
               className="size-11 inline-flex items-center justify-center rounded-xl bg-white/60 text-emerald-700 border border-white/70 backdrop-blur-md"
-              aria-label="WhatsApp"
+              aria-label="Hablar por WhatsApp con un asesor"
             >
               <MessageCircle className="w-4 h-4" />
             </a>
@@ -182,31 +192,37 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate }) => 
             <MoodColorPicker variant="compact" className="mobile-mood-picker" />
           </div>
 
-          <div className="grid grid-cols-2 gap-1.5">
+          <nav className="grid grid-cols-2 gap-1.5" aria-label="Navegación móvil">
             {navItems.map((item) => (
-              <button
+              <a
                 key={item.id}
-                type="button"
-                onClick={() => handleNavClick(item.id)}
-                  className={`w-full min-h-11 text-left px-3 py-2 rounded-xl text-xs font-semibold transition-colors ${
-                    activeSection === item.id
+                href={`#${item.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(item.id);
+                }}
+                className={`w-full min-h-11 text-left px-3 py-2 rounded-xl text-xs font-semibold transition-colors flex items-center ${
+                  activeSection === item.id
                     ? 'bg-white text-slate-950 font-bold shadow-[0_4px_14px_-12px_rgba(15,23,42,0.55)]'
                     : 'text-slate-700 hover:bg-white/65'
-                  }`}
+                }`}
                 style={{
                   boxShadow: activeSection === item.id ? `inset 2px 0 0 ${currentMood.color}` : undefined,
                 }}
                 aria-current={activeSection === item.id ? 'location' : undefined}
               >
                 {item.label}
-              </button>
+              </a>
             ))}
-          </div>
+          </nav>
 
           <div className="pt-3 border-t border-slate-100 space-y-2.5">
-            <button
-              type="button"
-              onClick={() => handleNavClick('cotizar')}
+            <a
+              href="#cotizar"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('cotizar');
+              }}
               className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-xs shadow-sm transition-all"
               style={{
                 backgroundColor: currentMood.color,
@@ -215,7 +231,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate }) => 
             >
               <span>Cotiza tu proyecto</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </a>
 
             <a
               href={BUSINESS_INFO.whatsappUrl}

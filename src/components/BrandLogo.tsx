@@ -33,7 +33,9 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     >
       <img
         src={logoSrc}
-        alt="Ideas & Colores Guatemala"
+        alt="Ideas & Colores Multi-Servicios Guatemala - Logotipo Oficial"
+        width="180"
+        height="48"
         className={`shrink-0 object-contain transition-transform duration-300 group-hover:scale-[1.03] ${sizeClasses}`}
         loading={isPriority ? 'eager' : 'lazy'}
         decoding="async"

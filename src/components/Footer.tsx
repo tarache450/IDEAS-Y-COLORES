@@ -48,13 +48,16 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 { id: 'contacto', label: 'Contacto' },
               ].map((item) => (
                 <li key={item.id}>
-                  <button
-                    type="button"
-                    onClick={() => onNavigate(item.id)}
-                    className="text-slate-400 hover:text-amber-400 transition-colors"
+                  <a
+                    href={`#${item.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onNavigate(item.id);
+                    }}
+                    className="text-slate-400 hover:text-amber-400 transition-colors inline-block"
                   >
                     {item.label}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -68,13 +71,16 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <ul className="space-y-2 text-xs sm:text-sm text-slate-400">
               {MULTI_SERVICES_CATEGORIES.map((cat) => (
                 <li key={cat.id}>
-                  <button
-                    type="button"
-                    onClick={() => onNavigate('soluciones')}
-                    className="hover:text-white transition-colors text-left"
+                  <a
+                    href="#soluciones"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onNavigate('soluciones');
+                    }}
+                    className="hover:text-white transition-colors text-left inline-block"
                   >
                     {cat.shortTitle}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>

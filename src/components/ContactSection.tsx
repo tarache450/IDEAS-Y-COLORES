@@ -68,7 +68,7 @@ export const ContactSection: React.FC = () => {
                   Teléfono directo
                 </h4>
                 <a
-                  href={`tel:${BUSINESS_INFO.phone}`}
+                  href={`tel:${BUSINESS_INFO.phoneClean}`}
                   className="text-lg font-bold text-slate-950 hover:text-amber-600 transition-colors block mt-1"
                 >
                   {BUSINESS_INFO.phone}
@@ -181,16 +181,24 @@ export const ContactSection: React.FC = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <input
                       type="text"
+                      id="contact-name"
+                      name="name"
                       required
                       placeholder="Tu nombre"
+                      aria-label="Tu nombre completo"
+                      autoComplete="name"
                       value={contactForm.name}
                       onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
                       className="text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-amber-500"
                     />
                     <input
                       type="tel"
+                      id="contact-phone"
+                      name="phone"
                       required
                       placeholder="Tu WhatsApp o celular"
+                      aria-label="Tu WhatsApp o número de celular"
+                      autoComplete="tel"
                       value={contactForm.phone}
                       onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
                       className="text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-amber-500"
@@ -198,7 +206,10 @@ export const ContactSection: React.FC = () => {
                   </div>
                   <textarea
                     rows={2}
+                    id="contact-message"
+                    name="message"
                     placeholder="¿Qué servicio o proyecto necesitas cotizar?"
+                    aria-label="Mensaje o descripción de tu proyecto"
                     value={contactForm.message}
                     onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
                     className="w-full text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-amber-500"
