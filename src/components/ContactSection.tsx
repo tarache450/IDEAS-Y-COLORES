@@ -9,6 +9,8 @@ import {
   Navigation,
   CheckCircle2,
   ShieldCheck,
+  Instagram,
+  Facebook,
 } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/content';
 import { SpotlightCard } from './ui/SpotlightCard';
@@ -134,6 +136,63 @@ export const ContactSection: React.FC = () => {
                 </p>
                 <p className="text-xs text-slate-500 mt-1">Cobertura en toda Guatemala</p>
               </SpotlightCard>
+            </div>
+
+            {/* Social Media Channels Grid (Instagram + Facebook) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Instagram Banner */}
+              <a
+                href={BUSINESS_INFO.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                id="contact-btn-instagram"
+                className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md flex items-center justify-between gap-3 transition-all hover:border-pink-300 group"
+                aria-label="Abrir Instagram oficial de Ideas & Colores"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                    <Instagram className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <h4 className="text-[11px] font-bold uppercase tracking-wider text-pink-600">
+                      Instagram
+                    </h4>
+                    <p className="text-xs font-bold text-slate-950 group-hover:text-pink-600 transition-colors truncate">
+                      {BUSINESS_INFO.instagram}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-[11px] font-semibold text-slate-600 bg-slate-50 group-hover:bg-pink-600 group-hover:text-white px-2.5 py-1 rounded-lg border border-slate-200 group-hover:border-pink-600 transition-all shrink-0">
+                  Ver →
+                </span>
+              </a>
+
+              {/* Facebook Banner */}
+              <a
+                href={BUSINESS_INFO.facebookUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                id="contact-btn-facebook"
+                className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md flex items-center justify-between gap-3 transition-all hover:border-blue-300 group"
+                aria-label="Abrir Facebook oficial de Ideas & Colores"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                    <Facebook className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <h4 className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
+                      Facebook
+                    </h4>
+                    <p className="text-xs font-bold text-slate-950 group-hover:text-blue-600 transition-colors truncate">
+                      Ideas & Colores
+                    </p>
+                  </div>
+                </div>
+                <span className="text-[11px] font-semibold text-slate-600 bg-slate-50 group-hover:bg-blue-600 group-hover:text-white px-2.5 py-1 rounded-lg border border-slate-200 group-hover:border-blue-600 transition-all shrink-0">
+                  Ver →
+                </span>
+              </a>
             </div>
 
             {/* Required Large WhatsApp CTA Button */}

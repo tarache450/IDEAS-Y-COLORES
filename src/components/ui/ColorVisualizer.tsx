@@ -139,23 +139,32 @@ export const ColorVisualizer: React.FC<ColorVisualizerProps> = ({
             ...finishEffects,
           }}
         >
-          {/* Sublayer A: Color Hue & Saturation (preserves underlying plaster texture & luminance) */}
+          {/* Sublayer A: Solid Uniform Architectural Base Coat (Smooth, rich, consistent coverage across the entire wall) */}
+          <div
+            className="absolute inset-0 transition-colors duration-250"
+            style={{
+              backgroundColor: selectedColor.hex,
+              opacity: 0.90,
+            }}
+          />
+
+          {/* Sublayer B: Color Hue Integration (harmonizes pigment with room lighting) */}
           <div
             className="absolute inset-0 transition-colors duration-250"
             style={{
               backgroundColor: selectedColor.hex,
               mixBlendMode: 'color',
-              opacity: 0.96,
+              opacity: 0.95,
             }}
           />
 
-          {/* Sublayer B: Multiply for Pigment Depth & Realistic Shadow Occlusion */}
+          {/* Sublayer C: Controlled Ambient Shadow (Delicate 3D depth without muddy blotches) */}
           <div
             className="absolute inset-0 transition-colors duration-250"
             style={{
               backgroundColor: selectedColor.hex,
               mixBlendMode: 'multiply',
-              opacity: multiplyOpacity,
+              opacity: 0.16,
             }}
           />
 

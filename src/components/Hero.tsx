@@ -129,13 +129,13 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
             </FadeIn>
 
             {/* Interactive Mood Selector Bar */}
-            <FadeIn delay={0.27} direction="up" distance={16} className="hidden sm:block">
+            <FadeIn delay={0.27} direction="up" distance={16} className="w-full">
               <MoodColorPicker variant="full" className="max-w-2xl" />
             </FadeIn>
 
             {/* Value Checkpoints */}
-            <FadeIn delay={0.32} direction="up" distance={16} className="hidden sm:block">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+            <FadeIn delay={0.32} direction="up" distance={16} className="w-full">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 pt-1">
                 <div className="flex items-center gap-2 text-xs font-semibold text-slate-700">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>Asesoría técnica en sitio</span>

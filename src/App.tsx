@@ -114,7 +114,7 @@ function AppContent() {
 
   return (
     <div
-      className="min-h-screen text-slate-900 flex flex-col antialiased relative selection:bg-blue-600 selection:text-white"
+      className="min-h-screen text-slate-900 flex flex-col antialiased relative overflow-x-hidden selection:bg-blue-600 selection:text-white"
       style={{ '--mood-color': currentMood.color } as React.CSSProperties}
     >
       {/* Fluid Dynamic Ambient Canvas with Prominent Motion & Mood-Reactive Colors */}

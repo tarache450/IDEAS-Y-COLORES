@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, MessageCircle, MapPin, Clock, ShieldCheck, Mail, ArrowUp } from 'lucide-react';
+import { Phone, MessageCircle, MapPin, Clock, ShieldCheck, Mail, ArrowUp, Instagram, Facebook } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { BUSINESS_INFO, MULTI_SERVICES_CATEGORIES } from '../data/content';
 
@@ -27,6 +27,28 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <span>
                 Garantía por escrito en mano de obra y productos seleccionados.
               </span>
+            </div>
+            <div className="pt-1 flex flex-wrap items-center gap-2.5">
+              <a
+                href={BUSINESS_INFO.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-pink-500/50 hover:bg-pink-950/20 text-xs font-semibold transition-all group"
+                aria-label="Seguir a Ideas & Colores en Instagram"
+              >
+                <Instagram className="w-4 h-4 text-pink-400 group-hover:scale-110 transition-transform" />
+                <span>Instagram</span>
+              </a>
+              <a
+                href={BUSINESS_INFO.facebookUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-blue-500/50 hover:bg-blue-950/20 text-xs font-semibold transition-all group"
+                aria-label="Seguir a Ideas & Colores en Facebook"
+              >
+                <Facebook className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
+                <span>Facebook</span>
+              </a>
             </div>
           </div>
 
@@ -123,6 +145,28 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   className="hover:text-emerald-400 transition-colors"
                 >
                   WhatsApp: {BUSINESS_INFO.phone}
+                </a>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <Instagram className="w-4 h-4 text-pink-400 shrink-0" />
+                <a
+                  href={BUSINESS_INFO.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-pink-400 transition-colors"
+                >
+                  Instagram: {BUSINESS_INFO.instagram}
+                </a>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <Facebook className="w-4 h-4 text-blue-400 shrink-0" />
+                <a
+                  href={BUSINESS_INFO.facebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-400 transition-colors truncate"
+                >
+                  Facebook: {BUSINESS_INFO.facebook}
                 </a>
               </li>
               <li className="flex items-start gap-2.5 text-slate-400">

@@ -86,6 +86,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
+        onTouchStart={(e) => updatePosition(e.touches[0].clientX)}
         onTouchMove={handleTouchMove}
         style={{ touchAction: 'pan-y' }}
       >
