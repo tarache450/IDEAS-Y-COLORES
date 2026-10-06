@@ -7,6 +7,7 @@ import {
   SectorItem,
   ExtendedServiceCategory,
 } from '../types';
+import { assetUrl } from '../utils/asset';
 
 export const BUSINESS_INFO = {
   name: 'Ideas & Colores Multi-Servicios',
@@ -327,7 +328,7 @@ export const MULTI_SERVICES_CATEGORIES: MultiServiceCategory[] = [
     ctaText: 'Cotizar pintura y aplicación',
     accentColor: '#0059FF',
     accentGlow: 'rgba(0, 89, 255, 0.25)',
-    image: '/services/servicio-pintura-interiores.jpg',
+    image: assetUrl('services/servicio-pintura-interiores.jpg'),
     isFeatured: true,
   },
   {
@@ -362,7 +363,7 @@ export const MULTI_SERVICES_CATEGORIES: MultiServiceCategory[] = [
     ctaText: 'Cotizar impresión digital',
     accentColor: '#FF5738',
     accentGlow: 'rgba(255, 87, 56, 0.25)',
-    image: '/services/servicio-mantenimiento-oficinas.jpg',
+    image: assetUrl('services/servicio-mantenimiento-oficinas.jpg'),
     isFeatured: false,
   },
   {
@@ -392,7 +393,7 @@ export const MULTI_SERVICES_CATEGORIES: MultiServiceCategory[] = [
     ctaText: 'Cotizar carpintería',
     accentColor: '#FAB82A',
     accentGlow: 'rgba(250, 184, 42, 0.25)',
-    image: '/services/servicio-carpinteria-medida.jpg',
+    image: assetUrl('services/servicio-carpinteria-medida.jpg'),
     isFeatured: false,
   },
   {
@@ -422,7 +423,7 @@ export const MULTI_SERVICES_CATEGORIES: MultiServiceCategory[] = [
     ctaText: 'Solicitar mantenimiento',
     accentColor: '#00A3FF',
     accentGlow: 'rgba(0, 163, 255, 0.25)',
-    image: '/services/servicio-plomeria-bano.jpg',
+    image: assetUrl('services/servicio-plomeria-bano.jpg'),
     isFeatured: false,
   },
   {
@@ -451,7 +452,7 @@ export const MULTI_SERVICES_CATEGORIES: MultiServiceCategory[] = [
     ctaText: 'Cotizar resina epóxica',
     accentColor: '#0059FF',
     accentGlow: 'rgba(0, 89, 255, 0.25)',
-    image: '/services/servicio-piso-epoxico.jpg',
+    image: assetUrl('services/servicio-piso-epoxico.jpg'),
     isFeatured: true,
   },
   {
@@ -481,7 +482,7 @@ export const MULTI_SERVICES_CATEGORIES: MultiServiceCategory[] = [
     ctaText: 'Consultar mi necesidad',
     accentColor: '#64748B',
     accentGlow: 'rgba(100, 116, 139, 0.25)',
-    image: '/services/servicio-drywall-cielo-falso.jpg',
+    image: assetUrl('services/servicio-drywall-cielo-falso.jpg'),
     isFeatured: false,
   },
 ];
@@ -503,7 +504,7 @@ export const SECTORS_LIST: SectorItem[] = [
       'Resinas epóxicas decorativas y mesas de río',
     ],
     accentColor: '#0059FF',
-    image: '/sectors/sector-residencial-sala-comedor.jpg',
+    image: assetUrl('sectors/sector-residencial-sala-comedor.jpg'),
   },
   {
     id: 'oficinas',
@@ -520,7 +521,7 @@ export const SECTORS_LIST: SectorItem[] = [
       'Limpieza de vidrios y mantenimiento general',
     ],
     accentColor: '#00A3FF',
-    image: '/sectors/sector-oficinas-sala-reuniones.jpg',
+    image: assetUrl('sectors/sector-oficinas-sala-reuniones.jpg'),
   },
   {
     id: 'comercios',
@@ -537,7 +538,7 @@ export const SECTORS_LIST: SectorItem[] = [
       'Instalación de iluminación y cuadros comerciales',
     ],
     accentColor: '#FF5738',
-    image: '/services/servicio-mantenimiento-oficinas.jpg',
+    image: assetUrl('services/servicio-mantenimiento-oficinas.jpg'),
   },
   {
     id: 'recreativos',
@@ -554,7 +555,7 @@ export const SECTORS_LIST: SectorItem[] = [
       'Mantenimiento preventivo de áreas comunes',
     ],
     accentColor: '#FAB82A',
-    image: '/projects/futeca-concepcion-despues.jpg',
+    image: assetUrl('projects/futeca-concepcion-despues.jpg'),
   },
   {
     id: 'instituciones',
@@ -571,7 +572,7 @@ export const SECTORS_LIST: SectorItem[] = [
       'Contratos de mantenimiento integral con garantía',
     ],
     accentColor: '#0059FF',
-    image: '/sectors/sector-institucional-colegio-discovery.jpg',
+    image: assetUrl('sectors/sector-institucional-colegio-discovery.jpg'),
   },
   {
     id: 'industria',
@@ -588,7 +589,7 @@ export const SECTORS_LIST: SectorItem[] = [
       'Limpieza técnica de naves y estructuras altas',
     ],
     accentColor: '#64748B',
-    image: '/services/servicio-piso-epoxico.jpg',
+    image: assetUrl('services/servicio-piso-epoxico.jpg'),
   },
 ];
 
@@ -606,7 +607,7 @@ export const EXPERIENCE_CLIENTS = {
         'Soluciones integrales de mantenimiento, pintura arquitectónica y preservación de instalaciones de alto estándar.',
       status: 'Proyecto destacado',
       badge: 'Proyecto destacado',
-      image: '/projects/pulte-golf-instalaciones.jpg',
+      image: assetUrl('projects/pulte-golf-instalaciones.jpg'),
       note: 'Instalaciones deportivas y áreas recreativas de alto estándar en Guatemala.',
       isPlaceholderReady: false,
     },
@@ -618,7 +619,7 @@ export const EXPERIENCE_CLIENTS = {
         'Mantenimiento integral de cerramientos perimetrales, pintura anticorrosiva en estructuras y demarcación deportiva.',
       status: 'Proyecto destacado',
       badge: 'Carretera a El Salvador',
-      image: '/projects/futeca-concepcion-despues.jpg',
+      image: assetUrl('projects/futeca-concepcion-despues.jpg'),
       note: 'Km 15.5 C.C. Pradera Concepción, Santa Catarina Pinula.',
       isPlaceholderReady: false,
     },
@@ -630,7 +631,7 @@ export const EXPERIENCE_CLIENTS = {
         'Pintura lavable de alta durabilidad en áreas lúdicas infantiles, murales y preservación de instalaciones techadas.',
       status: 'Proyecto destacado',
       badge: 'Km 14.5 Carretera a El Salvador',
-      image: '/sectors/sector-institucional-colegio-discovery.jpg',
+      image: assetUrl('sectors/sector-institucional-colegio-discovery.jpg'),
       note: 'Campus educativo con estándares de higiene y seguridad para niños.',
       isPlaceholderReady: false,
     },
@@ -642,7 +643,7 @@ export const EXPERIENCE_CLIENTS = {
         'Mantenimiento locativo, pintura de fachadas, preservación de áreas comunes y señalética comercial.',
       status: 'Proyecto destacado',
       badge: 'Proyecto destacado',
-      image: '/services/servicio-mantenimiento-oficinas.jpg',
+      image: assetUrl('services/servicio-mantenimiento-oficinas.jpg'),
       note: 'Espacio comercial y de servicios de alta afluencia en Fraijanes.',
       isPlaceholderReady: false,
     },
@@ -682,8 +683,8 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Mantenimiento integral de mampostería perimetral, esmalte anticorrosivo en cerramientos metálicos y demarcación deportiva de alto tráfico.',
     result:
       'Instalaciones deportivas restauradas con acabado profesional de alta durabilidad frente a intemperie y sol de montaña.',
-    image: '/projects/futeca-concepcion-despues.jpg',
-    beforeImage: '/projects/futeca-concepcion-antes.jpg',
+    image: assetUrl('projects/futeca-concepcion-despues.jpg'),
+    beforeImage: assetUrl('projects/futeca-concepcion-antes.jpg'),
     location: 'C.C. Pradera Concepción, Km 15.5 Carretera a El Salvador',
     hasBeforeAfter: true,
     isReferenceVisualization: false,
@@ -698,8 +699,8 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Pintura arquitectónica satinada para exteriores y sellador hidrófugo',
     result:
       'Fachada protegida con tonos neutros cálidos que armonizan con el entorno y resisten la lluvia.',
-    image: '/projects/fachada-residencial-carretera.jpg',
-    beforeImage: '/projects/fachada-residencial-antes.jpg',
+    image: assetUrl('projects/fachada-residencial-carretera.jpg'),
+    beforeImage: assetUrl('projects/fachada-residencial-antes.jpg'),
     location: 'Carretera a El Salvador, km 18.5',
     hasBeforeAfter: true,
     isReferenceVisualization: false,
@@ -714,7 +715,7 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Impresión en lona backlight, vinil adhesivo mate y acrílico rotulado',
     result:
       'Alta visibilidad publicitaria con colores vivos y resistencia a la decoloración por rayos UV en exterior.',
-    image: '/projects/rotulacion-comercial-fachada.jpg',
+    image: assetUrl('projects/rotulacion-comercial-fachada.jpg'),
     location: 'Zona 10, Ciudad de Guatemala',
     hasBeforeAfter: false,
     isReferenceVisualization: false,
@@ -729,7 +730,7 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Pintura arquitectónica de alta lavabilidad en muros, señalética y acabados de grado comercial',
     result:
       'Instalaciones deportivas de alto estándar con alta resistencia al roce y estética corporativa.',
-    image: '/projects/futeca-gym-fuerza.jpg',
+    image: assetUrl('projects/futeca-gym-fuerza.jpg'),
     location: 'C.C. Pradera Concepción, Carretera a El Salvador',
     hasBeforeAfter: false,
     isReferenceVisualization: false,
@@ -744,7 +745,7 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Sistema elasto-impermeabilizante fibratado con acabado termorreflejante',
     result:
       'Cero filtraciones en temporada de lluvias y reducción de temperatura en los ambientes interiores.',
-    image: '/projects/impermeabilizacion-losa-despues.jpg',
+    image: assetUrl('projects/impermeabilizacion-losa-despues.jpg'),
     location: 'Santa Catarina Pinula, Guatemala',
     hasBeforeAfter: false,
     isReferenceVisualization: false,
@@ -759,7 +760,7 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Pintura antibacterial de alta retención de color, señalética interna y esmalte anticorrosivo',
     result:
       'Entorno institucional pulcro, higiénico y con normativas de colorimetría y durabilidad.',
-    image: '/projects/pintura-institucional-oficinas.jpg',
+    image: assetUrl('projects/pintura-institucional-oficinas.jpg'),
     location: 'Zona 9, Ciudad de Guatemala',
     hasBeforeAfter: false,
     isReferenceVisualization: false,
@@ -774,7 +775,7 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Revestimiento epóxico multicapa autonivelante con sellador de poliuretano',
     result:
       'Superficie continua sin juntas, fácil de esterilizar y resistente a grasas, químicos y tráfico constante.',
-    image: '/projects/piso-epoxico-alto-trafico.jpg',
+    image: assetUrl('projects/piso-epoxico-alto-trafico.jpg'),
     location: 'Carretera a El Salvador, Guatemala',
     hasBeforeAfter: false,
     isReferenceVisualization: false,
@@ -789,7 +790,7 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Recubrimiento elastomérico antideslizante con pintura epoxi-acrílica para canchas deportivas',
     result:
       'Superficie deportiva segura con amortiguación adecuada y líneas reglamentarias nítidas.',
-    image: '/projects/cancha-deportiva-recubrimiento.jpg',
+    image: assetUrl('projects/cancha-deportiva-recubrimiento.jpg'),
     location: 'Guatemala',
     hasBeforeAfter: false,
     isReferenceVisualization: false,
@@ -804,8 +805,8 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Pintura arquitectónica lavable en áreas lúdicas infantiles, murales didácticos y protección de estructuras techadas de aprendizaje.',
     result:
       'Ambientes pedagógicos limpios, estimulantes y seguros con acabados certificados de bajo VOC en Carretera a El Salvador.',
-    image: '/projects/discovery-campus-despues.jpg',
-    beforeImage: '/projects/discovery-campus-antes.jpg',
+    image: assetUrl('projects/discovery-campus-despues.jpg'),
+    beforeImage: assetUrl('projects/discovery-campus-antes.jpg'),
     location: 'Km 14.5 Carretera a El Salvador, Santa Catarina Pinula',
     hasBeforeAfter: true,
     isReferenceVisualization: false,
@@ -820,7 +821,7 @@ export const PROJECTS_GALLERY: ProjectItem[] = [
       'Fabricación e instalación de pérgola con barniz marino y preservante de poro abierto',
     result:
       'Espacio exterior integrado al jardín con resistencia a hongos, termitas y humedad.',
-    image: '/projects/pergola-deck-madera.jpg',
+    image: assetUrl('projects/pergola-deck-madera.jpg'),
     location: 'Fraijanes, Guatemala',
     hasBeforeAfter: false,
     isReferenceVisualization: false,

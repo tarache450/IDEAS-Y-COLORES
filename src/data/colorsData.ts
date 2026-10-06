@@ -1,4 +1,5 @@
 import { ColorCollection, ColorSwatch, RoomScene } from '../types';
+import { assetUrl } from '../utils/asset';
 
 export const COLOR_COLLECTIONS: ColorCollection[] = [
   {
@@ -307,9 +308,9 @@ export const ROOM_SCENES: RoomScene[] = [
     id: 'sala-principal',
     name: 'Sala de Referencia Arquitectónica',
     category: 'interior',
-    image: '/studio/referencia-sala-principal.jpg',
-    wallMask: '/masks/mask-sala-principal.png?v=2',
-    foregroundImage: '/studio/sala-principal-fg.png?v=2',
+    image: assetUrl('studio/referencia-sala-principal.jpg'),
+    wallMask: `${assetUrl('masks/mask-sala-principal.png')}?v=2`,
+    foregroundImage: `${assetUrl('studio/sala-principal-fg.png')}?v=2`,
     aspectRatio: '16 / 9',
     description: 'Muro focal de diseño con iluminación natural lateral, mobiliario contemporáneo y vista a jardín exterior.',
   },

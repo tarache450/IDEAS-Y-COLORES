@@ -23,6 +23,7 @@ import { ProjectGalleryFilter } from '../types';
 import { AnimatedTabs } from './ui/AnimatedTabs';
 import { SpotlightCard } from './ui/SpotlightCard';
 import { StaggeredText } from './ui/StaggeredText';
+import { assetUrl } from '../utils/asset';
 import { BlurHighlight } from './ui/BlurHighlight';
 import FadeIn from './ui/FadeIn';
 import GlareHover from './ui/GlareHover';
@@ -56,8 +57,8 @@ const BEFORE_AFTER_CASES: BeforeAfterProject[] = [
     location: 'C.C. Pradera Concepción, Km 15.5 Carretera a El Salvador, Guatemala',
     summary:
       'Restauración de mampostería perimetral con tratamiento contra humedad, recubrimiento anticorrosivo en cerramientos metálicos y postes, y demarcación de líneas deportivas con esmalte de alta durabilidad climática.',
-    beforeImage: '/projects/futeca-concepcion-antes.jpg',
-    afterImage: '/projects/futeca-concepcion-despues.jpg',
+    beforeImage: assetUrl('projects/futeca-concepcion-antes.jpg'),
+    afterImage: assetUrl('projects/futeca-concepcion-despues.jpg'),
     technicalSheet: {
       colorsUsed: 'Azul Institucional Futeca, Gris Grafito Mate y Blanco Tráfico',
       productApplied: 'Pintura Elastómerica para Mampostería & Esmalte Poliuretano Anticorrosivo',
@@ -73,8 +74,8 @@ const BEFORE_AFTER_CASES: BeforeAfterProject[] = [
     location: 'Carretera a El Salvador, Guatemala',
     summary:
       'Tratamiento de muros exteriores con resane de microfisuras, sellador hidrófugo y dos manos de recubrimiento elástico satinado en paleta de neutros cálidos.',
-    beforeImage: '/projects/fachada-residencial-antes.jpg',
-    afterImage: '/projects/fachada-residencial-carretera.jpg',
+    beforeImage: assetUrl('projects/fachada-residencial-antes.jpg'),
+    afterImage: assetUrl('projects/fachada-residencial-carretera.jpg'),
     technicalSheet: {
       colorsUsed: 'Tonos Neutros Cálidos Arquitectónicos (Greige y Blanco Hueso)',
       productApplied: 'Recubrimiento Elastomérico Hidro-repelente con filtro UV',
@@ -90,8 +91,8 @@ const BEFORE_AFTER_CASES: BeforeAfterProject[] = [
     location: 'Km 14.5 Carretera a El Salvador, Santa Catarina Pinula',
     summary:
       'Mantenimiento correctivo y preventivo en módulos lúdicos infantiles con pintura lavable certificada bajo VOC y protección en áreas techadas de alto contacto.',
-    beforeImage: '/projects/discovery-campus-antes.jpg',
-    afterImage: '/projects/discovery-campus-despues.jpg',
+    beforeImage: assetUrl('projects/discovery-campus-antes.jpg'),
+    afterImage: assetUrl('projects/discovery-campus-despues.jpg'),
     technicalSheet: {
       colorsUsed: 'Blanco Puro Satinado y Acentos Didácticos',
       productApplied: 'Látex Antibacterial de Alta Resistencia al Frote (Bajo VOC)',

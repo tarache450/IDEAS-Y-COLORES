@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Eye, EyeOff, Sparkles } from 'lucide-react';
 import { ColorSwatch, PaintFinish, LightingMode } from '../../types';
+import { assetUrl } from '../../utils/asset';
 
 export interface ColorVisualizerProps {
   image: string;
@@ -16,9 +17,9 @@ export interface ColorVisualizerProps {
 }
 
 export const ColorVisualizer: React.FC<ColorVisualizerProps> = ({
-  image,
-  mask,
-  foregroundImage,
+  image: rawImage,
+  mask: rawMask,
+  foregroundImage: rawForeground,
   roomName,
   selectedColor,
   finish,
@@ -27,6 +28,9 @@ export const ColorVisualizer: React.FC<ColorVisualizerProps> = ({
   onToggleOriginal,
   className = '',
 }) => {
+  const image = assetUrl(rawImage);
+  const mask = assetUrl(rawMask);
+  const foregroundImage = rawForeground ? assetUrl(rawForeground) : undefined;
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [isPressingOriginal, setIsPressingOriginal] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);

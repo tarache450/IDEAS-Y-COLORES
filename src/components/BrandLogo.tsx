@@ -1,4 +1,5 @@
 import React from 'react';
+import { assetUrl } from '../utils/asset';
 
 interface BrandLogoProps {
   variant?: 'light' | 'dark' | 'monochrome';
@@ -16,7 +17,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   isPriority = true,
 }) => {
   const isLight = variant === 'light'; // Light variant is for dark backgrounds (Footer, dark banners)
-  const logoSrc = isLight ? '/logo-white.png' : '/logo.png';
+  const logoSrc = isLight ? assetUrl('logo-white.png') : assetUrl('logo.png');
 
   // Dimension presets maintaining natural 2:1 aspect ratio
   const sizeClasses = {
