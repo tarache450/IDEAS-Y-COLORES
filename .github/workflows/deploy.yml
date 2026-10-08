@@ -30,13 +30,16 @@ jobs:
         run: npm run lint
 
       - name: 🏗️ Compile Production Bundle
-        run: npm run build
+        run: |
+          export VITE_SUPABASE_URL="${VITE_SUPABASE_URL:-https://khagzrjxoqwzqrikomrd.supabase.co}"
+          export VITE_SUPABASE_ANON_KEY="${VITE_SUPABASE_ANON_KEY:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoYWd6cmp4b3F3enFyaWtvbXJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NzAwOTUsImV4cCI6MjEwNzA0NjA5NX0.pUav2uMVkrKTs-iL4s5RLvrvLmfqUPnPtxjwsF-sQU0}"
+          npm run build
         env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://khagzrjxoqwzqrikomrd.supabase.co' }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoYWd6cmp4b3F3enFyaWtvbXJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NzAwOTUsImV4cCI6MjEwNzA0NjA5NX0.pUav2uMVkrKTs-iL4s5RLvrvLmfqUPnPtxjwsF-sQU0' }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
       - name: 🚀 Deploy Dist Artifacts to Hostinger
-        if: ${{ secrets.HOSTINGER_FTP_SERVER != '' }}
+        if: secrets.HOSTINGER_FTP_SERVER != ''
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.HOSTINGER_FTP_SERVER }}
@@ -48,7 +51,7 @@ jobs:
           dangerous-clean-slate: false
 
       - name: ℹ️ Deployment Notice
-        if: ${{ secrets.HOSTINGER_FTP_SERVER == '' }}
+        if: secrets.HOSTINGER_FTP_SERVER == ''
         run: |
           echo "::notice title=FTP Secrets Pending::El bundle de producción compiló exitosamente. Para despliegue continuo vía FTP en GitHub Actions, configura HOSTINGER_FTP_SERVER, HOSTINGER_FTP_USERNAME y HOSTINGER_FTP_PASSWORD en GitHub Secrets."
 
