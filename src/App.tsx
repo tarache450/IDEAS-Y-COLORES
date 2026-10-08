@@ -20,6 +20,7 @@ import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { FloatingColorDock } from './components/FloatingColorDock';
 import { DynamicBackground } from './components/ui/DynamicBackground';
+import { AdminDashboard } from './components/admin/AdminDashboard';
 
 function AppContent() {
   const [activeSection, setActiveSection] = useState('inicio');
@@ -27,6 +28,53 @@ function AppContent() {
   const [selectedProjectForQuote, setSelectedProjectForQuote] = useState<string>('');
   const [customQuoteMessage, setCustomQuoteMessage] = useState<string>('');
   const { currentMood } = useColorMood();
+
+  const [isAdminView, setIsAdminView] = useState(() => {
+    return (
+      typeof window !== 'undefined' &&
+      (window.location.pathname === '/admin' || window.location.hash === '#admin')
+    );
+  });
+
+  useEffect(() => {
+    const handleUrlChange = () => {
+      setIsAdminView(window.location.pathname === '/admin' || window.location.hash === '#admin');
+    };
+
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        setIsAdminView((prev) => {
+          const next = !prev;
+          window.location.hash = next ? '#admin' : '';
+          return next;
+        });
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  const openAdmin = () => {
+    setIsAdminView(true);
+    window.location.hash = '#admin';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const closeAdmin = () => {
+    setIsAdminView(false);
+    if (window.location.hash === '#admin') {
+      window.location.hash = '';
+    }
+  };
 
   const scrollToSection = (sectionId: string) => {
     setActiveSection(sectionId);
@@ -112,6 +160,10 @@ function AppContent() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  if (isAdminView) {
+    return <AdminDashboard onBackToSite={closeAdmin} />;
+  }
+
   return (
     <div
       className="min-h-screen text-slate-900 flex flex-col antialiased relative overflow-x-hidden selection:bg-blue-600 selection:text-white"
@@ -191,7 +243,7 @@ function AppContent() {
       </main>
 
       {/* Footer */}
-      <Footer onNavigate={scrollToSection} />
+      <Footer onNavigate={scrollToSection} onOpenAdmin={openAdmin} />
 
       {/* 21st.dev Minimalist Floating Color Dock */}
       <FloatingColorDock activeSection={activeSection} onNavigate={scrollToSection} />

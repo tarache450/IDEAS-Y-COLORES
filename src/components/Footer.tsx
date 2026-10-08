@@ -5,9 +5,10 @@ import { BUSINESS_INFO, MULTI_SERVICES_CATEGORIES } from '../data/content';
 
 interface FooterProps {
   onNavigate: (sectionId: string) => void;
+  onOpenAdmin?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -188,6 +189,16 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </p>
           <div className="flex items-center gap-4">
             <span>Guatemala, C.A.</span>
+            {onOpenAdmin && (
+              <button
+                type="button"
+                onClick={onOpenAdmin}
+                className="text-slate-600 hover:text-amber-400 transition-colors text-[11px] font-semibold cursor-pointer"
+                title="Acceso exclusivo al CRM de Administrador"
+              >
+                🔒 Staff CRM
+              </button>
+            )}
             <button
               type="button"
               onClick={scrollToTop}
