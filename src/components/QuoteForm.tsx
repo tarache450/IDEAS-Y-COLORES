@@ -31,6 +31,7 @@ import { BUSINESS_INFO } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { SpotlightCard } from './ui/SpotlightCard';
+import { insertQuoteRequest } from '../lib/supabase';
 
 interface QuoteFormProps {
   initialProjectType?: string;
@@ -240,17 +241,43 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
     return true;
   };
 
-  const handleSubmitWeb = (e: React.FormEvent) => {
+  const handleSubmitWeb = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateStep3()) return;
 
     setIsSubmitting(true);
     setErrorMsg('');
 
-    setTimeout(() => {
+    try {
+      const { error } = await insertQuoteRequest({
+        name: fullName,
+        phone,
+        email,
+        service: selectedService,
+        space_type: selectedSpace,
+        estimated_area: estimatedArea,
+        desired_timeline: desiredTimeline,
+        location,
+        message: description,
+        source: 'website_quote_wizard',
+      });
+
+      if (error) {
+        console.error('Error guardando en Supabase:', error);
+        setErrorMsg(
+          'Ocurrió un error al procesar tu solicitud. Por favor intenta de nuevo o pulsa en Enviar directo a WhatsApp.'
+        );
+        setIsSubmitting(false);
+        return;
+      }
+
       setIsSubmitting(false);
       setSubmitted(true);
-    }, 600);
+    } catch (err) {
+      console.error('Error de red/conexión:', err);
+      setErrorMsg('Error de conexión al enviar el formulario. Puedes contactarnos directo por WhatsApp.');
+      setIsSubmitting(false);
+    }
   };
 
   const buildWhatsAppLink = () => {

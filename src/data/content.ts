@@ -30,7 +30,7 @@ export const BUSINESS_INFO = {
   location: 'Carretera a El Salvador, Guatemala',
   addressFull: 'Carretera a El Salvador, Guatemala',
   email: 'gerencia@ideasycoloresgt.com',
-  website: 'www.ideasycoloresgt.com',
+  website: 'www.ideasycoloresgt.site',
   instagram: '@ideasycoloresgt',
   instagramUrl: 'https://www.instagram.com/ideasycoloresgt/',
   facebook: 'Ideas & Colores Multi-Servicios',

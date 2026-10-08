@@ -1,8 +1,8 @@
 # Robots.txt — Ideas & Colores Multi-Servicios Guatemala
-# Website: https://ideasycoloresgt.com/
+# Website: https://ideasycoloresgt.site/
 
 User-agent: *
 Allow: /
 
 # Sitemap Index
-Sitemap: https://ideasycoloresgt.com/sitemap.xml
+Sitemap: https://ideasycoloresgt.site/sitemap.xml

@@ -15,6 +15,7 @@ import {
 import { BUSINESS_INFO } from '../data/content';
 import { SpotlightCard } from './ui/SpotlightCard';
 import { StaggeredText } from './ui/StaggeredText';
+import { insertQuoteRequest } from '../lib/supabase';
 
 export const ContactSection: React.FC = () => {
   const [contactForm, setContactForm] = useState({
@@ -23,11 +24,36 @@ export const ContactSection: React.FC = () => {
     message: '',
   });
   const [sent, setSent] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!contactForm.name || !contactForm.phone) return;
-    setSent(true);
+    if (!contactForm.name.trim() || !contactForm.phone.trim()) return;
+    setIsSubmitting(true);
+    setErrorMsg('');
+
+    try {
+      const { error } = await insertQuoteRequest({
+        name: contactForm.name,
+        phone: contactForm.phone,
+        message: contactForm.message,
+        service: 'Consulta de Contacto Directo',
+        source: 'website_contact_section',
+      });
+
+      if (error) {
+        setErrorMsg('No se pudo enviar. Inténtalo por WhatsApp.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      setIsSubmitting(false);
+      setSent(true);
+    } catch {
+      setErrorMsg('Error de conexión. Escríbenos a WhatsApp.');
+      setIsSubmitting(false);
+    }
   };
 
   const directWhatsAppUrl = `https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=Hola%20Ideas%20%26%20Colores%2C%20quiero%20cotizar%20mi%20proyecto.`;
@@ -273,11 +299,15 @@ export const ContactSection: React.FC = () => {
                     onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
                     className="w-full text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-amber-500"
                   />
+                  {errorMsg && (
+                    <p className="text-xs text-rose-600 font-semibold">{errorMsg}</p>
+                  )}
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-xl bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
+                    disabled={isSubmitting}
+                    className="w-full py-3 rounded-xl bg-slate-950 hover:bg-slate-800 disabled:opacity-60 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
                   >
-                    <span>Enviar mensaje</span>
+                    <span>{isSubmitting ? 'Enviando...' : 'Enviar mensaje'}</span>
                     <Send className="w-3.5 h-3.5" />
                   </button>
                 </form>
