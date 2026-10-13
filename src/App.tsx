@@ -55,7 +55,6 @@ const SectionSkeleton: React.FC<{ id: string; minHeight?: string }> = ({ id, min
     <div className="w-6 h-6 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" />
   </section>
 );
->>>>>>> f8ce225 (feat(perf): optimizar splitting de chunks vite, navegacion responsive y assets webp)
 
 function AppContent() {
   const [activeSection, setActiveSection] = useState('inicio');
