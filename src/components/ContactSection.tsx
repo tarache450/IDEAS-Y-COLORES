@@ -15,7 +15,7 @@ import {
 import { BUSINESS_INFO } from '../data/content';
 import { SpotlightCard } from './ui/SpotlightCard';
 import { StaggeredText } from './ui/StaggeredText';
-import { insertQuoteRequest } from '../lib/supabase';
+import { submitQuoteRequest } from '../services/quotes';
 
 export const ContactSection: React.FC = () => {
   const [contactForm, setContactForm] = useState({
@@ -23,35 +23,44 @@ export const ContactSection: React.FC = () => {
     phone: '',
     message: '',
   });
-  const [sent, setSent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [sent, setSent] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [honeypot, setHoneypot] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!contactForm.name.trim() || !contactForm.phone.trim()) return;
+    if (isSubmitting) return;
+    if (!contactForm.name.trim() || !contactForm.phone.trim()) {
+      setErrorMsg('Por favor completa tu nombre y número de contacto.');
+      return;
+    }
+
     setIsSubmitting(true);
     setErrorMsg('');
 
     try {
-      const { error } = await insertQuoteRequest({
+      const result = await submitQuoteRequest({
         name: contactForm.name,
         phone: contactForm.phone,
-        message: contactForm.message,
+        message: contactForm.message || undefined,
         service: 'Consulta de Contacto Directo',
         source: 'website_contact_section',
+        honeypot,
       });
 
-      if (error) {
-        setErrorMsg('No se pudo enviar. Inténtalo por WhatsApp.');
+      if (!result.success) {
+        setErrorMsg(result.error || 'No pudimos enviar tu mensaje. Inténtalo nuevamente o por WhatsApp.');
         setIsSubmitting(false);
         return;
       }
 
       setIsSubmitting(false);
       setSent(true);
+      setContactForm({ name: '', phone: '', message: '' });
+      setHoneypot('');
     } catch {
-      setErrorMsg('Error de conexión. Escríbenos a WhatsApp.');
+      setErrorMsg('Ocurrió un inconveniente al enviar tu consulta. Por favor escríbenos a WhatsApp.');
       setIsSubmitting(false);
     }
   };
@@ -258,11 +267,29 @@ export const ContactSection: React.FC = () => {
 
               {sent ? (
                 <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>¡Mensaje recibido! Te contactaremos a la brevedad posible.</span>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-3">
+                  {/* Anti-Spam Honeypot */}
+                  <input
+                    type="text"
+                    name="quick_business_hp"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    tabIndex={-1}
+                    aria-hidden="true"
+                    autoComplete="off"
+                    className="hidden absolute -left-[9999px]"
+                  />
+
+                  {errorMsg && (
+                    <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold">
+                      {errorMsg}
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <input
                       type="text"
@@ -305,10 +332,16 @@ export const ContactSection: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3 rounded-xl bg-slate-950 hover:bg-slate-800 disabled:opacity-60 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
+                    className="w-full py-3 rounded-xl bg-slate-950 hover:bg-slate-800 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
                   >
-                    <span>{isSubmitting ? 'Enviando...' : 'Enviar mensaje'}</span>
-                    <Send className="w-3.5 h-3.5" />
+                    {isSubmitting ? (
+                      <span>Enviando...</span>
+                    ) : (
+                      <>
+                        <span>Enviar mensaje</span>
+                        <Send className="w-3.5 h-3.5" />
+                      </>
+                    )}
                   </button>
                 </form>
               )}

@@ -157,6 +157,9 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({ onSelectSolu
                             alt={cat.title}
                             className="w-full h-full object-cover"
                             loading="lazy"
+                            decoding="async"
+                            width="480"
+                            height="300"
                           />
                         </div>
 

@@ -17,7 +17,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   isPriority = true,
 }) => {
   const isLight = variant === 'light'; // Light variant is for dark backgrounds (Footer, dark banners)
-  const logoSrc = isLight ? assetUrl('logo-white.png') : assetUrl('logo.png');
+  const logoSrc = isLight ? assetUrl('logo-white.webp') : assetUrl('logo.webp');
 
   // Dimension presets maintaining natural 2:1 aspect ratio
   const sizeClasses = {

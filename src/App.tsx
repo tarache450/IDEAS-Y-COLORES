@@ -20,7 +20,10 @@ import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { FloatingColorDock } from './components/FloatingColorDock';
 import { DynamicBackground } from './components/ui/DynamicBackground';
-import { AdminDashboard } from './components/admin/AdminDashboard';
+
+const AdminDashboard = React.lazy(() =>
+  import('./components/admin/AdminDashboard').then((m) => ({ default: m.AdminDashboard }))
+);
 
 function AppContent() {
   const [activeSection, setActiveSection] = useState('inicio');
@@ -161,7 +164,18 @@ function AppContent() {
   }, []);
 
   if (isAdminView) {
-    return <AdminDashboard onBackToSite={closeAdmin} />;
+    return (
+      <React.Suspense
+        fallback={
+          <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white space-y-3">
+            <div className="w-8 h-8 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+            <p className="text-xs font-semibold text-slate-300">Cargando panel de administración...</p>
+          </div>
+        }
+      >
+        <AdminDashboard onBackToSite={closeAdmin} />
+      </React.Suspense>
+    );
   }
 
   return (

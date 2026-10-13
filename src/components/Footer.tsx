@@ -122,7 +122,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin }) => {
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-amber-400 shrink-0" />
                 <a
-                  href={`tel:${BUSINESS_INFO.phone}`}
+                  href={`tel:${BUSINESS_INFO.phoneClean}`}
                   className="hover:text-white transition-colors"
                 >
                   {BUSINESS_INFO.phone}

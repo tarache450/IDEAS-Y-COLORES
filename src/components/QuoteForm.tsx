@@ -31,7 +31,7 @@ import { BUSINESS_INFO } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { SpotlightCard } from './ui/SpotlightCard';
-import { insertQuoteRequest } from '../lib/supabase';
+import { submitQuoteRequest } from '../services/quotes';
 
 interface QuoteFormProps {
   initialProjectType?: string;
@@ -176,6 +176,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [honeypot, setHoneypot] = useState('');
 
   // Determine dynamic form accent color based on chosen service
   const currentServiceObj =
@@ -243,29 +244,31 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
 
   const handleSubmitWeb = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     if (!validateStep3()) return;
 
     setIsSubmitting(true);
     setErrorMsg('');
 
     try {
-      const { error } = await insertQuoteRequest({
+      const result = await submitQuoteRequest({
         name: fullName,
         phone,
-        email,
+        email: email || undefined,
         service: selectedService,
-        space_type: selectedSpace,
-        estimated_area: estimatedArea,
-        desired_timeline: desiredTimeline,
+        spaceType: selectedSpace,
+        estimatedArea,
+        desiredTimeline,
         location,
-        message: description,
+        message: description || undefined,
         source: 'website_quote_wizard',
+        honeypot,
       });
 
-      if (error) {
-        console.error('Error guardando en Supabase:', error);
+      if (!result.success) {
         setErrorMsg(
-          'Ocurrió un error al procesar tu solicitud. Por favor intenta de nuevo o pulsa en Enviar directo a WhatsApp.'
+          result.error ||
+            'No pudimos enviar tu solicitud en este momento. Por favor inténtalo nuevamente o escríbenos por WhatsApp.'
         );
         setIsSubmitting(false);
         return;
@@ -273,9 +276,8 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
 
       setIsSubmitting(false);
       setSubmitted(true);
-    } catch (err) {
-      console.error('Error de red/conexión:', err);
-      setErrorMsg('Error de conexión al enviar el formulario. Puedes contactarnos directo por WhatsApp.');
+    } catch {
+      setErrorMsg('No pudimos enviar tu solicitud. Inténtalo nuevamente o escríbenos a WhatsApp.');
       setIsSubmitting(false);
     }
   };
@@ -369,7 +371,13 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                   onClick={() => {
                     setSubmitted(false);
                     setCurrentStep(1);
+                    setFullName('');
+                    setPhone('');
+                    setEmail('');
+                    setDescription('');
                     setUploadedPhotos([]);
+                    setErrorMsg('');
+                    setHoneypot('');
                   }}
                   className="text-xs font-bold text-slate-500 hover:text-slate-800 underline"
                 >
@@ -379,6 +387,17 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
             ) : (
               /* Wizard Steps */
               <form onSubmit={handleSubmitWeb}>
+                {/* Honeypot Anti-Spam (Invisible para humanos, trampa para bots) */}
+                <input
+                  type="text"
+                  name="user_business_hp"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  autoComplete="off"
+                  className="hidden absolute -left-[9999px]"
+                />
                 {/* Imported Configuration Alert */}
                 {description && (
                   <div className="mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
@@ -953,7 +972,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
 
               <div className="space-y-2 text-xs">
                 <a
-                  href={`tel:${BUSINESS_INFO.phone}`}
+                  href={`tel:${BUSINESS_INFO.phoneClean}`}
                   className="flex items-center gap-2.5 text-slate-200 hover:text-white p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 transition-colors"
                 >
                   <Phone className="w-4 h-4 text-amber-400 shrink-0" />

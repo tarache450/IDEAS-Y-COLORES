@@ -57,8 +57,8 @@ const BEFORE_AFTER_CASES: BeforeAfterProject[] = [
     location: 'C.C. Pradera Concepción, Km 15.5 Carretera a El Salvador, Guatemala',
     summary:
       'Restauración de mampostería perimetral con tratamiento contra humedad, recubrimiento anticorrosivo en cerramientos metálicos y postes, y demarcación de líneas deportivas con esmalte de alta durabilidad climática.',
-    beforeImage: assetUrl('projects/futeca-concepcion-antes.jpg'),
-    afterImage: assetUrl('projects/futeca-concepcion-despues.jpg'),
+    beforeImage: assetUrl('projects/futeca-concepcion-antes.webp'),
+    afterImage: assetUrl('projects/futeca-concepcion-despues.webp'),
     technicalSheet: {
       colorsUsed: 'Azul Institucional Futeca, Gris Grafito Mate y Blanco Tráfico',
       productApplied: 'Pintura Elastómerica para Mampostería & Esmalte Poliuretano Anticorrosivo',
@@ -74,8 +74,8 @@ const BEFORE_AFTER_CASES: BeforeAfterProject[] = [
     location: 'Carretera a El Salvador, Guatemala',
     summary:
       'Tratamiento de muros exteriores con resane de microfisuras, sellador hidrófugo y dos manos de recubrimiento elástico satinado en paleta de neutros cálidos.',
-    beforeImage: assetUrl('projects/fachada-residencial-antes.jpg'),
-    afterImage: assetUrl('projects/fachada-residencial-carretera.jpg'),
+    beforeImage: assetUrl('projects/fachada-residencial-antes.webp'),
+    afterImage: assetUrl('projects/fachada-residencial-carretera.webp'),
     technicalSheet: {
       colorsUsed: 'Tonos Neutros Cálidos Arquitectónicos (Greige y Blanco Hueso)',
       productApplied: 'Recubrimiento Elastomérico Hidro-repelente con filtro UV',
@@ -91,8 +91,8 @@ const BEFORE_AFTER_CASES: BeforeAfterProject[] = [
     location: 'Km 14.5 Carretera a El Salvador, Santa Catarina Pinula',
     summary:
       'Mantenimiento correctivo y preventivo en módulos lúdicos infantiles con pintura lavable certificada bajo VOC y protección en áreas techadas de alto contacto.',
-    beforeImage: assetUrl('projects/discovery-campus-antes.jpg'),
-    afterImage: assetUrl('projects/discovery-campus-despues.jpg'),
+    beforeImage: assetUrl('projects/discovery-campus-antes.webp'),
+    afterImage: assetUrl('projects/discovery-campus-despues.webp'),
     technicalSheet: {
       colorsUsed: 'Blanco Puro Satinado y Acentos Didácticos',
       productApplied: 'Látex Antibacterial de Alta Resistencia al Frote (Bajo VOC)',
@@ -291,7 +291,9 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onRequestSimil
                       alt={project.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.035] opacity-95"
                       loading="lazy"
-                      referrerPolicy="no-referrer"
+                      decoding="async"
+                      width="400"
+                      height="288"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
 

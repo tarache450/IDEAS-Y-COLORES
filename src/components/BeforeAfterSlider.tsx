@@ -96,6 +96,9 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
           alt={`Resultado final después - ${title}`}
           className="absolute inset-0 w-full h-full object-cover pointer-events-none"
           loading="lazy"
+          decoding="async"
+          width="1376"
+          height="768"
         />
 
         {/* Before image (Clipped cleanly with clip-path, perfectly 1:1 aligned without stretching) */}
@@ -108,6 +111,9 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
             alt={`Estado previo antes - ${title}`}
             className="absolute inset-0 w-full h-full object-cover pointer-events-none"
             loading="lazy"
+            decoding="async"
+            width="1376"
+            height="768"
           />
         </div>
 

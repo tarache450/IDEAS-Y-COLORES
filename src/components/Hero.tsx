@@ -27,28 +27,28 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
   // Curated architectural project showcase photos corresponding to the 4 moods
   const moodShowcases = {
     azul: {
-      image: assetUrl('studio/color-studio-azul-profundo.jpg'),
+      image: assetUrl('studio/color-studio-azul-profundo.webp'),
       title: 'Estudio Contemporáneo Zona 14',
       tag: 'Pintura Arquitectónica & Asesoría',
       tone: 'Azul Naval & Nogal Cálido',
       desc: 'Acabado mate de alta cobertura con iluminación arquitectónica 3000K.',
     },
     naranja: {
-      image: assetUrl('studio/color-studio-terracota-coral.jpg'),
+      image: assetUrl('studio/color-studio-terracota-coral.webp'),
       title: 'Comedor Residencial Carretera a El Salvador',
       tag: 'Muros de Acento & Calidez',
       tone: 'Terracota Orgánico & Roble',
       desc: 'Pigmentación uniforme resistente a luz solar con textura aterciopelada.',
     },
     amarillo: {
-      image: assetUrl('studio/color-studio-neutros-calidos.jpg'),
+      image: assetUrl('studio/color-studio-neutros-calidos.webp'),
       title: 'Dormitorio Master Condominio',
       tag: 'Luz Natural & Sensación de Amplitud',
       tone: 'Arena Suave & Greige Cálido',
       desc: 'Pintura lavable de ultra bajo olor y acabado sedoso.',
     },
     celeste: {
-      image: assetUrl('hero-interior-sala.jpg'),
+      image: assetUrl('hero-interior-sala.webp'),
       title: 'Sala Panorámica Carretera a El Salvador',
       tag: 'Integración Visual & Armonía',
       tone: 'Off-White & Greige Arquitectónico',

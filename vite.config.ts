@@ -76,10 +76,17 @@ export default defineConfig(() => {
     build: {
       rollupOptions: {
         output: {
-          manualChunks: {
-            'vendor-react': ['react', 'react-dom'],
-            'vendor-motion': ['motion'],
-            'vendor-icons': ['lucide-react'],
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/scheduler/')) {
+                return 'vendor-react';
+              }
+              if (id.includes('motion') || id.includes('framer-motion')) return 'vendor-motion';
+              if (id.includes('lucide-react')) return 'vendor-icons';
+              if (id.includes('gsap') || id.includes('@gsap')) return 'vendor-gsap';
+              if (id.includes('ogl')) return 'vendor-webgl';
+              if (id.includes('@supabase')) return 'vendor-supabase';
+            }
           },
         },
       },
