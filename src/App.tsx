@@ -1,29 +1,61 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { ColorMoodProvider, useColorMood } from './context/ColorMoodContext';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { BentoTrustGrid } from './components/BentoTrustGrid';
 import { SolutionsSection } from './components/SolutionsSection';
 import { SectorsSection } from './components/SectorsSection';
-import { ColorStudioVisualizer } from './components/ColorStudioVisualizer';
-import { PaintCalculator } from './components/PaintCalculator';
-import { ServicesSection } from './components/ServicesSection';
-import { ProcessSection } from './components/ProcessSection';
-import { ProjectsGallery } from './components/ProjectsGallery';
-import { TestimonialsGuaranteesSection } from './components/TestimonialsGuaranteesSection';
-import { PromoSection } from './components/PromoSection';
-import { AboutSection } from './components/AboutSection';
-import { FAQSection } from './components/FAQSection';
-import { QuoteForm } from './components/QuoteForm';
-import { ContactSection } from './components/ContactSection';
-import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { FloatingColorDock } from './components/FloatingColorDock';
 import { DynamicBackground } from './components/ui/DynamicBackground';
 
-const AdminDashboard = React.lazy(() =>
+// Lazy-loaded components below the fold to minimize initial mobile bundle transfer
+const ColorStudioVisualizer = lazy(() =>
+  import('./components/ColorStudioVisualizer').then((m) => ({ default: m.ColorStudioVisualizer }))
+);
+const PaintCalculator = lazy(() =>
+  import('./components/PaintCalculator').then((m) => ({ default: m.PaintCalculator }))
+);
+const ServicesSection = lazy(() =>
+  import('./components/ServicesSection').then((m) => ({ default: m.ServicesSection }))
+);
+const ProcessSection = lazy(() =>
+  import('./components/ProcessSection').then((m) => ({ default: m.ProcessSection }))
+);
+const ProjectsGallery = lazy(() =>
+  import('./components/ProjectsGallery').then((m) => ({ default: m.ProjectsGallery }))
+);
+const TestimonialsGuaranteesSection = lazy(() =>
+  import('./components/TestimonialsGuaranteesSection').then((m) => ({ default: m.TestimonialsGuaranteesSection }))
+);
+const PromoSection = lazy(() =>
+  import('./components/PromoSection').then((m) => ({ default: m.PromoSection }))
+);
+const AboutSection = lazy(() =>
+  import('./components/AboutSection').then((m) => ({ default: m.AboutSection }))
+);
+const FAQSection = lazy(() =>
+  import('./components/FAQSection').then((m) => ({ default: m.FAQSection }))
+);
+const QuoteForm = lazy(() =>
+  import('./components/QuoteForm').then((m) => ({ default: m.QuoteForm }))
+);
+const ContactSection = lazy(() =>
+  import('./components/ContactSection').then((m) => ({ default: m.ContactSection }))
+);
+const FinalCTA = lazy(() =>
+  import('./components/FinalCTA').then((m) => ({ default: m.FinalCTA }))
+);
+const AdminDashboard = lazy(() =>
   import('./components/admin/AdminDashboard').then((m) => ({ default: m.AdminDashboard }))
 );
+
+const SectionSkeleton: React.FC<{ id: string; minHeight?: string }> = ({ id, minHeight = '300px' }) => (
+  <section id={id} style={{ minHeight }} className="w-full flex items-center justify-center py-12" aria-busy="true">
+    <div className="w-6 h-6 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" />
+  </section>
+);
+>>>>>>> f8ce225 (feat(perf): optimizar splitting de chunks vite, navegacion responsive y assets webp)
 
 function AppContent() {
   const [activeSection, setActiveSection] = useState('inicio');
@@ -165,7 +197,7 @@ function AppContent() {
 
   if (isAdminView) {
     return (
-      <React.Suspense
+      <Suspense
         fallback={
           <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white space-y-3">
             <div className="w-8 h-8 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
@@ -174,7 +206,7 @@ function AppContent() {
         }
       >
         <AdminDashboard onBackToSite={closeAdmin} />
-      </React.Suspense>
+      </Suspense>
     );
   }
 
@@ -212,48 +244,72 @@ function AppContent() {
         />
 
         {/* 4. Estudio Interactivo de Color & Visualizador Virtual de Ambientes */}
-        <ColorStudioVisualizer onSelectColorForQuote={handleColorSelectedForQuote} />
+        <Suspense fallback={<SectionSkeleton id="estudio-color" minHeight="450px" />}>
+          <ColorStudioVisualizer onSelectColorForQuote={handleColorSelectedForQuote} />
+        </Suspense>
 
         {/* 5. Calculadora Interactiva de Pintura, Rendimiento y Ahorro */}
-        <PaintCalculator onTransferToQuote={handleTransferCalculatorToQuote} />
+        <Suspense fallback={<SectionSkeleton id="calculadora" minHeight="400px" />}>
+          <PaintCalculator onTransferToQuote={handleTransferCalculatorToQuote} />
+        </Suspense>
 
         {/* 6. Servicios técnicos detallados y capacidades */}
-        <ServicesSection onQuoteClick={() => scrollToSection('cotizar')} />
+        <Suspense fallback={<SectionSkeleton id="servicios" minHeight="400px" />}>
+          <ServicesSection onQuoteClick={() => scrollToSection('cotizar')} />
+        </Suspense>
 
         {/* 7. Proceso de transformación */}
-        <ProcessSection onQuoteClick={() => scrollToSection('cotizar')} />
+        <Suspense fallback={<SectionSkeleton id="proceso" minHeight="300px" />}>
+          <ProcessSection onQuoteClick={() => scrollToSection('cotizar')} />
+        </Suspense>
 
         {/* 8. Galería de Proyectos con filtros multi-servicios y comparativa interactiva Antes/Después */}
-        <ProjectsGallery onRequestSimilar={handleRequestSimilarProject} />
+        <Suspense fallback={<SectionSkeleton id="proyectos" minHeight="450px" />}>
+          <ProjectsGallery onRequestSimilar={handleRequestSimilarProject} />
+        </Suspense>
 
         {/* 8.1. Confianza y Prueba Social con trayectoria corporativa y 4 Garantías Claras */}
-        <TestimonialsGuaranteesSection />
+        <Suspense fallback={<SectionSkeleton id="garantias" minHeight="300px" />}>
+          <TestimonialsGuaranteesSection />
+        </Suspense>
 
         {/* 9. Banner de promoción verificada (Hasta 20% de descuento en pintura y aplicación) */}
-        <PromoSection onQuoteClick={() => scrollToSection('cotizar')} />
+        <Suspense fallback={<SectionSkeleton id="promociones" minHeight="250px" />}>
+          <PromoSection onQuoteClick={() => scrollToSection('cotizar')} />
+        </Suspense>
 
         {/* 10. Nosotros: Historia, valores y respaldo */}
-        <AboutSection />
+        <Suspense fallback={<SectionSkeleton id="nosotros" minHeight="350px" />}>
+          <AboutSection />
+        </Suspense>
 
         {/* 10.1. Preguntas Frecuentes - Resolución de Objeciones */}
-        <FAQSection />
+        <Suspense fallback={<SectionSkeleton id="faq" minHeight="350px" />}>
+          <FAQSection />
+        </Suspense>
 
         {/* 11. Formulario de cotización inteligente de 3 pasos */}
-        <QuoteForm
-          initialProjectType={selectedProjectForQuote ? 'personalizado' : 'residencial'}
-          initialService={
-            selectedSolutionForQuote
-              ? selectedSolutionForQuote
-              : 'Pintura y Aplicación Profesional'
-          }
-          initialMessage={customQuoteMessage}
-        />
+        <Suspense fallback={<SectionSkeleton id="cotizar" minHeight="500px" />}>
+          <QuoteForm
+            initialProjectType={selectedProjectForQuote ? 'personalizado' : 'residencial'}
+            initialService={
+              selectedSolutionForQuote
+                ? selectedSolutionForQuote
+                : 'Pintura y Aplicación Profesional'
+            }
+            initialMessage={customQuoteMessage}
+          />
+        </Suspense>
 
         {/* 12. Contacto verificado, Ubicación en Carretera a El Salvador y Mapa */}
-        <ContactSection />
+        <Suspense fallback={<SectionSkeleton id="contacto" minHeight="400px" />}>
+          <ContactSection />
+        </Suspense>
 
         {/* 13. Final CTA */}
-        <FinalCTA onQuoteClick={() => scrollToSection('cotizar')} />
+        <Suspense fallback={<SectionSkeleton id="final-cta" minHeight="250px" />}>
+          <FinalCTA onQuoteClick={() => scrollToSection('cotizar')} />
+        </Suspense>
       </main>
 
       {/* Footer */}

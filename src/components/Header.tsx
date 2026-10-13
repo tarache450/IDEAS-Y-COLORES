@@ -77,7 +77,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate }) => 
           </a>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden min-[1400px]:flex items-center gap-0.5 whitespace-nowrap" aria-label="Navegación principal">
+          <nav className="hidden xl:flex items-center gap-0.5 2xl:gap-1 whitespace-nowrap" aria-label="Navegación principal">
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
               return (
@@ -89,7 +89,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate }) => 
                     e.preventDefault();
                     handleNavClick(item.id);
                   }}
-                  className={`px-3 py-2 rounded-lg text-xs font-semibold transition-colors duration-200 relative inline-block ${
+                  className={`px-2.5 py-1.5 2xl:px-3 2xl:py-2 rounded-lg text-[11px] 2xl:text-xs font-semibold transition-colors duration-200 relative inline-block ${
                     isActive
                       ? 'text-slate-950 font-bold'
                       : 'text-slate-600 hover:text-slate-950 hover:bg-white/35'
@@ -180,7 +180,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate }) => 
           </div>
 
           {/* Mobile Hamburger, Instagram & WhatsApp Button */}
-          <div className="flex items-center gap-1.5 min-[1400px]:hidden">
+          <div className="flex items-center gap-1.5 xl:hidden">
             <a
               href={BUSINESS_INFO.instagramUrl}
               target="_blank"
@@ -218,7 +218,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate }) => 
       {mobileMenuOpen && (
         <div
           id="mobile-drawer-menu"
-          className="min-[1400px]:hidden bg-white/96 backdrop-blur-lg border-b border-slate-200/70 shadow-[0_18px_38px_-26px_rgba(15,23,42,0.55)] px-4 pt-3 pb-6 space-y-4 nav-drawer-enter max-h-[calc(100dvh-72px)] overflow-y-auto"
+          className="xl:hidden bg-white/96 backdrop-blur-lg border-b border-slate-200/70 shadow-[0_18px_38px_-26px_rgba(15,23,42,0.55)] px-4 pt-3 pb-6 space-y-4 nav-drawer-enter max-h-[calc(100dvh-72px)] overflow-y-auto"
         >
           {/* Mood Selector inside mobile menu */}
           <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200/80">

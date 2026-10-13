@@ -54,15 +54,41 @@
     <!-- Resource Preconnects for Web Performance & Core Web Vitals -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-    <link rel="dns-prefetch" href="https://maps.google.com" />
 
-    <!-- Typography -->
+    <!-- Preload Critical LCP Assets (Hero Image + Logo) -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="image"
+      href="/studio/color-studio-azul-profundo.webp"
+      type="image/webp"
+      fetchpriority="high"
     />
+    <link
+      rel="preload"
+      as="image"
+      href="/logo.webp"
+      type="image/webp"
+      fetchpriority="high"
+    />
+
+    <!-- Non-render-blocking Typography -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      />
+    </noscript>
 
     <!-- Comprehensive Structured Data (Schema.org JSON-LD Graph) -->
     <script type="application/ld+json">
@@ -266,7 +292,28 @@
     </script>
   </head>
   <body class="bg-slate-50 text-slate-900 antialiased selection:bg-amber-400 selection:text-slate-950 font-sans">
-    <div id="root"></div>
+    <div id="root">
+      <div style="min-height: 100vh; background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column;">
+        <header style="height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid rgba(226,232,240,0.8); max-width: 1400px; margin: 0 auto; width: 100%; box-sizing: border-box;">
+          <img src="/logo.webp" alt="Ideas & Colores Multi-Servicios" width="180" height="48" style="height: 40px; width: auto; object-fit: contain;" />
+          <div style="height: 38px; width: 130px; background-color: #0059FF; border-radius: 12px;"></div>
+        </header>
+        <main style="padding: 24px 16px; max-width: 1280px; margin: 0 auto; width: 100%; box-sizing: border-box;">
+          <div style="display: inline-block; padding: 6px 14px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 9999px; font-size: 12px; font-weight: 600; color: #1e293b; margin-bottom: 16px;">
+            Ideas & Colores Multi-Servicios • Guatemala
+          </div>
+          <h1 style="font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; color: #020617; line-height: 1.05; margin: 0 0 16px 0; letter-spacing: -0.035em;">
+            Color que transforma espacios.
+          </h1>
+          <p style="font-size: 1.15rem; font-weight: 600; color: #1e293b; margin: 0 0 8px 0;">
+            Pintura, mantenimiento y soluciones para cada espacio.
+          </p>
+          <p style="font-size: 0.95rem; color: #475569; max-width: 620px; line-height: 1.6; margin: 0 0 24px 0;">
+            Transformamos, protegemos y mantenemos tus espacios con asesoría técnica personalizada, suministro de marcas reconocidas y personal calificado en Carretera a El Salvador y toda Guatemala.
+          </p>
+        </main>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

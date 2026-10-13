@@ -251,10 +251,43 @@ main > section.bg-transparent:nth-of-type(even) {
 }
 
 @media (max-width: 767px) {
-  .ambient-wash { animation: none; filter: blur(35px); opacity: 0.11; }
+  /* Drastically reduce GPU compositing load on mobile to fix Speed Index & FCP */
+  .dynamic-blob {
+    filter: blur(24px) !important;
+    animation: none !important;
+    opacity: 0.28 !important;
+  }
+  .dynamic-blob-3,
+  .dynamic-blob-4,
+  .dynamic-blob-5,
+  .dynamic-light-beam,
+  .dynamic-particle {
+    display: none !important;
+  }
+  .dynamic-bg-grid {
+    animation: none !important;
+    opacity: 0.15 !important;
+  }
+  .ambient-wash { animation: none; filter: blur(25px); opacity: 0.11; }
   .ambient-lightfall { opacity: 0.12; }
   .mobile-mood-picker button { width: 44px; height: 44px; }
   main > section { scroll-margin-top: 72px; }
+}
+
+/* Core Web Vitals: Skip off-screen paint & layout during initial load */
+#soluciones,
+#sectores,
+#estudio-color,
+#calculadora,
+#servicios,
+#proyectos,
+#promociones,
+#nosotros,
+#faq,
+#cotizar,
+#contacto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
 }
 
 /* ─── Custom subtle scrollbar ──────────────────────────────── */

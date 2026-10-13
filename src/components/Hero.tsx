@@ -72,70 +72,64 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-          {/* Left Column: Core Copy & CTAs — staggered entrance via FadeIn */}
+          {/* Left Column: Core Copy & CTAs — rendered immediately for instantaneous FCP/LCP */}
           <div className="lg:col-span-7 space-y-6 text-left">
             {/* Eyebrow badge */}
-            <FadeIn delay={0.05} direction="up" distance={20}>
-              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200 shadow-xs text-xs font-semibold">
-                <span
-                  className="w-2.5 h-2.5 rounded-full transition-colors duration-500 animate-pulse"
-                  style={{ backgroundColor: currentMood.color }}
-                />
-                <span className="font-medium text-slate-800">Ideas & Colores Multi-Servicios • Guatemala</span>
-                <span className="hidden sm:inline text-slate-300">|</span>
-                <span className="hidden sm:inline font-bold" style={{ color: currentMood.color }}>
-                  {currentMood.name}
-                </span>
-              </div>
-            </FadeIn>
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200 shadow-xs text-xs font-semibold">
+              <span
+                className="w-2.5 h-2.5 rounded-full transition-colors duration-500 animate-pulse"
+                style={{ backgroundColor: currentMood.color }}
+              />
+              <span className="font-medium text-slate-800">Ideas & Colores Multi-Servicios • Guatemala</span>
+              <span className="hidden sm:inline text-slate-300">|</span>
+              <span className="hidden sm:inline font-bold" style={{ color: currentMood.color }}>
+                {currentMood.name}
+              </span>
+            </div>
 
-            {/* Main H1 Title */}
-            <FadeIn delay={0.12} direction="up" distance={24}>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-[-0.035em] leading-[1.04] font-display text-balance">
-                Color que <br className="hidden sm:inline" />
-                <span className="relative inline-block text-slate-950 mr-2">
-                  transforma
-                  {/* Dynamic brand brush stroke curve underneath */}
-                  <svg
-                    className="absolute -bottom-2.5 left-0 w-full h-3.5 opacity-90 transition-colors duration-500"
-                    style={{ color: currentMood.color }}
-                    viewBox="0 0 200 14"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    preserveAspectRatio="none"
-                  >
-                    <path
-                      d="M2 10C50 3 150 2 198 9"
-                      stroke="currentColor"
-                      strokeWidth="5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </span>
-                <span>espacios.</span>
-              </h1>
-            </FadeIn>
+            {/* Main H1 Title - critical LCP candidate */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-[-0.035em] leading-[1.04] font-display text-balance">
+              Color que <br className="hidden sm:inline" />
+              <span className="relative inline-block text-slate-950 mr-2">
+                transforma
+                {/* Dynamic brand brush stroke curve underneath */}
+                <svg
+                  className="absolute -bottom-2.5 left-0 w-full h-3.5 opacity-90 transition-colors duration-500"
+                  style={{ color: currentMood.color }}
+                  viewBox="0 0 200 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  preserveAspectRatio="none"
+                >
+                  <path
+                    d="M2 10C50 3 150 2 198 9"
+                    stroke="currentColor"
+                    strokeWidth="5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>
+              <span>espacios.</span>
+            </h1>
 
             {/* Subtitle / Lead Description */}
-            <FadeIn delay={0.20} direction="up" distance={20}>
-              <div className="space-y-2">
-                <p className="text-xl sm:text-2xl text-slate-800 font-semibold tracking-tight">
-                  Pintura, mantenimiento y soluciones para cada espacio.
-                </p>
-                <p className="text-base sm:text-lg text-slate-600 max-w-2xl font-normal leading-relaxed">
-                  Transformamos, protegemos y mantenemos tus espacios con asesoría técnica personalizada,
-                  suministro de marcas reconocidas y personal calificado de principio a fin.
-                </p>
-              </div>
-            </FadeIn>
+            <div className="space-y-2">
+              <p className="text-xl sm:text-2xl text-slate-800 font-semibold tracking-tight">
+                Pintura, mantenimiento y soluciones para cada espacio.
+              </p>
+              <p className="text-base sm:text-lg text-slate-600 max-w-2xl font-normal leading-relaxed">
+                Transformamos, protegemos y mantenemos tus espacios con asesoría técnica personalizada,
+                suministro de marcas reconocidas y personal calificado de principio a fin.
+              </p>
+            </div>
 
             {/* Interactive Mood Selector Bar */}
-            <FadeIn delay={0.27} direction="up" distance={16} className="w-full">
+            <div className="w-full">
               <MoodColorPicker variant="full" className="max-w-2xl" />
-            </FadeIn>
+            </div>
 
             {/* Value Checkpoints */}
-            <FadeIn delay={0.32} direction="up" distance={16} className="w-full">
+            <div className="w-full">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 pt-1">
                 <div className="flex items-center gap-2 text-xs font-semibold text-slate-700">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -150,10 +144,10 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
                   <span>Personal calificado</span>
                 </div>
               </div>
-            </FadeIn>
+            </div>
 
             {/* CTAs */}
-            <FadeIn delay={0.38} direction="up" distance={16}>
+            <div>
               <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
                 {/* Primary CTA with dynamic color and shimmer */}
                 <button
@@ -184,36 +178,34 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
                   <span>Hablar por WhatsApp</span>
                 </a>
               </div>
-            </FadeIn>
+            </div>
 
             {/* Partner trust note + social proof */}
-            <FadeIn delay={0.44} direction="up" distance={12}>
-              <div className="space-y-1.5">
-                <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                  <span className="font-semibold text-slate-700">Respaldo de marca:</span>
-                  <span>
-                    Soluciones y recubrimientos oficiales con respaldo {BUSINESS_INFO.partnerBrand}.
-                  </span>
+            <div className="space-y-1.5">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                <span className="font-semibold text-slate-700">Respaldo de marca:</span>
+                <span>
+                  Soluciones y recubrimientos oficiales con respaldo {BUSINESS_INFO.partnerBrand}.
+                </span>
+              </div>
+              <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600">
+                <div className="flex items-center gap-1">
+                  <span className="text-amber-400 text-sm leading-none">★★★★★</span>
+                  <NumberTicker value={4.9} decimals={1} className="font-extrabold text-slate-900 ml-1" />
+                  <span className="text-slate-500">/5</span>
                 </div>
-                <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600">
-                  <div className="flex items-center gap-1">
-                    <span className="text-amber-400 text-sm leading-none">★★★★★</span>
-                    <NumberTicker value={4.9} decimals={1} className="font-extrabold text-slate-900 ml-1" />
-                    <span className="text-slate-500">/5</span>
-                  </div>
-                  <span className="text-slate-300">|</span>
-                  <div className="flex items-center gap-1 font-medium text-slate-700">
-                    <span>+</span>
-                    <NumberTicker value={250} className="font-bold text-slate-900" />
-                    <span>proyectos entregados en Carretera a El Salvador y toda Guatemala</span>
-                  </div>
+                <span className="text-slate-300">|</span>
+                <div className="flex items-center gap-1 font-medium text-slate-700">
+                  <span>+</span>
+                  <NumberTicker value={250} className="font-bold text-slate-900" />
+                  <span>proyectos entregados en Carretera a El Salvador y toda Guatemala</span>
                 </div>
               </div>
-            </FadeIn>
+            </div>
           </div>
 
           {/* Right Column: Architectural Visual Composition responding to mood */}
-          <FadeIn delay={0.22} direction="right" distance={32} className="lg:col-span-5 relative">
+          <div className="lg:col-span-5 relative">
             <div className="relative mx-auto max-w-md lg:max-w-none">
               {/* Main architectural photo card with smooth crossfade */}
               <div
@@ -228,10 +220,10 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
                     key={activeMood}
                     src={moodShowcases.image}
                     alt={`${moodShowcases.title} - Proyecto de pintura y acabados por Ideas & Colores Guatemala`}
-                    initial={{ opacity: 0, scale: 1.05 }}
+                    initial={{ opacity: 1, scale: 1 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4 }}
+                    transition={{ duration: 0.3 }}
                     className="w-full h-full object-cover"
                     loading="eager"
                     fetchPriority="high"
@@ -294,25 +286,25 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
                 </div>
               </div>
 
-              {/* Floating verified badge */}
-              <div className="absolute -bottom-5 -left-4 sm:-left-6 bg-white rounded-2xl p-3.5 shadow-xl border border-slate-200/90 flex items-center gap-3">
+              {/* Floating verified badge with safe mobile margin */}
+              <div className="absolute -bottom-5 left-1 sm:-left-6 bg-white rounded-2xl p-3 sm:p-3.5 shadow-xl border border-slate-200/90 flex items-center gap-2.5 sm:gap-3 max-w-[90vw]">
                 <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0 transition-colors duration-400"
+                  className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center text-white shrink-0 transition-colors duration-400"
                   style={{ backgroundColor: currentMood.color }}
                 >
-                  <Award className="w-6 h-6" style={{ color: currentMood.textColorOnAccent }} />
+                  <Award className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: currentMood.textColorOnAccent }} />
                 </div>
                 <div className="text-left">
-                  <div className="text-sm font-black text-slate-900 leading-none">
+                  <div className="text-xs sm:text-sm font-black text-slate-900 leading-none">
                     +500 Proyectos
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
+                  <div className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5">
                     Ejecutados con garantía por escrito
                   </div>
                 </div>
               </div>
             </div>
-          </FadeIn>
+          </div>
         </div>
       </div>
     </section>

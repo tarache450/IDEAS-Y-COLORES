@@ -77,19 +77,36 @@ export default defineConfig(() => {
       rollupOptions: {
         output: {
           manualChunks(id) {
-            if (id.includes('node_modules')) {
-              if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/scheduler/')) {
+              if (
+                id.includes('/react/') ||
+                id.includes('/react-dom/') ||
+                id.includes('/scheduler/') ||
+                id.includes('\\react\\') ||
+                id.includes('\\react-dom\\') ||
+                id.includes('\\scheduler\\')
+              ) {
                 return 'vendor-react';
               }
-              if (id.includes('motion') || id.includes('framer-motion')) return 'vendor-motion';
-              if (id.includes('lucide-react')) return 'vendor-icons';
-              if (id.includes('gsap') || id.includes('@gsap')) return 'vendor-gsap';
-              if (id.includes('ogl')) return 'vendor-webgl';
-              if (id.includes('@supabase')) return 'vendor-supabase';
+              if (id.includes('motion') || id.includes('framer-motion')) {
+                return 'vendor-motion';
+              }
+              if (id.includes('gsap') || id.includes('@gsap')) {
+                return 'vendor-gsap';
+              }
+              if (id.includes('lucide-react')) {
+                return 'vendor-icons';
+              }
+              if (id.includes('ogl')) {
+                return 'vendor-webgl';
+              }
+              if (id.includes('@supabase')) {
+                return 'vendor-supabase';
+              }
             }
           },
         },
       },
+      chunkSizeWarningLimit: 600,
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.

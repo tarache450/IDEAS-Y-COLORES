@@ -18,7 +18,18 @@ export function assetUrl(path: string): string {
   // Safe fallback to import.meta.env with casting
   const metaEnv = (import.meta as unknown as { env?: { BASE_URL?: string } }).env;
   const base = metaEnv?.BASE_URL || './';
-  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  let cleanPath = path.startsWith('/') ? path.slice(1) : path;
+
+  // Auto-serve ultra-fast modern .webp format for content photos and logos
+  if (/\.(jpe?g|png)$/i.test(cleanPath)) {
+    if (
+      !cleanPath.includes('favicon') &&
+      !cleanPath.includes('apple-touch-icon') &&
+      !cleanPath.includes('masks/')
+    ) {
+      cleanPath = cleanPath.replace(/\.(jpe?g|png)$/i, '.webp');
+    }
+  }
 
   if (base === './' || base === '.') {
     return `./${cleanPath}`;

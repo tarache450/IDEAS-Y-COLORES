@@ -6,3 +6,9 @@ coverage/
 *.log
 .env*
 !.env.example
+*.bak
+*.tmp
+Pack_Completo_Instagram_Ideas_y_Colores/
+TABY_PROMPT.md
+.vscode/
+.idea/
