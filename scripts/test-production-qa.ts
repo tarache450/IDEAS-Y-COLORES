@@ -3,6 +3,7 @@ import { submitQuoteRequest, validateQuoteInput } from '../src/services/quotes';
 import dotenv from 'dotenv';
 
 dotenv.config();
+dotenv.config({ path: '.env.local' });
 
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://khagzrjxoqwzqrikomrd.supabase.co';
 const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoYWd6cmp4b3F3enFyaWtvbXJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NzAwOTUsImV4cCI6MjEwNzA0NjA5NX0.pUav2uMVkrKTs-iL4s5RLvrvLmfqUPnPtxjwsF-sQU0';
@@ -38,7 +39,7 @@ async function runQATests() {
   assert(!badEmailRes.valid, 'Invalid email format is rejected');
 
   // Valid email
-  const goodEmailRes = validateQuoteInput({ name: 'Juan Pérez', phone: '502 1234 5678', email: 'contacto@ideascolores.gt' });
+  const goodEmailRes = validateQuoteInput({ name: 'Juan Pérez', phone: '502 1234 5678', email: 'gerencia@ideasycoloresgt.com' });
   assert(goodEmailRes.valid, 'Valid email format is accepted');
 
   // Invalid phone (< 6 chars)

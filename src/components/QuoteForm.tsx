@@ -37,6 +37,7 @@ interface QuoteFormProps {
   initialProjectType?: string;
   initialService?: string;
   initialMessage?: string;
+  onOpenPrivacy?: () => void;
 }
 
 interface ServiceOption {
@@ -149,6 +150,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
   initialProjectType = 'Residencial',
   initialService = 'Pintura y recubrimientos',
   initialMessage = '',
+  onOpenPrivacy,
 }) => {
   const { currentMood } = useColorMood();
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
@@ -865,7 +867,16 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                       />
                       <label htmlFor="privacy-check" className="text-xs text-slate-600 leading-tight">
                         Acepto ser contactado por un asesor técnico de Ideas & Colores Guatemala para
-                        recibir la cotización y agendar visita técnica si aplica.
+                        recibir la cotización y agendar visita técnica si aplica.{' '}
+                        {onOpenPrivacy && (
+                          <button
+                            type="button"
+                            onClick={onOpenPrivacy}
+                            className="text-blue-600 hover:text-blue-800 underline font-semibold cursor-pointer inline ml-1"
+                          >
+                            Ver política de privacidad y protección de datos (Guatemala Dto. 57-2008)
+                          </button>
+                        )}
                       </label>
                     </div>
 

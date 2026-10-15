@@ -8,6 +8,7 @@ import { SectorsSection } from './components/SectorsSection';
 import { Footer } from './components/Footer';
 import { FloatingColorDock } from './components/FloatingColorDock';
 import { DynamicBackground } from './components/ui/DynamicBackground';
+import { PrivacyPolicyModal } from './components/PrivacyPolicyModal';
 
 // Lazy-loaded components below the fold to minimize initial mobile bundle transfer
 const ColorStudioVisualizer = lazy(() =>
@@ -62,6 +63,7 @@ function AppContent() {
   const [selectedProjectForQuote, setSelectedProjectForQuote] = useState<string>('');
   const [customQuoteMessage, setCustomQuoteMessage] = useState<string>('');
   const { currentMood } = useColorMood();
+  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
 
   const [isAdminView, setIsAdminView] = useState(() => {
     return (
@@ -284,7 +286,7 @@ function AppContent() {
 
         {/* 10.1. Preguntas Frecuentes - Resolución de Objeciones */}
         <Suspense fallback={<SectionSkeleton id="faq" minHeight="350px" />}>
-          <FAQSection />
+          <FAQSection onOpenPrivacy={() => setIsPrivacyModalOpen(true)} />
         </Suspense>
 
         {/* 11. Formulario de cotización inteligente de 3 pasos */}
@@ -297,6 +299,7 @@ function AppContent() {
                 : 'Pintura y Aplicación Profesional'
             }
             initialMessage={customQuoteMessage}
+            onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
           />
         </Suspense>
 
@@ -312,10 +315,20 @@ function AppContent() {
       </main>
 
       {/* Footer */}
-      <Footer onNavigate={scrollToSection} onOpenAdmin={openAdmin} />
+      <Footer
+        onNavigate={scrollToSection}
+        onOpenAdmin={openAdmin}
+        onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+      />
 
       {/* 21st.dev Minimalist Floating Color Dock */}
       <FloatingColorDock activeSection={activeSection} onNavigate={scrollToSection} />
+
+      {/* Modal de Política de Privacidad y Protección de Datos Personales (Guatemala) */}
+      <PrivacyPolicyModal
+        isOpen={isPrivacyModalOpen}
+        onClose={() => setIsPrivacyModalOpen(false)}
+      />
 
     </div>
   );

@@ -29,12 +29,35 @@ const isDev = Boolean(
 );
 
 /**
+ * Sanitiza cadenas de texto eliminando bloques de script, estilos, iframes,
+ * etiquetas HTML, pseudoprotocolos javascript: y caracteres de control no imprimibles.
+ */
+export function sanitizeString(val?: unknown): string {
+  if (typeof val !== 'string') return '';
+  return val
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
+    .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, '')
+    .replace(/<[^>]*>/g, '')
+    .replace(/javascript:/gi, '')
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+    .trim();
+}
+
+/**
  * Valida los datos antes de enviarlos a la base de datos
  */
 export function validateQuoteInput(input: CreateQuoteInput): { valid: boolean; error?: string } {
-  const cleanName = input.name.trim();
-  const cleanPhone = input.phone.trim();
-  const cleanEmail = input.email?.trim();
+  if (!input || typeof input !== 'object') {
+    return { valid: false, error: 'Datos de solicitud inválidos.' };
+  }
+
+  const cleanName = sanitizeString(input.name);
+  const cleanPhone = sanitizeString(input.phone);
+  const cleanEmail = sanitizeString(input.email);
+  const cleanMessage = sanitizeString(input.message);
 
   if (!cleanName || cleanName.length < 2) {
     return { valid: false, error: 'Por favor ingresa tu nombre completo (mínimo 2 caracteres).' };
@@ -56,7 +79,7 @@ export function validateQuoteInput(input: CreateQuoteInput): { valid: boolean; e
     }
   }
 
-  if (input.message && input.message.length > 3000) {
+  if (cleanMessage && cleanMessage.length > 3000) {
     return { valid: false, error: 'El mensaje no debe superar los 3000 caracteres.' };
   }
 
@@ -70,7 +93,7 @@ export async function submitQuoteRequest(
   input: CreateQuoteInput
 ): Promise<QuoteSubmissionResult> {
   // 1. Detección de Bot / Honeypot: si el campo invisible fue rellenado, simular éxito silencioso
-  if (input.honeypot && input.honeypot.trim().length > 0) {
+  if (input.honeypot && String(input.honeypot).trim().length > 0) {
     if (isDev) {
       console.warn('[Anti-Spam] Envío descartado por detección de bot (honeypot activado).');
     }
@@ -86,17 +109,17 @@ export async function submitQuoteRequest(
     };
   }
 
-  // 3. Sanitización de datos
+  // 3. Sanitización estricta de datos
   const payload: QuoteRequestInsert = {
-    name: input.name.trim(),
-    phone: input.phone.trim(),
-    email: input.email?.trim() || null,
-    service: input.service?.trim() || null,
-    space_type: input.spaceType?.trim() || null,
-    estimated_area: input.estimatedArea?.trim() || null,
-    desired_timeline: input.desiredTimeline?.trim() || null,
-    location: input.location?.trim() || null,
-    message: input.message?.trim() || null,
+    name: sanitizeString(input.name),
+    phone: sanitizeString(input.phone),
+    email: sanitizeString(input.email) || null,
+    service: sanitizeString(input.service) || null,
+    space_type: sanitizeString(input.spaceType) || null,
+    estimated_area: sanitizeString(input.estimatedArea) || null,
+    desired_timeline: sanitizeString(input.desiredTimeline) || null,
+    location: sanitizeString(input.location) || null,
+    message: sanitizeString(input.message) || null,
     status: 'new',
     source: input.source || 'website_quote_form',
   };

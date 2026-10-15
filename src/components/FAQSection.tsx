@@ -13,9 +13,13 @@ import { useColorMood } from '../context/ColorMoodContext';
 import { AnimatedTabs } from './ui/AnimatedTabs';
 import { motion, AnimatePresence } from 'motion/react';
 
+interface FAQSectionProps {
+  onOpenPrivacy?: () => void;
+}
+
 interface FAQItem {
   id: string;
-  category: 'visitas' | 'garantias' | 'materiales' | 'servicios';
+  category: 'visitas' | 'garantias' | 'materiales' | 'servicios' | 'privacidad';
   question: string;
   answer: string;
 }
@@ -36,11 +40,25 @@ const FAQ_ITEMS: FAQItem[] = [
       'Entregamos un documento formal de garantía respaldado por Ideas & Colores Multi-Servicios. Cubre tanto la calidad de los materiales originales como la adherencia y mano de obra profesional, garantizando que no existirá descascaramiento prematuro, ampollamiento ni fallas por mala preparación de superficie.',
   },
   {
+    id: 'privacidad-ley-guatemala',
+    category: 'privacidad',
+    question: '¿Cómo protegen mis datos personales según la ley de Guatemala?',
+    answer:
+      'En estricto apego al Decreto Número 57-2008 del Congreso de la República de Guatemala (Ley de Acceso a la Información Pública y Protección de Datos Personales, Artículos 9, 22, 23 y 64) y a los Artículos 24 y 31 de la Constitución Política de Guatemala (Inviolabilidad de Correspondencia y Habeas Data), tus datos personales y de ubicación son confidenciales y se tratan bajo el principio de finalidad exclusiva para la formulación de tu presupuesto y coordinación de visitas. NUNCA comercializamos, cedemos ni compartimos tu información con terceros, agencias de publicidad ni bases de datos externas.',
+  },
+  {
     id: 'suministro-materiales',
     category: 'materiales',
     question: '¿Ustedes suministran los materiales o el cliente debe comprarlos?',
     answer:
       'Ofrecemos ambas modalidades según tu conveniencia. En la modalidad recomendada "Llave en mano", suministramos productos originales de marcas líderes (Sherwin-Williams, Corona, Lanco, Sika) con descuentos por volumen y sin diluciones perjudiciales. Si ya compraste tu pintura o recubrimiento, también brindamos exclusivamente el servicio de aplicación calificada.',
+  },
+  {
+    id: 'privacidad-fotografias-contacto',
+    category: 'privacidad',
+    question: '¿Para qué se utilizan mis datos de contacto y fotografías de espacios?',
+    answer:
+      `Tu nombre, número de WhatsApp/teléfono y fotografías de referencia se emplean exclusivamente por nuestro equipo técnico para calcular metrajes, evaluar el sustrato y redactar tu presupuesto formal desglosado. Los datos se transmiten bajo conexión segura HTTPS y están protegidos por políticas criptográficas y de aislamiento en base de datos (Row Level Security). Puedes solicitar la eliminación definitiva de tus datos en cualquier momento escribiendo a ${BUSINESS_INFO.email} o a nuestro WhatsApp oficial.`,
   },
   {
     id: 'tiempo-cotizacion',
@@ -72,7 +90,7 @@ const FAQ_ITEMS: FAQItem[] = [
   },
 ];
 
-export const FAQSection: React.FC = () => {
+export const FAQSection: React.FC<FAQSectionProps> = ({ onOpenPrivacy }) => {
   const { currentMood } = useColorMood();
   const [openId, setOpenId] = useState<string | null>('visita-costo');
   const [activeCategory, setActiveCategory] = useState<string>('todos');
@@ -107,12 +125,13 @@ export const FAQSection: React.FC = () => {
         </div>
 
         {/* Filter Categories using AnimatedTabs */}
-        <div className="flex items-center justify-center mb-10">
+        <div className="flex items-center justify-center mb-10 overflow-x-auto pb-2">
           <AnimatedTabs
             tabs={[
               { id: 'todos', label: 'Todas las preguntas' },
               { id: 'visitas', label: 'Visitas y presupuestos' },
               { id: 'garantias', label: 'Garantía y facturación' },
+              { id: 'privacidad', label: '🛡️ Privacidad de Datos (GT)' },
               { id: 'materiales', label: 'Materiales y protección' },
               { id: 'servicios', label: 'Multi-Servicios' },
             ]}
@@ -174,8 +193,43 @@ export const FAQSection: React.FC = () => {
           })}
         </div>
 
+        {/* Guatemala Data Privacy Banner Card */}
+        <div className="mt-10 rounded-3xl bg-slate-50 border border-slate-200/90 p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-5 shadow-2xs">
+          <div className="flex items-start gap-4">
+            <div className="w-11 h-11 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 shadow-2xs">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
+                  Marco Legal Guatemala
+                </span>
+                <span className="text-xs font-semibold text-slate-500">
+                  Decreto No. 57-2008 & Art. 24/31 CPRG
+                </span>
+              </div>
+              <h4 className="text-base font-bold text-slate-950 font-display">
+                Tratamiento Ético y Protección Estricta de Datos Personales
+              </h4>
+              <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">
+                Tus datos de cotización (nombre, WhatsApp, fotos de referencia y ubicación) se custodian bajo estándares de confidencialidad mercantil y técnica. Cero venta o cesión a terceros, con derecho de cancelación en cualquier momento.
+              </p>
+            </div>
+          </div>
+
+          {onOpenPrivacy && (
+            <button
+              type="button"
+              onClick={onOpenPrivacy}
+              className="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-900 border border-slate-300 font-bold text-xs transition-colors shrink-0 shadow-2xs cursor-pointer"
+            >
+              Ver Aviso Legal Completo →
+            </button>
+          )}
+        </div>
+
         {/* WhatsApp Fast Consultation Card */}
-        <div className="mt-12 rounded-3xl bg-gradient-to-br from-slate-950 to-slate-900 text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-slate-800">
+        <div className="mt-8 rounded-3xl bg-gradient-to-br from-slate-950 to-slate-900 text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-slate-800">
           <div className="space-y-1 text-center sm:text-left">
             <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
               ¿Tienes otra pregunta sobre tu proyecto?

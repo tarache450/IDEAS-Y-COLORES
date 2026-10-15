@@ -6,9 +6,10 @@ import { BUSINESS_INFO, MULTI_SERVICES_CATEGORIES } from '../data/content';
 interface FooterProps {
   onNavigate: (sectionId: string) => void;
   onOpenAdmin?: () => void;
+  onOpenPrivacy?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin, onOpenPrivacy }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -187,8 +188,19 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin }) => {
             © {new Date().getFullYear()} Ideas & Colores Multi-Servicios Guatemala. Fundada en{' '}
             {BUSINESS_INFO.foundationYear}. Todos los derechos reservados.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-4">
             <span>Guatemala, C.A.</span>
+            {onOpenPrivacy && (
+              <button
+                type="button"
+                onClick={onOpenPrivacy}
+                className="text-slate-400 hover:text-blue-400 transition-colors text-[11px] font-semibold cursor-pointer flex items-center gap-1"
+                title="Aviso de Privacidad y Protección de Datos Personales (Guatemala - Decreto 57-2008)"
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+                <span>Privacidad (Dto. 57-2008)</span>
+              </button>
+            )}
             {onOpenAdmin && (
               <button
                 type="button"

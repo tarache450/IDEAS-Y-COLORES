@@ -86,12 +86,46 @@ export interface QuoteStats {
   total_won_revenue: number;
 }
 
+function sanitizeString(val?: unknown): string {
+  if (typeof val !== 'string') return '';
+  return val
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
+    .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, '')
+    .replace(/<[^>]*>/g, '')
+    .replace(/javascript:/gi, '')
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+    .trim();
+}
+
 /**
  * Inserts a new quote request into the quote_requests table.
  * Honors RLS with return=minimal (no select rights needed for anonymous users).
  */
 export async function insertQuoteRequest(payload: QuoteRequestPayload): Promise<{ error: Error | null }> {
   try {
+    if (!payload || typeof payload !== 'object') {
+      return { error: new Error('Carga de datos inválida.') };
+    }
+
+    const cleanName = sanitizeString(payload.name);
+    const cleanPhone = sanitizeString(payload.phone);
+
+    if (cleanName.length < 2) {
+      return { error: new Error('Nombre inválido: debe contener al menos 2 caracteres.') };
+    }
+    if (cleanName.length > 150) {
+      return { error: new Error('Nombre excede el límite permitido de 150 caracteres.') };
+    }
+    if (cleanPhone.length < 6) {
+      return { error: new Error('Teléfono inválido: debe contener al menos 6 caracteres.') };
+    }
+    if (cleanPhone.length > 30) {
+      return { error: new Error('Teléfono excede el límite permitido de 30 caracteres.') };
+    }
+
     if (!supabaseUrl || !supabaseAnonKey) {
       console.warn('[Supabase] Simulando guardado local (credenciales no detectadas)');
       return { error: null };
@@ -101,15 +135,15 @@ export async function insertQuoteRequest(payload: QuoteRequestPayload): Promise<
       .from('quote_requests')
       .insert([
         {
-          name: payload.name.trim(),
-          phone: payload.phone.trim(),
-          email: payload.email?.trim() || null,
-          service: payload.service || null,
-          space_type: payload.space_type || null,
-          estimated_area: payload.estimated_area || null,
-          desired_timeline: payload.desired_timeline || null,
-          location: payload.location?.trim() || null,
-          message: payload.message?.trim() || null,
+          name: cleanName,
+          phone: cleanPhone,
+          email: sanitizeString(payload.email) || null,
+          service: sanitizeString(payload.service) || null,
+          space_type: sanitizeString(payload.space_type) || null,
+          estimated_area: sanitizeString(payload.estimated_area) || null,
+          desired_timeline: sanitizeString(payload.desired_timeline) || null,
+          location: sanitizeString(payload.location) || null,
+          message: sanitizeString(payload.message) || null,
           status: 'new',
           priority: 'normal',
           source: payload.source || 'website',
@@ -203,8 +237,16 @@ export async function fetchQuoteRequests(options?: {
     }
 
     if (options?.search && options.search.trim() !== '') {
-      const term = `%${options.search.trim()}%`;
-      query = query.or(`name.ilike.${term},phone.ilike.${term},email.ilike.${term},location.ilike.${term},service.ilike.${term}`);
+      // PostgREST .or() parses commas and parentheses as delimiter syntax.
+      // Strip control chars and punctuation that could break parsing or inject clauses.
+      const safeSearch = options.search
+        .replace(/[,\(\)"';\\%_]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (safeSearch.length > 0) {
+        const term = `%${safeSearch}%`;
+        query = query.or(`name.ilike.${term},phone.ilike.${term},email.ilike.${term},location.ilike.${term},service.ilike.${term}`);
+      }
     }
 
     const { data, error } = await query;
@@ -312,13 +354,21 @@ export async function addQuoteNote(
   authorEmail: string
 ): Promise<{ data: QuoteNote | null; error: Error | null }> {
   try {
+    const cleanContent = (content || '').replace(/<[^>]*>/g, '').trim();
+    if (!cleanContent) {
+      return { data: null, error: new Error('La nota no puede estar vacía.') };
+    }
+    if (cleanContent.length > 3000) {
+      return { data: null, error: new Error('La nota no puede exceder 3000 caracteres.') };
+    }
+
     const { data, error } = await supabase
       .from('quote_notes')
       .insert([
         {
           quote_id: quoteId,
-          content: content.trim(),
-          author_email: authorEmail,
+          content: cleanContent,
+          author_email: (authorEmail || '').trim(),
         },
       ])
       .select()

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Descarga de Logotipos - Ideas & Colores (Resolución de Impresión 300 DPI)</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-glow: rgba(37, 99, 235, 0.35);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --badge-bg: #1e293b;
+      --badge-accent: #38bdf8;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background: radial-gradient(circle at 50% 0%, #1e293b 0%, var(--bg) 75%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header {
+      text-align: center;
+      max-width: 750px;
+      margin-bottom: 40px;
+    }
+    .brand-tag {
+      display: inline-block;
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--badge-accent);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+    .preview-box {
+      width: 100%;
+      max-width: 650px;
+      background: repeating-conic-gradient(#1e293b 0% 25%, #0f172a 0% 50%) 50% / 20px 20px;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 45px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    }
+    .preview-box img {
+      max-width: 100%;
+      height: auto;
+      max-height: 160px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4));
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      width: 100%;
+      max-width: 1100px;
+      margin-bottom: 40px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 12px 30px -10px var(--accent-glow);
+    }
+    .card-header {
+      margin-bottom: 16px;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--badge-bg);
+      border: 1px solid var(--card-border);
+      color: #38bdf8;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .specs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+    .spec-item {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 12px 20px;
+      border-radius: 10px;
+      transition: background 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.18);
+      box-shadow: none;
+    }
+    .footer {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="brand-tag">Ideas & Colores Multi-Servicios Guatemala</div>
+    <h1>Descarga de Logotipo en Alta Resolución</h1>
+    <p class="subtitle">Archivos oficiales masterizados a <strong>300 DPI</strong> (estándar de la industria gráfica) para impresión digital, offset, gigantografías, rotulación y papelería corporativa.</p>
+  </div>
+
+  <div class="preview-box">
+    <img src="logo-hd.png" alt="Logotipo Ideas & Colores Oficial">
+  </div>
+
+  <!-- WinRAR / ZIP Master Bundle Banner -->
+  <div style="width: 100%; max-width: 1100px; background: linear-gradient(135deg, rgba(37,99,235,0.2) 0%, rgba(30,41,59,0.7) 100%); border: 1px solid rgba(56,189,248,0.35); border-radius: 16px; padding: 24px; margin-bottom: 35px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
+    <div>
+      <span class="badge" style="background:#0284c7; color:#ffffff;">PAQUETE COMPLETO COMPRIMIDO</span>
+      <h2 style="font-size: 1.4rem; font-weight: 800; margin: 6px 0;">Todos los Logotipos en Archivo WinRAR / ZIP (18.4 MB)</h2>
+      <p style="color: var(--text-muted); font-size: 0.92rem;">Incluye las versiones 300 DPI, Gran Formato, fondos transparentes, fondo blanco, negativo, TIFF de imprenta y guía de uso LEEME.txt.</p>
+    </div>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+      <a class="btn" style="background: #2563eb;" href="Logos-Ideas-y-Colores-Alta-Resolucion-300DPI.rar" download="Logos-Ideas-y-Colores-Alta-Resolucion-300DPI.rar">
+        📦 Descargar Archivo WinRAR (.RAR)
+      </a>
+      <a class="btn btn-secondary" href="Logos-Ideas-y-Colores-Alta-Resolucion-300DPI.zip" download="Logos-Ideas-y-Colores-Alta-Resolucion-300DPI.zip">
+        🗜️ Descargar (.ZIP Universal)
+      </a>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Card 1: PNG 300 DPI Transparente -->
+    <div class="card">
+      <div>
+        <div class="card-header">
+          <span class="badge">ESTÁNDAR IMPRESIÓN DIGITAL</span>
+          <h3>PNG Transparente (300 DPI)</h3>
+        </div>
+        <p>Ideal para diseñadores, imprentas, colocación sobre cualquier color de fondo, uniformes y papelería.</p>
+        <div class="specs">
+          <span class="spec-item">300 DPI</span>
+          <span class="spec-item">3116 × 1556 px</span>
+          <span class="spec-item">Transparente</span>
+          <span class="spec-item">1.4 MB</span>
+        </div>
+      </div>
+      <a class="btn" href="impresion/Logo-Ideas-y-Colores-300DPI-Transparente.png" download="Logo-Ideas-y-Colores-300DPI-Transparente.png">
+        📥 Descargar PNG (300 DPI)
+      </a>
+    </div>
+
+    <!-- Card 2: JPG 300 DPI Fondo Blanco -->
+    <div class="card">
+      <div>
+        <div class="card-header">
+          <span class="badge">ENVÍO DIRECTO A CLIENTE</span>
+          <h3>JPG Fondo Blanco (300 DPI)</h3>
+        </div>
+        <p>Ideal para enviar por WhatsApp o correo sin que el fondo transparente se vea negro en visores de teléfono.</p>
+        <div class="specs">
+          <span class="spec-item">300 DPI</span>
+          <span class="spec-item">3116 × 1556 px</span>
+          <span class="spec-item">Fondo Blanco</span>
+          <span class="spec-item">964 KB</span>
+        </div>
+      </div>
+      <a class="btn" href="impresion/Logo-Ideas-y-Colores-300DPI-Fondo-Blanco.jpg" download="Logo-Ideas-y-Colores-300DPI-Fondo-Blanco.jpg">
+        📥 Descargar JPG (Fondo Blanco)
+      </a>
+    </div>
+
+    <!-- Card 3: TIFF 300 DPI Imprenta -->
+    <div class="card">
+      <div>
+        <div class="card-header">
+          <span class="badge">PRE-PRENSA PROFESIONAL</span>
+          <h3>TIFF Imprenta (300 DPI)</h3>
+        </div>
+        <p>Formato estándar sin compresión con pérdida utilizado por imprentas industriales y sistemas RIP.</p>
+        <div class="specs">
+          <span class="spec-item">300 DPI</span>
+          <span class="spec-item">3116 × 1556 px</span>
+          <span class="spec-item">Compresión LZW</span>
+          <span class="spec-item">1.7 MB</span>
+        </div>
+      </div>
+      <a class="btn btn-secondary" href="impresion/Logo-Ideas-y-Colores-300DPI-Imprenta.tif" download="Logo-Ideas-y-Colores-300DPI-Imprenta.tif">
+        📥 Descargar TIFF (Imprenta)
+      </a>
+    </div>
+
+    <!-- Card 4: Gran Formato 6232x3112 px -->
+    <div class="card">
+      <div>
+        <div class="card-header">
+          <span class="badge">GRAN FORMATO / GIGANTOGRAFÍA</span>
+          <h3>Ultra HD 6232 × 3112 (300 DPI)</h3>
+        </div>
+        <p>Muestreo 2X Lanczos3 optimizado para letreros exteriores, rotulación de vehículos y vallas publicitarias.</p>
+        <div class="specs">
+          <span class="spec-item">300 DPI</span>
+          <span class="spec-item">6232 × 3112 px</span>
+          <span class="spec-item">Transparente</span>
+          <span class="spec-item">4.9 MB</span>
+        </div>
+      </div>
+      <a class="btn" href="impresion/Logo-Ideas-y-Colores-GRAN-FORMATO-6232x3112-300DPI.png" download="Logo-Ideas-y-Colores-GRAN-FORMATO-6232x3112-300DPI.png">
+        📥 Descargar Gran Formato (PNG)
+      </a>
+    </div>
+  </div>
+
+  <div class="footer">
+    Ideas & Colores Multi-Servicios — Guatemala. Material masterizado para impresión de alta fidelidad.
+  </div>
+
+</body>
+</html>
