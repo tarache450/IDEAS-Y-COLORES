@@ -7,6 +7,7 @@ import { SolutionsSection } from './components/SolutionsSection';
 import { SectorsSection } from './components/SectorsSection';
 import { Footer } from './components/Footer';
 import { FloatingColorDock } from './components/FloatingColorDock';
+import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { DynamicBackground } from './components/ui/DynamicBackground';
 import { PrivacyPolicyModal } from './components/PrivacyPolicyModal';
 
@@ -135,7 +136,8 @@ function AppContent() {
   };
 
   const handleRequestSimilarProject = (projectTitle: string, category: string) => {
-    setSelectedProjectForQuote(`${projectTitle} (${category})`);
+    setSelectedProjectForQuote(category);
+    setCustomQuoteMessage(`Me interesa solicitar una cotización para un proyecto similar a: "${projectTitle}" (${category}).`);
     scrollToSection('cotizar');
   };
 
@@ -146,7 +148,7 @@ function AppContent() {
     roomName: string,
     hex?: string
   ) => {
-    setSelectedSolutionForQuote('Pintura Arquitectónica con Asesoría de Color');
+    setSelectedSolutionForQuote('Pintura y recubrimientos');
     setCustomQuoteMessage(
       `Me interesa cotizar mi proyecto con el color ${colorCode} ${colorName}${hex ? ` (${hex})` : ''}, acabado ${finish.toUpperCase()} para el espacio de ${roomName}.`
     );
@@ -155,13 +157,15 @@ function AppContent() {
 
   const handleTransferCalculatorToQuote = (details: string) => {
     setCustomQuoteMessage(details);
-    setSelectedSolutionForQuote('Pintura y Aplicación según Medidas Calculadas');
+    setSelectedSolutionForQuote('Pintura y recubrimientos');
     scrollToSection('cotizar');
   };
 
-  // Scrollspy to automatically update active section on scroll
+  // Zero-layout-thrashing IntersectionObserver Scrollspy
   useEffect(() => {
-    const sections = [
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
+
+    const sectionIds = [
       'inicio',
       'confianza',
       'soluciones',
@@ -177,23 +181,35 @@ function AppContent() {
       'contacto',
     ];
 
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 200;
-      for (const sectionId of sections) {
-        const el = document.getElementById(sectionId);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(sectionId);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && entry.target.id) {
+            setActiveSection(entry.target.id);
             break;
           }
         }
+      },
+      {
+        rootMargin: '-22% 0px -65% 0px',
+        threshold: 0,
+      }
+    );
+
+    const observeElements = () => {
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    observeElements();
+    const timer = window.setTimeout(observeElements, 1200);
+
+    return () => {
+      window.clearTimeout(timer);
+      observer.disconnect();
+    };
   }, []);
 
   if (isAdminView) {
@@ -239,7 +255,7 @@ function AppContent() {
         {/* 3.1. Sectores que atendemos en Guatemala (6 sectores) */}
         <SectorsSection
           onQuoteSector={(sectorTitle) => {
-            setSelectedSolutionForQuote(`Atención para sector ${sectorTitle}`);
+            setSelectedProjectForQuote(sectorTitle);
             scrollToSection('cotizar');
           }}
         />
@@ -292,12 +308,8 @@ function AppContent() {
         {/* 11. Formulario de cotización inteligente de 3 pasos */}
         <Suspense fallback={<SectionSkeleton id="cotizar" minHeight="500px" />}>
           <QuoteForm
-            initialProjectType={selectedProjectForQuote ? 'personalizado' : 'residencial'}
-            initialService={
-              selectedSolutionForQuote
-                ? selectedSolutionForQuote
-                : 'Pintura y Aplicación Profesional'
-            }
+            initialProjectType={selectedProjectForQuote || 'Residencial'}
+            initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
             initialMessage={customQuoteMessage}
             onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
           />
@@ -323,6 +335,9 @@ function AppContent() {
 
       {/* 21st.dev Minimalist Floating Color Dock */}
       <FloatingColorDock activeSection={activeSection} onNavigate={scrollToSection} />
+
+      {/* Sticky Floating WhatsApp Conversion Drawer (Mobile & Desktop) */}
+      <FloatingWhatsApp />
 
       {/* Modal de Política de Privacidad y Protección de Datos Personales (Guatemala) */}
       <PrivacyPolicyModal

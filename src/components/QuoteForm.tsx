@@ -146,6 +146,38 @@ const SPACE_OPTIONS: SpaceOption[] = [
   },
 ];
 
+function normalizeServiceTitle(raw?: string): string {
+  if (!raw) return SERVICE_OPTIONS[0].title;
+  const lower = raw.toLowerCase();
+  if (lower.includes('pintura') || lower.includes('recubrimiento') || lower.includes('impermeab')) {
+    return 'Pintura y recubrimientos';
+  }
+  if (lower.includes('impresi') || lower.includes('rotulaci')) return 'Impresión digital';
+  if (lower.includes('carpinter') || lower.includes('madera') || lower.includes('pérgola')) return 'Carpintería';
+  if (lower.includes('plomer')) return 'Plomería';
+  if (lower.includes('resina') || lower.includes('epóxic') || lower.includes('epoxic')) return 'Resina epóxica';
+  if (lower.includes('mantenimiento') || lower.includes('instalaci') || lower.includes('reparaci')) {
+    return 'Mantenimiento general';
+  }
+  const exact = SERVICE_OPTIONS.find((s) => s.title.toLowerCase() === lower);
+  return exact ? exact.title : SERVICE_OPTIONS[0].title;
+}
+
+function normalizeSpaceTitle(raw?: string): string {
+  if (!raw) return SPACE_OPTIONS[0].title;
+  const lower = raw.toLowerCase();
+  if (lower.includes('residencial') || lower.includes('casa') || lower.includes('condominio')) return 'Residencial';
+  if (lower.includes('oficina') || lower.includes('corporativ')) return 'Oficina';
+  if (lower.includes('comercial') || lower.includes('local') || lower.includes('plaza')) return 'Comercial';
+  if (lower.includes('recreativ') || lower.includes('deportiv') || lower.includes('gimnasio') || lower.includes('cancha')) {
+    return 'Recreativo';
+  }
+  if (lower.includes('institucional') || lower.includes('colegio') || lower.includes('campus')) return 'Institucional';
+  if (lower.includes('industrial') || lower.includes('bodega') || lower.includes('planta')) return 'Industrial';
+  const exact = SPACE_OPTIONS.find((s) => s.title.toLowerCase() === lower);
+  return exact ? exact.title : SPACE_OPTIONS[0].title;
+}
+
 export const QuoteForm: React.FC<QuoteFormProps> = ({
   initialProjectType = 'Residencial',
   initialService = 'Pintura y recubrimientos',
@@ -156,10 +188,14 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
 
   // Step 1 State: ¿Qué necesitas?
-  const [selectedService, setSelectedService] = useState<string>(initialService);
+  const [selectedService, setSelectedService] = useState<string>(() =>
+    normalizeServiceTitle(initialService)
+  );
 
   // Step 2 State: Tipo de espacio
-  const [selectedSpace, setSelectedSpace] = useState<string>(initialProjectType);
+  const [selectedSpace, setSelectedSpace] = useState<string>(() =>
+    normalizeSpaceTitle(initialProjectType)
+  );
   const [estimatedArea, setEstimatedArea] = useState<string>('50 - 150 m²');
   const [desiredTimeline, setDesiredTimeline] = useState<string>('Próximos 7 días');
 
@@ -187,9 +223,15 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
 
   useEffect(() => {
     if (initialService) {
-      setSelectedService(initialService);
+      setSelectedService(normalizeServiceTitle(initialService));
     }
   }, [initialService]);
+
+  useEffect(() => {
+    if (initialProjectType) {
+      setSelectedSpace(normalizeSpaceTitle(initialProjectType));
+    }
+  }, [initialProjectType]);
 
   useEffect(() => {
     if (initialMessage) {
@@ -815,7 +857,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           Arrastra fotografías aquí o haz clic para seleccionarlas
                         </p>
                         <p className="text-[10px] text-slate-500 mt-0.5">
-                          PNG, JPG o HEIC de tus paredes, techos, pisos o muebles
+                          PNG, JPG o HEIC de tus paredes, techos, pisos o muebles (listas para adjuntar en tu chat de WhatsApp al finalizar)
                         </p>
                         <input
                           ref={fileInputRef}

@@ -12,7 +12,6 @@ import { BUSINESS_INFO } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
 import { MoodColorPicker } from './MoodColorPicker';
 import { NumberTicker } from './ui/NumberTicker';
-import FadeIn from './ui/FadeIn';
 import { motion, AnimatePresence } from 'motion/react';
 import { assetUrl } from '../utils/asset';
 
@@ -28,6 +27,7 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
   const moodShowcases = {
     azul: {
       image: assetUrl('studio/color-studio-azul-profundo.webp'),
+      srcSet: undefined,
       title: 'Estudio Contemporáneo Zona 14',
       tag: 'Pintura Arquitectónica & Asesoría',
       tone: 'Azul Naval & Nogal Cálido',
@@ -35,6 +35,7 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
     },
     naranja: {
       image: assetUrl('studio/color-studio-terracota-coral.webp'),
+      srcSet: undefined,
       title: 'Comedor Residencial Carretera a El Salvador',
       tag: 'Muros de Acento & Calidez',
       tone: 'Terracota Orgánico & Roble',
@@ -42,6 +43,7 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
     },
     amarillo: {
       image: assetUrl('studio/color-studio-neutros-calidos.webp'),
+      srcSet: undefined,
       title: 'Dormitorio Master Condominio',
       tag: 'Luz Natural & Sensación de Amplitud',
       tone: 'Arena Suave & Greige Cálido',
@@ -49,6 +51,7 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
     },
     celeste: {
       image: assetUrl('hero-interior-sala.webp'),
+      srcSet: `${assetUrl('hero-interior-sala-mobile.webp')} 640w, ${assetUrl('hero-interior-sala.webp')} 1200w`,
       title: 'Sala Panorámica Carretera a El Salvador',
       tag: 'Integración Visual & Armonía',
       tone: 'Off-White & Greige Arquitectónico',
@@ -115,11 +118,11 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
             {/* Subtitle / Lead Description */}
             <div className="space-y-2">
               <p className="text-xl sm:text-2xl text-slate-800 font-semibold tracking-tight">
-                Pintura, mantenimiento y soluciones para cada espacio.
+                Pintura con sistema Airless, impermeabilización de losas y mantenimiento integral.
               </p>
               <p className="text-base sm:text-lg text-slate-600 max-w-2xl font-normal leading-relaxed">
                 Transformamos, protegemos y mantenemos tus espacios con asesoría técnica personalizada,
-                suministro de marcas reconocidas y personal calificado de principio a fin.
+                recubrimientos de alto estándar, marcas reconocidas y personal calificado de principio a fin.
               </p>
             </div>
 
@@ -141,7 +144,7 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
                 </div>
                 <div className="flex items-center gap-2 text-xs font-semibold text-slate-700">
                   <Truck className="w-4 h-4 text-sky-600 shrink-0" />
-                  <span>Personal calificado</span>
+                  <span>Sistema Airless & Losa</span>
                 </div>
               </div>
             </div>
@@ -197,7 +200,7 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
                 <span className="text-slate-300">|</span>
                 <div className="flex items-center gap-1 font-medium text-slate-700">
                   <span>+</span>
-                  <NumberTicker value={250} className="font-bold text-slate-900" />
+                  <NumberTicker value={500} className="font-bold text-slate-900" />
                   <span>proyectos entregados en Carretera a El Salvador y toda Guatemala</span>
                 </div>
               </div>
@@ -219,6 +222,8 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
                   <motion.img
                     key={activeMood}
                     src={moodShowcases.image}
+                    srcSet={moodShowcases.srcSet}
+                    sizes="(max-width: 640px) 100vw, 600px"
                     alt={`${moodShowcases.title} - Proyecto de pintura y acabados por Ideas & Colores Guatemala`}
                     initial={{ opacity: 1, scale: 1 }}
                     animate={{ opacity: 1, scale: 1 }}

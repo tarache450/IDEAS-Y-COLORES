@@ -36,7 +36,6 @@ import {
   QuoteNote,
   QuoteStats,
   signInAdmin,
-  signUpAdmin,
   signOutAdmin,
   getAdminSession,
   fetchQuoteRequests,
@@ -69,10 +68,9 @@ const PRIORITY_LABELS: Record<QuotePriority, { label: string; color: string; bad
 };
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) => {
-  // Authentication State
+  // Auth State (Login only - admin accounts are provisioned via Supabase Console)
   const [sessionUser, setSessionUser] = useState<any | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [authError, setAuthError] = useState<string | null>(null);
@@ -163,27 +161,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
     }
   }, [selectedLead]);
 
-  // Handle Login / Sign Up
+  // Handle Admin Login
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError(null);
     setAuthSubmitting(true);
 
-    if (authMode === 'login') {
-      const { user, error } = await signInAdmin(authEmail, authPassword);
-      if (error) {
-        setAuthError(error.message);
-      } else {
-        setSessionUser(user);
-      }
+    const { user, error } = await signInAdmin(authEmail, authPassword);
+    if (error) {
+      setAuthError(error.message);
     } else {
-      const { user, error } = await signUpAdmin(authEmail, authPassword);
-      if (error) {
-        setAuthError(error.message);
-      } else {
-        setSessionUser(user);
-        alert('Cuenta creada. Si Supabase requiere confirmación por email, por favor revisa tu bandeja de entrada.');
-      }
+      setSessionUser(user);
     }
     setAuthSubmitting(false);
   };
@@ -304,7 +292,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
     );
   }
 
-  // Auth Screen (Login / Signup)
+  // Auth Screen (Login only)
   if (!sessionUser) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 text-white relative overflow-hidden">
@@ -333,7 +321,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
               Ideas & Colores CRM
             </h2>
             <p className="mt-1 text-sm text-slate-400">
-              Panel Administrativo de Control y Cotizaciones
+              Acceso Exclusivo para Personal Autorizado
             </p>
           </div>
         </div>
@@ -391,20 +379,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                 ) : (
                   <Shield className="w-4 h-4" />
                 )}
-                {authMode === 'login' ? 'Iniciar Sesión en CRM' : 'Crear Cuenta Administrativa'}
+                Iniciar Sesión en CRM
               </button>
             </form>
-
-            <div className="mt-6 pt-5 border-t border-slate-800 text-center">
-              <button
-                onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
-                className="text-xs text-amber-400 hover:text-amber-300 font-medium transition-colors"
-              >
-                {authMode === 'login'
-                  ? '¿Primer acceso? Registrar nuevo administrador'
-                  : '¿Ya tienes cuenta? Iniciar sesión aquí'}
-              </button>
-            </div>
           </div>
         </div>
       </div>

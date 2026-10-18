@@ -26,7 +26,6 @@ import { StaggeredText } from './ui/StaggeredText';
 import { assetUrl } from '../utils/asset';
 import { BlurHighlight } from './ui/BlurHighlight';
 import FadeIn from './ui/FadeIn';
-import GlareHover from './ui/GlareHover';
 
 interface ProjectsGalleryProps {
   onRequestSimilar: (projectTitle: string, category: string) => void;

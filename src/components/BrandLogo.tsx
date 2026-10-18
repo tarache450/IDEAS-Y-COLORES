@@ -39,6 +39,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
         height="48"
         className={`shrink-0 object-contain transition-transform duration-300 group-hover:scale-[1.03] ${sizeClasses}`}
         loading={isPriority ? 'eager' : 'lazy'}
+        fetchPriority={isPriority ? 'high' : 'auto'}
         decoding="async"
       />
 
