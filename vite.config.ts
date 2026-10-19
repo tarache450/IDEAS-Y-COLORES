@@ -62,12 +62,46 @@ function aistudioMediaPlugin(): Plugin {
     },
   };
 }
-// LINT.ThenChange(//depot/google3/java/com/google/alkali/boq/makersuite/applet_dev_service/templates/initializers/react_theme/vite.config.ts:aistudio_media_plugin)
+function apiBackendPlugin(): Plugin {
+  return {
+    name: 'vite-plugin-api-backend',
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const rawUrl = req.url?.split('?')[0];
+        if (rawUrl === '/api/leads' || rawUrl === '/api/leads/') {
+          try {
+            const { handleLeadsRequest } = await import('./src/server/handlers/leadsHandler');
+            await handleLeadsRequest(req, res);
+            return;
+          } catch (err) {
+            console.error('[API Backend Plugin Error]', err);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ ok: false, error: 'Internal API Server Error' }));
+            return;
+          }
+        }
+        if (rawUrl === '/api/health' || rawUrl === '/api/health/') {
+          try {
+            const { handleHealthRequest } = await import('./src/server/handlers/healthHandler');
+            await handleHealthRequest(req, res);
+            return;
+          } catch (err) {
+            console.error('[API Health Plugin Error]', err);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ ok: false, error: 'Health Check Failed' }));
+            return;
+          }
+        }
+        next();
+      });
+    },
+  };
+}
 
 export default defineConfig(() => {
   return {
     base: '/',
-    plugins: [react(), tailwindcss(), aistudioMediaPlugin()],
+    plugins: [react(), tailwindcss(), aistudioMediaPlugin(), apiBackendPlugin()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

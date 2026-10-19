@@ -1,0 +1,42 @@
+{
+  "system": "orca-engine",
+  "project": "IDEAS-Y-COLORES",
+  "domain": "https://ideasycoloresgt.site",
+  "corporateEmail": "gerencia@ideasycoloresgt.com",
+  "backend": {
+    "architecture": "dual-runtime-hybrid",
+    "nodeRuntime": {
+      "framework": "Node / Vite Middleware / TypeScript",
+      "entrypoint": "src/server/index.ts",
+      "validator": "src/server/validators/leadSchema.ts",
+      "storage": "src/server/services/leadStorage.ts",
+      "mailer": "src/server/services/mailer.ts",
+      "endpoints": [
+        { "path": "/api/leads", "method": "POST", "handler": "handleLeadsRequest" },
+        { "path": "/api/health", "method": "GET", "handler": "handleHealthRequest" }
+      ]
+    },
+    "phpFallbackRuntime": {
+      "version": "PHP 8.2+",
+      "server": "Hostinger Apache/LiteSpeed Shared Hosting",
+      "gatewayLeads": "public/api/leads.php",
+      "gatewayHealth": "public/api/health.php",
+      "rewriteEngine": "public/.htaccess"
+    },
+    "security": {
+      "cors": "Strict Origin Lock (https://ideasycoloresgt.site + localhost)",
+      "rateLimiter": "3 submissions / 10 min window per IP",
+      "honeypot": "website_hp field with silent 200 OK evasion",
+      "sanitization": "HTML-strip, script-strip, HTML-entity-escape",
+      "smtp": {
+        "host": "smtp.hostinger.com",
+        "port": 465,
+        "ssl": true,
+        "mailbox": "gerencia@ideasycoloresgt.com"
+      },
+      "storage": "Protected append-only JSONL log (data/leads.jsonl)"
+    },
+    "status": "HEALTHY",
+    "updatedAt": "2026-10-19T17:24:00Z"
+  }
+}

@@ -14,4 +14,5 @@ entrega-logos-cliente/
 TABY_PROMPT.md
 .vscode/
 .idea/
-
+data/
+*.jsonl

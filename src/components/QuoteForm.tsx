@@ -213,6 +213,8 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submittedLeadId, setSubmittedLeadId] = useState('');
+  const [submittedWaUrl, setSubmittedWaUrl] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [honeypot, setHoneypot] = useState('');
 
@@ -318,6 +320,8 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
         return;
       }
 
+      setSubmittedLeadId(result.leadId || '');
+      setSubmittedWaUrl(result.whatsappRedirectUrl || '');
       setIsSubmitting(false);
       setSubmitted(true);
     } catch {
@@ -380,10 +384,16 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                   <CheckCircle2 className="w-12 h-12 stroke-[2.2]" />
                 </div>
 
-                <div className="space-y-2 max-w-lg mx-auto">
+                <div className="space-y-3 max-w-lg mx-auto">
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-950 font-display">
                     ¡Cotización recibida con éxito!
                   </h3>
+                  {submittedLeadId && (
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-slate-800 text-xs font-mono font-bold">
+                      <span className="text-slate-500 font-sans">No. de Seguimiento:</span>
+                      <span className="text-blue-700 font-bold">[{submittedLeadId}]</span>
+                    </div>
+                  )}
                   <p className="text-sm sm:text-base text-slate-600">
                     Gracias, <strong>{fullName}</strong>. Un asesor técnico de Ideas & Colores te
                     contactará al <strong>{phone}</strong> para coordinar la visita y afinar tu
@@ -400,7 +410,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                     Envía el resumen de tu cotización directo a nuestro equipo técnico:
                   </p>
                   <a
-                    href={buildWhatsAppLink()}
+                    href={submittedWaUrl || buildWhatsAppLink()}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-sm transition-all"
@@ -414,6 +424,8 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                   type="button"
                   onClick={() => {
                     setSubmitted(false);
+                    setSubmittedLeadId('');
+                    setSubmittedWaUrl('');
                     setCurrentStep(1);
                     setFullName('');
                     setPhone('');
@@ -434,7 +446,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                 {/* Honeypot Anti-Spam (Invisible para humanos, trampa para bots) */}
                 <input
                   type="text"
-                  name="user_business_hp"
+                  name="website_hp"
                   value={honeypot}
                   onChange={(e) => setHoneypot(e.target.value)}
                   tabIndex={-1}

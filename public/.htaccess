@@ -13,11 +13,22 @@
   RewriteCond %{HTTP_HOST} ^www\.ideasycoloresgt\.site$ [NC]
   RewriteRule ^(.*)$ https://ideasycoloresgt.site/$1 [L,R=301]
 
-  # 3. SPA Fallback: Direct non-file/directory requests to index.html
+  # 3. Backend API Gateway Rewrites (Hostinger Apache/LiteSpeed)
+  RewriteRule ^api/leads/?$ api/leads.php [QSA,L]
+  RewriteRule ^api/health/?$ api/health.php [QSA,L]
+
+  # 4. SPA Fallback: Direct non-file/directory requests to index.html
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule ^ index.html [L]
 </IfModule>
+
+# Protect sensitive storage and environment files
+<FilesMatch "(^\.env|\.jsonl|\.json)$">
+  <If "%{REQUEST_URI} =~ m#/(data|storage)/#">
+    Require all denied
+  </If>
+</FilesMatch>
 
 # ----------------------------------------------------------------------
 # GZIP / DEFLATE COMPRESSION (LiteSpeed & Apache on Hostinger)
