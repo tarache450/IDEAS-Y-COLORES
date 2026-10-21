@@ -55,7 +55,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- Preload Critical LCP Assets (Hero Image + Logo) -->
+    <!-- Preload Critical LCP Asset (Hero Image) - Perf Optimization: avoid logo competing with critical render -->
     <link
       rel="preload"
       as="image"
@@ -63,14 +63,7 @@
       type="image/webp"
       fetchpriority="high"
     />
-    <link
-      rel="preload"
-      as="image"
-      href="/logo.webp"
-      type="image/webp"
-      fetchpriority="high"
-    />
-
+    
     <!-- Non-render-blocking Typography -->
     <link
       rel="preload"

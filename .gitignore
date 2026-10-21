@@ -17,3 +17,4 @@ TABY_PROMPT.md
 .idea/
 data/
 *.jsonl
+docs/evidence/**/*.json
