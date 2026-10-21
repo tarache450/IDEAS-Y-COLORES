@@ -148,7 +148,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
           <button
             type="button"
             onClick={() => setSliderPosition(100)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+            className={`min-h-[44px] px-4 py-2.5 rounded-xl text-xs font-bold transition-all inline-flex items-center justify-center ${
               sliderPosition >= 98
                 ? 'bg-slate-900 text-white shadow-xs'
                 : 'bg-slate-100 hover:bg-slate-200 text-slate-700'

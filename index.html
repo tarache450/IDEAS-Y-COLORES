@@ -61,14 +61,23 @@
       as="image"
       href="/studio/color-studio-azul-profundo.webp"
       type="image/webp"
+      media="(min-width: 1024px)"
       fetchpriority="high"
     />
-    
-    <!-- Non-render-blocking Typography -->
+    <!-- Non-render-blocking Typography: preload variable fonts to minimize swap CLS -->
     <link
       rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      as="font"
+      type="font/woff2"
+      href="https://fonts.gstatic.com/s/outfit/v15/QGYvz_MVcBeNP4NJtEtq.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2"
+      crossorigin
     />
     <link
       rel="stylesheet"

@@ -110,14 +110,15 @@ function previewCompressionPlugin(): Plugin {
     name: 'vite-plugin-preview-compression',
     configurePreviewServer(server) {
       server.middlewares.use((req, res, next) => {
+        if (req.method !== 'GET' && req.method !== 'HEAD') return next();
         const acceptEncoding = (req.headers['accept-encoding'] as string) || '';
         const rawUrl = req.url?.split('?')[0].split('#')[0] || '/';
+        if (rawUrl.startsWith('/api/')) return next();
         const relPath = rawUrl === '/' ? 'index.html' : rawUrl.replace(/^\//, '');
         const filePath = path.resolve(__dirname, 'dist', relPath);
 
-        const targetPath = fs.existsSync(filePath) && fs.statSync(filePath).isFile()
-          ? filePath
-          : path.resolve(__dirname, 'dist', 'index.html');
+        // Only serve files that really exist (never mask 404s with index.html).
+        const targetPath = filePath;
 
         if (fs.existsSync(targetPath) && fs.statSync(targetPath).isFile()) {
           const ext = path.extname(targetPath).toLowerCase();
@@ -176,7 +177,7 @@ export default defineConfig(() => {
     },
     esbuild: {
       legalComments: 'none',
-      drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
+      drop: process.env.NODE_ENV === 'production' ? ['debugger'] : [],
     },
     build: {
       target: 'es2022',
