@@ -61,6 +61,7 @@
       as="image"
       href="/studio/color-studio-azul-profundo.webp"
       type="image/webp"
+      media="(min-width: 1024px)"
       fetchpriority="high"
     />
     <link
@@ -71,24 +72,19 @@
       fetchpriority="high"
     />
 
-    <!-- Non-render-blocking Typography -->
+        <!-- Preload Critical Typography WOFF2 to Eliminate Font Swap CLS -->
     <link
       rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      as="font"
+      type="font/woff2"
+      href="https://fonts.gstatic.com/s/outfit/v15/QGYvz_MVcBeNP4NJtEtqUYLknw.woff2"
+      crossorigin
     />
+    <!-- Typography: Loaded synchronously with preconnect to prevent late font swap shifts -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-      media="print"
-      onload="this.media='all'"
     />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-      />
-    </noscript>
 
     <!-- Comprehensive Structured Data (Schema.org JSON-LD Graph) -->
     <script type="application/ld+json">

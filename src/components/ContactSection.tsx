@@ -72,7 +72,7 @@ export const ContactSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-3.5 py-1 rounded-full border border-amber-200">
+          <span className="text-xs font-bold uppercase tracking-wider text-amber-900 bg-amber-50 px-3.5 py-1 rounded-full border border-amber-300">
             Canales Verificados
           </span>
           <div className="mt-3">
@@ -101,9 +101,9 @@ export const ContactSection: React.FC = () => {
                 <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center mb-3">
                   <Phone className="w-5 h-5" />
                 </div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600">
                   Teléfono directo
-                </h4>
+                </h3>
                 <a
                   href={`tel:${BUSINESS_INFO.phoneClean}`}
                   className="text-lg font-bold text-slate-950 hover:text-amber-600 transition-colors block mt-1"
@@ -121,9 +121,9 @@ export const ContactSection: React.FC = () => {
                 <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-3">
                   <MessageCircle className="w-5 h-5" />
                 </div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-800">
                   WhatsApp Oficial
-                </h4>
+                </h3>
                 <a
                   href={directWhatsAppUrl}
                   target="_blank"
@@ -143,9 +143,9 @@ export const ContactSection: React.FC = () => {
                 <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-900 flex items-center justify-center mb-3">
                   <Mail className="w-5 h-5" />
                 </div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600">
                   Correo Electrónico
-                </h4>
+                </h3>
                 <a
                   href={`mailto:${BUSINESS_INFO.email}`}
                   className="text-sm font-bold text-slate-950 hover:text-sky-600 transition-colors block mt-1 truncate"
@@ -182,16 +182,16 @@ export const ContactSection: React.FC = () => {
                 rel="noopener noreferrer"
                 id="contact-btn-instagram"
                 className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md flex items-center justify-between gap-3 transition-all hover:border-pink-300 group"
-                aria-label="Abrir Instagram oficial de Ideas & Colores"
+                aria-label="Instagram Ideas & Colores: ver perfil oficial"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
                     <Instagram className="w-4 h-4" />
                   </div>
                   <div className="min-w-0">
-                    <h4 className="text-[11px] font-bold uppercase tracking-wider text-pink-600">
+                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-pink-600">
                       Instagram
-                    </h4>
+                    </h3>
                     <p className="text-xs font-bold text-slate-950 group-hover:text-pink-600 transition-colors truncate">
                       {BUSINESS_INFO.instagram}
                     </p>
@@ -209,16 +209,16 @@ export const ContactSection: React.FC = () => {
                 rel="noopener noreferrer"
                 id="contact-btn-facebook"
                 className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md flex items-center justify-between gap-3 transition-all hover:border-blue-300 group"
-                aria-label="Abrir Facebook oficial de Ideas & Colores"
+                aria-label="Facebook Ideas & Colores: ver página oficial"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
                     <Facebook className="w-4 h-4" />
                   </div>
                   <div className="min-w-0">
-                    <h4 className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
+                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
                       Facebook
-                    </h4>
+                    </h3>
                     <p className="text-xs font-bold text-slate-950 group-hover:text-blue-600 transition-colors truncate">
                       Ideas & Colores
                     </p>
@@ -301,7 +301,7 @@ export const ContactSection: React.FC = () => {
                       autoComplete="name"
                       value={contactForm.name}
                       onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                      className="text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-amber-500"
+                      className="text-base sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-amber-500"
                     />
                     <input
                       type="tel"
@@ -324,7 +324,7 @@ export const ContactSection: React.FC = () => {
                     aria-label="Mensaje o descripción de tu proyecto"
                     value={contactForm.message}
                     onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                    className="w-full text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-amber-500"
+                    className="w-full text-base sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-amber-500"
                   />
                   {errorMsg && (
                     <p className="text-xs text-rose-600 font-semibold">{errorMsg}</p>
@@ -332,7 +332,7 @@ export const ContactSection: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3 rounded-xl bg-slate-950 hover:bg-slate-800 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
+                    className="w-full min-h-[44px] py-3 rounded-xl bg-slate-950 hover:bg-slate-800 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
                   >
                     {isSubmitting ? (
                       <span>Enviando...</span>

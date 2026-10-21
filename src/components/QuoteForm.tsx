@@ -605,7 +605,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                       <button
                         type="button"
                         onClick={() => setCurrentStep(2)}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white shadow-md hover:opacity-95 transition-all"
+                        className="inline-flex items-center justify-center min-h-[44px] gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white shadow-md hover:opacity-95 transition-all"
                         style={{ backgroundColor: formAccentColor }}
                       >
                         <span>Siguiente: Tipo de espacio</span>
@@ -684,7 +684,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                         <select
                           value={estimatedArea}
                           onChange={(e) => setEstimatedArea(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm font-medium focus:outline-none bg-white"
                         >
                           <option value="Menos de 50 m² (Puntual o habitación)">
                             Menos de 50 m² (Puntual o habitación)
@@ -727,7 +727,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                       <button
                         type="button"
                         onClick={() => setCurrentStep(1)}
-                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-600 hover:bg-slate-100 transition-colors"
+                        className="inline-flex items-center justify-center min-h-[44px] gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-600 hover:bg-slate-100 transition-colors"
                       >
                         <ArrowLeft className="w-4 h-4" />
                         <span>Atrás</span>
@@ -849,7 +849,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Detalla dimensiones, estado de la superficie, requerimientos de color o fecha de inicio..."
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none bg-white"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm focus:outline-none bg-white"
                       />
                     </div>
 

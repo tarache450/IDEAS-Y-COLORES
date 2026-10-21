@@ -10,6 +10,7 @@ import { FloatingColorDock } from './components/FloatingColorDock';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { DynamicBackground } from './components/ui/DynamicBackground';
 import { PrivacyPolicyModal } from './components/PrivacyPolicyModal';
+import { LazySection } from './components/ui/LazySection';
 
 // Lazy-loaded components below the fold to minimize initial mobile bundle transfer
 const ColorStudioVisualizer = lazy(() =>
@@ -114,6 +115,7 @@ function AppContent() {
   };
 
   const scrollToSection = (sectionId: string) => {
+    window.dispatchEvent(new CustomEvent('navigate-section', { detail: sectionId }));
     setActiveSection(sectionId);
     const element = document.getElementById(sectionId);
     if (element) {
@@ -261,51 +263,70 @@ function AppContent() {
         />
 
         {/* 4. Estudio Interactivo de Color & Visualizador Virtual de Ambientes */}
+        <LazySection id="estudio-color" minHeight="450px">
         <Suspense fallback={<SectionSkeleton id="estudio-color" minHeight="450px" />}>
           <ColorStudioVisualizer onSelectColorForQuote={handleColorSelectedForQuote} />
         </Suspense>
+        </LazySection>
 
         {/* 5. Calculadora Interactiva de Pintura, Rendimiento y Ahorro */}
+        <LazySection id="calculadora" minHeight="400px">
         <Suspense fallback={<SectionSkeleton id="calculadora" minHeight="400px" />}>
           <PaintCalculator onTransferToQuote={handleTransferCalculatorToQuote} />
         </Suspense>
+        </LazySection>
 
         {/* 6. Servicios técnicos detallados y capacidades */}
+        <LazySection id="servicios" minHeight="400px">
         <Suspense fallback={<SectionSkeleton id="servicios" minHeight="400px" />}>
           <ServicesSection onQuoteClick={() => scrollToSection('cotizar')} />
         </Suspense>
+        </LazySection>
 
         {/* 7. Proceso de transformación */}
+        <LazySection id="proceso" minHeight="300px">
         <Suspense fallback={<SectionSkeleton id="proceso" minHeight="300px" />}>
           <ProcessSection onQuoteClick={() => scrollToSection('cotizar')} />
         </Suspense>
+        </LazySection>
 
         {/* 8. Galería de Proyectos con filtros multi-servicios y comparativa interactiva Antes/Después */}
+        <LazySection id="proyectos" minHeight="450px">
         <Suspense fallback={<SectionSkeleton id="proyectos" minHeight="450px" />}>
           <ProjectsGallery onRequestSimilar={handleRequestSimilarProject} />
         </Suspense>
+        </LazySection>
 
         {/* 8.1. Confianza y Prueba Social con trayectoria corporativa y 4 Garantías Claras */}
+        <LazySection id="garantias" minHeight="300px">
         <Suspense fallback={<SectionSkeleton id="garantias" minHeight="300px" />}>
           <TestimonialsGuaranteesSection />
         </Suspense>
+        </LazySection>
 
         {/* 9. Banner de promoción verificada (Hasta 20% de descuento en pintura y aplicación) */}
+        <LazySection id="promociones" minHeight="250px">
         <Suspense fallback={<SectionSkeleton id="promociones" minHeight="250px" />}>
           <PromoSection onQuoteClick={() => scrollToSection('cotizar')} />
         </Suspense>
+        </LazySection>
 
         {/* 10. Nosotros: Historia, valores y respaldo */}
+        <LazySection id="nosotros" minHeight="350px">
         <Suspense fallback={<SectionSkeleton id="nosotros" minHeight="350px" />}>
           <AboutSection />
         </Suspense>
+        </LazySection>
 
         {/* 10.1. Preguntas Frecuentes - Resolución de Objeciones */}
+        <LazySection id="faq" minHeight="350px">
         <Suspense fallback={<SectionSkeleton id="faq" minHeight="350px" />}>
           <FAQSection onOpenPrivacy={() => setIsPrivacyModalOpen(true)} />
         </Suspense>
+        </LazySection>
 
         {/* 11. Formulario de cotización inteligente de 3 pasos */}
+        <LazySection id="cotizar" minHeight="500px">
         <Suspense fallback={<SectionSkeleton id="cotizar" minHeight="500px" />}>
           <QuoteForm
             initialProjectType={selectedProjectForQuote || 'Residencial'}
@@ -314,16 +335,21 @@ function AppContent() {
             onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
           />
         </Suspense>
+        </LazySection>
 
         {/* 12. Contacto verificado, Ubicación en Carretera a El Salvador y Mapa */}
+        <LazySection id="contacto" minHeight="400px">
         <Suspense fallback={<SectionSkeleton id="contacto" minHeight="400px" />}>
           <ContactSection />
         </Suspense>
+        </LazySection>
 
         {/* 13. Final CTA */}
+        <LazySection id="final-cta" minHeight="250px">
         <Suspense fallback={<SectionSkeleton id="final-cta" minHeight="250px" />}>
           <FinalCTA onQuoteClick={() => scrollToSection('cotizar')} />
         </Suspense>
+        </LazySection>
       </main>
 
       {/* Footer */}
