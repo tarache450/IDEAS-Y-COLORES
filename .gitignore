@@ -18,3 +18,5 @@ TABY_PROMPT.md
 data/
 *.jsonl
 docs/evidence/**/*.json
+docs/verificacion/**/raw/
+docs/verificacion/**/capturas/
