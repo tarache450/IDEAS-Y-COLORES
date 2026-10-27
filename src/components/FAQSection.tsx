@@ -208,9 +208,9 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ onOpenPrivacy }) => {
                   Decreto No. 57-2008 & Art. 24/31 CPRG
                 </span>
               </div>
-              <h4 className="text-base font-bold text-slate-950 font-display">
+              <h3 className="text-base font-bold text-slate-950 font-display">
                 Tratamiento Ético y Protección Estricta de Datos Personales
-              </h4>
+              </h3>
               <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">
                 Tus datos de cotización (nombre, WhatsApp, fotos de referencia y ubicación) se custodian bajo estándares de confidencialidad mercantil y técnica. Cero venta o cesión a terceros, con derecho de cancelación en cualquier momento.
               </p>
@@ -234,9 +234,9 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ onOpenPrivacy }) => {
             <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
               ¿Tienes otra pregunta sobre tu proyecto?
             </span>
-            <h4 className="text-lg sm:text-xl font-bold font-display text-white">
+            <h3 className="text-lg sm:text-xl font-bold font-display text-white">
               Habla directamente con un asesor técnico ahora.
-            </h4>
+            </h3>
             <p className="text-xs sm:text-sm text-slate-300">
               Respondemos tus dudas en minutos por WhatsApp con amabilidad y soporte técnico.
             </p>

@@ -711,7 +711,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                         <select
                           value={desiredTimeline}
                           onChange={(e) => setDesiredTimeline(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm font-medium focus:outline-none bg-white"
                         >
                           <option value="Urgente (1-3 días)">Urgente (1-3 días)</option>
                           <option value="Próximos 7 días">Próximos 7 días</option>
@@ -780,7 +780,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           onChange={(e) => setFullName(e.target.value)}
                           placeholder="Tu nombre y apellido"
                           autoComplete="name"
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm font-medium focus:outline-none bg-white"
                         />
                       </div>
 
@@ -798,7 +798,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           onChange={(e) => setPhone(e.target.value)}
                           placeholder="Ej: +502 6661-7592"
                           autoComplete="tel"
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm font-medium focus:outline-none bg-white"
                         />
                       </div>
 
@@ -815,7 +815,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="tu-correo@ejemplo.com"
                           autoComplete="email"
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm font-medium focus:outline-none bg-white"
                         />
                       </div>
 
@@ -832,7 +832,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           value={location}
                           onChange={(e) => setLocation(e.target.value)}
                           placeholder="Ej: Carretera a El Salvador Km 16, Z.10, Fraijanes..."
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm font-medium focus:outline-none bg-white"
                         />
                       </div>
                     </div>

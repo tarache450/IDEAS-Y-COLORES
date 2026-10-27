@@ -118,7 +118,7 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
                 type="button"
                 onClick={onQuoteClick}
                 className="font-bold hover:underline inline-flex items-center gap-1 min-h-[44px] py-2 px-1"
-                style={{ color: currentMood.color }}
+                style={{ color: '#93c5fd' }}
               >
                 <span>Solicitar visita técnica</span>
                 <ArrowRight className="w-3.5 h-3.5" />

@@ -56,9 +56,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin, onOpenP
 
           {/* Navigation Links */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 font-display">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200 font-display">
               Navegación
-            </h4>
+            </h3>
             <ul className="space-y-2 text-xs sm:text-sm">
               {[
                 { id: 'inicio', label: 'Inicio' },
@@ -89,9 +89,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin, onOpenP
 
           {/* 6 Multi-Services List */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 font-display">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200 font-display">
               Multi-Servicios
-            </h4>
+            </h3>
             <ul className="space-y-2 text-xs sm:text-sm text-slate-400">
               {MULTI_SERVICES_CATEGORIES.map((cat) => (
                 <li key={cat.id}>
@@ -112,9 +112,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin, onOpenP
 
           {/* Contact Direct */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 font-display">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200 font-display">
               Contacto Verificado
-            </h4>
+            </h3>
             <ul className="space-y-3 text-xs sm:text-sm">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
@@ -175,7 +175,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin, onOpenP
                 <Clock className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
                 <div>
                   <p>{BUSINESS_INFO.scheduleWeekdays}</p>
-                  <p className="text-[11px] text-slate-500">{BUSINESS_INFO.scheduleSaturdays}</p>
+                  <p className="text-[11px] text-slate-400">{BUSINESS_INFO.scheduleSaturdays}</p>
                 </div>
               </li>
             </ul>
@@ -183,7 +183,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin, onOpenP
         </div>
 
         {/* Bottom copyright + Back to top */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <p>
             © {new Date().getFullYear()} Ideas & Colores Multi-Servicios Guatemala. Fundada en{' '}
             {BUSINESS_INFO.foundationYear}. Todos los derechos reservados.
@@ -205,7 +205,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin, onOpenP
               <button
                 type="button"
                 onClick={onOpenAdmin}
-                className="text-slate-600 hover:text-amber-400 transition-colors text-[11px] font-semibold cursor-pointer"
+                className="text-slate-400 hover:text-amber-400 transition-colors text-[11px] font-semibold cursor-pointer"
                 title="Acceso exclusivo al CRM de Administrador"
               >
                 🔒 Staff CRM
