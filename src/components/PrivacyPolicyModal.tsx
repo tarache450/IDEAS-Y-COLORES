@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { X, ShieldCheck, Lock, FileText, CheckCircle2, Scale, Mail, Phone, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { BUSINESS_INFO } from '../data/content';
+import { getObfuscatedEmailDisplay, buildSafeMailtoUrl } from '../utils/security';
 
 interface PrivacyPolicyModalProps {
   isOpen: boolean;
@@ -141,7 +142,7 @@ export const PrivacyPolicyModal: React.FC<PrivacyPolicyModalProps> = ({ isOpen, 
                 <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1 text-xs">
                   <p><strong>Razón Comercial:</strong> {BUSINESS_INFO.name}</p>
                   <p><strong>Ubicación Principal:</strong> {BUSINESS_INFO.addressFull}</p>
-                  <p><strong>Canal Oficial de Privacidad:</strong> {BUSINESS_INFO.email}</p>
+                  <p><strong>Canal Oficial de Privacidad:</strong> {getObfuscatedEmailDisplay()}</p>
                   <p><strong>Teléfono / WhatsApp de Atención:</strong> {BUSINESS_INFO.phone}</p>
                 </div>
               </div>
@@ -217,11 +218,11 @@ export const PrivacyPolicyModal: React.FC<PrivacyPolicyModalProps> = ({ isOpen, 
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <a
-                      href={`mailto:${BUSINESS_INFO.email}?subject=Solicitud%20de%20Privacidad%20y%20Baja%20de%20Datos%20-%20Guatemala`}
+                      href={buildSafeMailtoUrl('Solicitud de Privacidad y Baja de Datos - Guatemala')}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-colors"
                     >
                       <Mail className="w-3.5 h-3.5" />
-                      <span>{BUSINESS_INFO.email}</span>
+                      <span>{getObfuscatedEmailDisplay()}</span>
                     </a>
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { Jimp } from 'jimp';
+import sharp from 'sharp';
 
 const publicDir = path.resolve('public');
 
@@ -45,9 +45,9 @@ async function scanImages(dir: string, base: string = ''): Promise<ImageInfo[]> 
 
         if (['.jpg', '.jpeg', '.png'].includes(ext)) {
           try {
-            const img = await Jimp.read(fullPath);
-            width = img.bitmap.width;
-            height = img.bitmap.height;
+            const metadata = await sharp(fullPath).metadata();
+            width = metadata.width;
+            height = metadata.height;
           } catch {
             // Ignore unreadable images
           }

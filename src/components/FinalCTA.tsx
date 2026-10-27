@@ -2,6 +2,7 @@ import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { ArrowRight, MessageCircle, Sparkles, ShieldCheck } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
+import { buildSafeWhatsAppUrl } from '../utils/security';
 
 const Grainient = React.lazy(() => import('./ui/Grainient').then((module) => ({ default: module.Grainient })));
 
@@ -13,7 +14,10 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ onQuoteClick }) => {
   const { currentMood } = useColorMood();
   const sectionRef = useRef<HTMLElement>(null);
   const [showAmbient, setShowAmbient] = useState(false);
-  const directWhatsAppUrl = `https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=Hola%20Ideas%20%26%20Colores%2C%20quiero%20cotizar%20mi%20proyecto.`;
+  const directWhatsAppUrl = buildSafeWhatsAppUrl(
+    BUSINESS_INFO.whatsappNumber,
+    'Hola Ideas & Colores, quiero cotizar mi proyecto.'
+  );
 
   useEffect(() => {
     const section = sectionRef.current;

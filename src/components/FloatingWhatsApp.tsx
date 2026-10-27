@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MessageCircle, X, Send, Sparkles } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/content';
+import { buildSafeWhatsAppUrl } from '../utils/security';
 
 export const FloatingWhatsApp: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,10 +11,11 @@ export const FloatingWhatsApp: React.FC = () => {
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
-    const message = customNote.trim()
-      ? `Hola Ideas & Colores, quiero cotizar mi proyecto: ${encodeURIComponent(customNote)}`
-      : encodeURIComponent(defaultWaText);
-    window.open(`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${message}`, '_blank');
+    const rawMsg = customNote.trim()
+      ? `Hola Ideas & Colores, quiero cotizar mi proyecto: ${customNote.trim()}`
+      : defaultWaText;
+    const url = buildSafeWhatsAppUrl(BUSINESS_INFO.whatsappNumber, rawMsg);
+    window.open(url, '_blank', 'noopener,noreferrer');
     setIsOpen(false);
     setCustomNote('');
   };
@@ -89,6 +91,7 @@ export const FloatingWhatsApp: React.FC = () => {
               <input
                 type="text"
                 id="whatsapp-custom-input"
+                maxLength={500}
                 value={customNote}
                 onChange={(e) => setCustomNote(e.target.value)}
                 placeholder="Escribe tu consulta o proyecto..."
@@ -103,15 +106,18 @@ export const FloatingWhatsApp: React.FC = () => {
                 <Send className="w-4 h-4" />
               </button>
             </div>
-            <div className="mt-2.5 flex items-center justify-between text-[11px] text-slate-500">
-              <span className="flex items-center gap-1 text-slate-600">
-                <Sparkles className="w-3 h-3 text-amber-500" />
-                Respuesta en menos de 15 min
-              </span>
+            <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
               <a
-                href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(
-                  defaultWaText
-                )}`}
+                href={BUSINESS_INFO.googleReviewUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-600 hover:text-amber-600 font-medium inline-flex items-center gap-1 transition-colors"
+                title="Déjanos tu reseña en Google"
+              >
+                <span>⭐ Reseñas Google ({BUSINESS_INFO.googleRating} ★)</span>
+              </a>
+              <a
+                href={buildSafeWhatsAppUrl(BUSINESS_INFO.whatsappNumber, defaultWaText)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-emerald-600 hover:text-emerald-700 font-semibold"

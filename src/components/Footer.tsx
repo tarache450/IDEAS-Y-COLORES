@@ -1,7 +1,13 @@
 import React from 'react';
-import { Phone, MessageCircle, MapPin, Clock, ShieldCheck, Mail, ArrowUp, Instagram, Facebook } from 'lucide-react';
+import { Phone, MessageCircle, MapPin, Clock, ShieldCheck, Mail, ArrowUp, Instagram, Facebook, Star } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
+import { GoogleIcon } from './ui/GoogleIcon';
 import { BUSINESS_INFO, MULTI_SERVICES_CATEGORIES } from '../data/content';
+import {
+  buildSafeWhatsAppUrl,
+  getObfuscatedEmailDisplay,
+  buildSafeMailtoUrl,
+} from '../utils/security';
 
 interface FooterProps {
   onNavigate: (sectionId: string) => void;
@@ -31,6 +37,18 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin, onOpenP
               </span>
             </div>
             <div className="pt-1 flex flex-wrap items-center gap-2.5">
+              <a
+                href={BUSINESS_INFO.googleReviewUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                id="footer-btn-google-reviews"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-amber-400/50 hover:bg-amber-950/20 text-xs font-semibold transition-all group"
+                aria-label="Dejar reseña en Google para Ideas & Colores"
+                title="Dejar reseña en Google (5.0 ★)"
+              >
+                <GoogleIcon className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <span>Google (5.0 ★)</span>
+              </a>
               <a
                 href={BUSINESS_INFO.instagramUrl}
                 target="_blank"
@@ -132,16 +150,19 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin, onOpenP
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-amber-400 shrink-0" />
                 <a
-                  href={`mailto:${BUSINESS_INFO.email}`}
+                  href={buildSafeMailtoUrl('Consulta Web - Ideas & Colores')}
                   className="hover:text-white transition-colors truncate"
                 >
-                  {BUSINESS_INFO.email}
+                  {getObfuscatedEmailDisplay()}
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
                 <a
-                  href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=Hola%20Ideas%20%26%20Colores%2C%20quiero%20cotizar%20mi%20proyecto.`}
+                  href={buildSafeWhatsAppUrl(
+                    BUSINESS_INFO.whatsappNumber,
+                    'Hola Ideas & Colores, quiero cotizar mi proyecto.'
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-emerald-400 transition-colors"
@@ -169,6 +190,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin, onOpenP
                   className="hover:text-blue-400 transition-colors truncate"
                 >
                   Facebook: {BUSINESS_INFO.facebook}
+                </a>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <GoogleIcon className="w-4 h-4 shrink-0" />
+                <a
+                  href={BUSINESS_INFO.googleReviewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-amber-400 transition-colors flex items-center gap-1 truncate"
+                >
+                  <span>Google: Reseñas &amp; Calificación ({BUSINESS_INFO.googleRating} ★)</span>
                 </a>
               </li>
               <li className="flex items-start gap-2.5 text-slate-400">

@@ -32,6 +32,11 @@ import { useColorMood } from '../context/ColorMoodContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { SpotlightCard } from './ui/SpotlightCard';
 import { submitQuoteRequest } from '../services/quotes';
+import {
+  buildSafeWhatsAppUrl,
+  getObfuscatedEmailDisplay,
+  buildSafeMailtoUrl,
+} from '../utils/security';
 
 interface QuoteFormProps {
   initialProjectType?: string;
@@ -242,7 +247,10 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
 
   const handlePhotoUpload = (files: FileList | null) => {
     if (!files) return;
-    const newPhotos = Array.from(files).map((file) => ({
+    const validFiles = Array.from(files).filter(
+      (file) => file.type.startsWith('image/') && file.size <= 10 * 1024 * 1024
+    );
+    const newPhotos = validFiles.map((file) => ({
       file,
       preview: URL.createObjectURL(file),
     }));
@@ -344,7 +352,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
         : '') +
       `\nSolicito asesoría técnica y presupuesto formal con garantía por escrito.`;
 
-    return `https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(text)}`;
+    return buildSafeWhatsAppUrl(BUSINESS_INFO.whatsappNumber, text);
   };
 
   return (
@@ -432,16 +440,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
               /* Wizard Steps */
               <form onSubmit={handleSubmitWeb}>
                 {/* Honeypot Anti-Spam (Invisible para humanos, trampa para bots) */}
-                <input
-                  type="text"
-                  name="user_business_hp"
-                  value={honeypot}
-                  onChange={(e) => setHoneypot(e.target.value)}
-                  tabIndex={-1}
-                  aria-hidden="true"
-                  autoComplete="off"
-                  className="hidden absolute -left-[9999px]"
-                />
+                <input type="text" name="website_hp" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} style={{ display: 'none' }} tabIndex={-1} autoComplete="off" aria-hidden="true" />
                 {/* Imported Configuration Alert */}
                 {description && (
                   <div className="mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
@@ -764,6 +763,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           id="quote-fullname"
                           name="fullName"
                           required
+                          maxLength={150}
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
                           placeholder="Tu nombre y apellido"
@@ -782,6 +782,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           id="quote-phone"
                           name="phone"
                           required
+                          maxLength={25}
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
                           placeholder="Ej: +502 6661-7592"
@@ -799,6 +800,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           type="email"
                           id="quote-email"
                           name="email"
+                          maxLength={254}
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="tu-correo@ejemplo.com"
@@ -817,6 +819,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           id="quote-location"
                           name="location"
                           required
+                          maxLength={200}
                           value={location}
                           onChange={(e) => setLocation(e.target.value)}
                           placeholder="Ej: Carretera a El Salvador Km 16, Z.10, Fraijanes..."
@@ -834,6 +837,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                         rows={3}
                         id="quote-description"
                         name="description"
+                        maxLength={3000}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Detalla dimensiones, estado de la superficie, requerimientos de color o fecha de inicio..."
@@ -1033,10 +1037,10 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                 </a>
 
                 <a
-                  href={`mailto:${BUSINESS_INFO.email}`}
+                  href={buildSafeMailtoUrl('Cotización de Proyecto - Ideas & Colores')}
                   className="flex items-center gap-2.5 text-slate-200 hover:text-white p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 transition-colors"
                 >
-                  <span className="font-semibold truncate">{BUSINESS_INFO.email}</span>
+                  <span className="font-semibold truncate">{getObfuscatedEmailDisplay()}</span>
                 </a>
               </div>
 

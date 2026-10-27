@@ -8,6 +8,7 @@ import {
   ExtendedServiceCategory,
 } from '../types';
 import { assetUrl } from '../utils/asset';
+import { getDeobfuscatedCorporateEmail, buildSafeWhatsAppUrl } from '../utils/security';
 
 export const BUSINESS_INFO = {
   name: 'Ideas & Colores Multi-Servicios',
@@ -25,16 +26,21 @@ export const BUSINESS_INFO = {
   phoneClean: '+50266617592',
   whatsapp: '+502 6661-7592',
   whatsappNumber: '50266617592',
-  whatsappUrl:
-    'https://wa.me/50266617592?text=Hola%20Ideas%20%26%20Colores%2C%20quiero%20cotizar%20mi%20proyecto.',
+  whatsappUrl: buildSafeWhatsAppUrl(
+    '50266617592',
+    'Hola Ideas & Colores, quiero cotizar mi proyecto.'
+  ),
   location: 'Carretera a El Salvador, Guatemala',
   addressFull: 'Carretera a El Salvador, Guatemala',
-  email: 'gerencia@ideasycoloresgt.com',
+  email: getDeobfuscatedCorporateEmail(),
   website: 'www.ideasycoloresgt.site',
   instagram: '@ideasycoloresgt',
   instagramUrl: 'https://www.instagram.com/ideasycoloresgt/',
   facebook: 'Ideas & Colores Multi-Servicios',
   facebookUrl: 'https://www.facebook.com/share/1cQtAtZp4K/?mibextid=wwXIfr',
+  googleReviewUrl: 'https://share.google/vjM7qEupI63HKBTNn',
+  googleBusinessName: 'Ideas & Colores Multi-Servicios',
+  googleRating: '5.0',
   hoursWeekday: 'Lunes a viernes: 8:00 a.m. a 6:00 p.m.',
   hoursWeekend: 'Sábado y domingo: cita previa',
   scheduleWeekdays: 'Lunes a viernes: 8:00 a.m. a 6:00 p.m.',

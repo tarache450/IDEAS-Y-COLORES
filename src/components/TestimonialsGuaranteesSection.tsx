@@ -8,10 +8,13 @@ import {
   Award,
   CheckCircle2,
   Image as ImageIcon,
+  Star,
+  ExternalLink,
 } from 'lucide-react';
-import { EXPERIENCE_CLIENTS } from '../data/content';
+import { BUSINESS_INFO, EXPERIENCE_CLIENTS } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
 import { SpotlightCard } from './ui/SpotlightCard';
+import { GoogleIcon } from './ui/GoogleIcon';
 import FadeIn from './ui/FadeIn';
 
 const GUARANTEES = [
@@ -181,6 +184,102 @@ export const TestimonialsGuaranteesSection: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Google Business Profile & Client Reviews Direct API / Action */}
+        <FadeIn direction="up" distance={20}>
+          <div className="mb-20">
+            <SpotlightCard
+              className="rounded-3xl p-6 sm:p-10 bg-gradient-to-br from-white via-slate-50 to-amber-50/40 border border-slate-200/90 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden"
+              spotlightColor="rgba(245, 158, 11, 0.14)"
+            >
+              {/* Subtle ambient blur behind card */}
+              <div
+                className="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 rounded-full blur-3xl opacity-25 pointer-events-none"
+                style={{ backgroundColor: currentMood.color }}
+              />
+              <div className="absolute bottom-0 left-1/4 -mb-16 w-56 h-56 rounded-full bg-amber-400/15 blur-3xl pointer-events-none" />
+
+              <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+                {/* Left: Google Verified Branding & Context */}
+                <div className="space-y-3.5 text-center lg:text-left max-w-xl">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs">
+                    <GoogleIcon className="w-4 h-4 shrink-0" />
+                    <span className="text-xs font-bold text-slate-800 tracking-tight">
+                      Perfil Oficial de Google • Reseñas Verificadas
+                    </span>
+                  </div>
+
+                  <h3 className="text-2xl sm:text-3xl font-extrabold font-display text-slate-950 tracking-tight">
+                    ¿Trabajaste con nosotros? Comparte tu experiencia en Google
+                  </h3>
+
+                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                    Tu opinión sobre la puntualidad, acabados y asesoría de{' '}
+                    <strong className="text-slate-900 font-semibold">{BUSINESS_INFO.name}</strong>{' '}
+                    respalda nuestro trabajo y orienta a nuevos proyectos residenciales y comerciales en Carretera a El Salvador y toda Guatemala.
+                  </p>
+
+                  <div className="pt-1 flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs font-semibold text-slate-600">
+                    <div className="flex items-center gap-1.5 bg-white px-3.5 py-1.5 rounded-xl border border-slate-200 shadow-2xs">
+                      <span className="text-amber-500 font-extrabold text-sm">{BUSINESS_INFO.googleRating}</span>
+                      <div className="flex items-center text-amber-400">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                        ))}
+                      </div>
+                      <span className="text-slate-300">|</span>
+                      <span className="text-slate-700">Calificación 5 Estrellas</span>
+                    </div>
+
+                    <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200/80">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Opinión pública e inmediata</span>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Right: Interactive 5-Star Rating & Direct Action Button */}
+                <div className="flex flex-col items-center lg:items-end gap-4 shrink-0 w-full lg:w-auto">
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs text-center w-full sm:w-auto">
+                    <span className="text-xs font-bold text-slate-700 block mb-2">
+                      Califica nuestro servicio en un clic:
+                    </span>
+                    <div className="flex items-center justify-center gap-1.5 mb-1.5">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <a
+                          key={star}
+                          href={BUSINESS_INFO.googleReviewUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1 rounded-lg hover:bg-amber-50 transition-all hover:scale-125 text-amber-400 hover:text-amber-500 focus:outline-none"
+                          title={`Calificar con ${star} estrellas en el perfil de Google`}
+                          aria-label={`Calificar con ${star} estrellas en el perfil de Google`}
+                        >
+                          <Star className="w-7 h-7 fill-amber-400 text-amber-400 transition-transform" />
+                        </a>
+                      ))}
+                    </div>
+                    <span className="text-[11px] text-slate-500">
+                      Haz clic en las estrellas para abrir tu reseña
+                    </span>
+                  </div>
+
+                  <a
+                    href={BUSINESS_INFO.googleReviewUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    id="btn-google-reviews-section"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-slate-950 hover:bg-slate-800 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all hover:scale-102 group cursor-pointer"
+                  >
+                    <GoogleIcon className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    <span>Dejar reseña en Google</span>
+                    <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" />
+                  </a>
+                </div>
+              </div>
+            </SpotlightCard>
+          </div>
+        </FadeIn>
 
         {/* Section 2: 4 Clear Guarantees Grid with SpotlightCard */}
         <div className="pt-12 border-t border-slate-200">

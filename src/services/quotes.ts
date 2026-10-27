@@ -1,5 +1,14 @@
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import type { LeadSource, QuoteRequestInsert } from '../types/database.types';
+import {
+  sanitizePlainText,
+  isValidGuatemalaPhone,
+  isHoneypotTriggered,
+  checkRateLimit,
+  resetRateLimit,
+} from '../utils/security';
+
+export { resetRateLimit };
 
 export interface CreateQuoteInput {
   name: string;
@@ -19,6 +28,8 @@ export interface QuoteSubmissionResult {
   success: boolean;
   error?: string;
   id?: string;
+  droppedByHoneypot?: boolean;
+  rateLimited?: boolean;
 }
 
 const EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
@@ -29,21 +40,13 @@ const isDev = Boolean(
 );
 
 /**
- * Sanitiza cadenas de texto eliminando bloques de script, estilos, iframes,
- * etiquetas HTML, pseudoprotocolos javascript: y caracteres de control no imprimibles.
+ * Sanitiza texto destinado a almacenamiento o canales de texto plano.
+ * Elimina etiquetas/bloques ejecutables, pseudoprotocolos y caracteres de control,
+ * pero NO convierte `&`, `<`, `>` ni comillas en entidades HTML. React ya escapa
+ * al renderizar; escapar en la entrada provoca doble escape en el CRM.
  */
-export function sanitizeString(val?: unknown): string {
-  if (typeof val !== 'string') return '';
-  return val
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
-    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
-    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
-    .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, '')
-    .replace(/<[^>]*>/g, '')
-    .replace(/javascript:/gi, '')
-    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
-    .trim();
+export function sanitizeString(val?: unknown, maxLength = 3000): string {
+  return sanitizePlainText(val, maxLength);
 }
 
 /**
@@ -54,32 +57,36 @@ export function validateQuoteInput(input: CreateQuoteInput): { valid: boolean; e
     return { valid: false, error: 'Datos de solicitud inválidos.' };
   }
 
-  const cleanName = sanitizeString(input.name);
-  const cleanPhone = sanitizeString(input.phone);
-  const cleanEmail = sanitizeString(input.email);
-  const cleanMessage = sanitizeString(input.message);
+  const rawName = typeof input.name === 'string' ? input.name.trim() : '';
+  const rawMessage = typeof input.message === 'string' ? input.message.trim() : '';
+  const rawEmail = typeof input.email === 'string' ? input.email.trim() : '';
+
+  if (rawName.length > 150) {
+    return { valid: false, error: 'El nombre no debe exceder 150 caracteres.' };
+  }
+
+  const cleanName = sanitizePlainText(input.name, 150);
+  const cleanPhone = sanitizePlainText(input.phone, 25);
+  const cleanEmail = sanitizePlainText(input.email, 254);
 
   if (!cleanName || cleanName.length < 2) {
     return { valid: false, error: 'Por favor ingresa tu nombre completo (mínimo 2 caracteres).' };
   }
-  if (cleanName.length > 150) {
-    return { valid: false, error: 'El nombre no debe exceder 150 caracteres.' };
+
+  if (!cleanPhone || !isValidGuatemalaPhone(input.phone)) {
+    return {
+      valid: false,
+      error: 'Por favor ingresa un número de teléfono o WhatsApp válido en Guatemala (8 dígitos o +502).',
+    };
   }
 
-  if (!cleanPhone || cleanPhone.length < 6) {
-    return { valid: false, error: 'Por favor ingresa un número de teléfono o WhatsApp válido.' };
-  }
-  if (cleanPhone.length > 30) {
-    return { valid: false, error: 'El número de teléfono no debe exceder 30 caracteres.' };
-  }
-
-  if (cleanEmail && cleanEmail.length > 0) {
-    if (cleanEmail.length > 254 || !EMAIL_REGEX.test(cleanEmail)) {
+  if (rawEmail.length > 0) {
+    if (rawEmail.length > 254 || !EMAIL_REGEX.test(cleanEmail)) {
       return { valid: false, error: 'Por favor ingresa una dirección de correo electrónico válida.' };
     }
   }
 
-  if (cleanMessage && cleanMessage.length > 3000) {
+  if (rawMessage.length > 3000) {
     return { valid: false, error: 'El mensaje no debe superar los 3000 caracteres.' };
   }
 
@@ -92,12 +99,12 @@ export function validateQuoteInput(input: CreateQuoteInput): { valid: boolean; e
 export async function submitQuoteRequest(
   input: CreateQuoteInput
 ): Promise<QuoteSubmissionResult> {
-  // 1. Detección de Bot / Honeypot: si el campo invisible fue rellenado, simular éxito silencioso
-  if (input.honeypot && String(input.honeypot).trim().length > 0) {
+  // 1. Detección de Bot / Honeypot: si el campo invisible fue rellenado, simular éxito silencioso sin consumir rate limit ni insertar en BD
+  if (isHoneypotTriggered(input?.honeypot)) {
     if (isDev) {
       console.warn('[Anti-Spam] Envío descartado por detección de bot (honeypot activado).');
     }
-    return { success: true };
+    return { success: true, droppedByHoneypot: true };
   }
 
   // 2. Validación de entrada en capa de servicio
@@ -109,36 +116,52 @@ export async function submitQuoteRequest(
     };
   }
 
-  // 3. Sanitización estricta de datos
+  // 3. Control de Rate Limiting en cliente (cooldown de 30s)
+  const rateLimit = checkRateLimit('quote_submission');
+  if (!rateLimit.allowed) {
+    return {
+      success: false,
+      rateLimited: true,
+      error: `Por favor espera ${rateLimit.remainingSeconds} segundos antes de enviar otra solicitud.`,
+    };
+  }
+
+  // 4. Sanitización estricta de datos
   const payload: QuoteRequestInsert = {
-    name: sanitizeString(input.name),
-    phone: sanitizeString(input.phone),
-    email: sanitizeString(input.email) || null,
-    service: sanitizeString(input.service) || null,
-    space_type: sanitizeString(input.spaceType) || null,
-    estimated_area: sanitizeString(input.estimatedArea) || null,
-    desired_timeline: sanitizeString(input.desiredTimeline) || null,
-    location: sanitizeString(input.location) || null,
-    message: sanitizeString(input.message) || null,
+    name: sanitizePlainText(input.name, 150),
+    phone: sanitizePlainText(input.phone, 25),
+    email: sanitizePlainText(input.email, 254) || null,
+    service: sanitizePlainText(input.service, 150) || null,
+    space_type: sanitizePlainText(input.spaceType, 100) || null,
+    estimated_area: sanitizePlainText(input.estimatedArea, 100) || null,
+    desired_timeline: sanitizePlainText(input.desiredTimeline, 100) || null,
+    location: sanitizePlainText(input.location, 200) || null,
+    message: sanitizePlainText(input.message, 3000) || null,
     status: 'new',
     source: input.source || 'website_quote_form',
   };
 
-  // 4. Si Supabase no está configurado (e.g. variables ausentes en local temporalmente)
+  // 5. Si Supabase no está configurado: simular solo en desarrollo.
+  // En producción un fallback "exitoso" perdería el lead silenciosamente.
   if (!isSupabaseConfigured) {
     if (isDev) {
       console.info(
         '[Supabase Fallback] Variables no configuradas. Simulando recepción de lead:',
         payload
       );
+      return {
+        success: true,
+        id: 'local-fallback-' + Date.now(),
+      };
     }
+
     return {
-      success: true,
-      id: 'local-fallback-' + Date.now(),
+      success: false,
+      error: 'El sistema de cotizaciones no está configurado. Escríbenos directamente por WhatsApp.',
     };
   }
 
-  // 5. Inserción con cliente Supabase (con RLS y tipos)
+  // 6. Inserción con cliente Supabase (con RLS y tipos)
   try {
     const { error } = await supabase
       .from('quote_requests')

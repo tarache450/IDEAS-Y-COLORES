@@ -8,6 +8,7 @@ import {
 import { BUSINESS_INFO } from '../data/content';
 import { AnimatedTabs } from './ui/AnimatedTabs';
 import { SpotlightCard } from './ui/SpotlightCard';
+import { buildSafeWhatsAppUrl } from '../utils/security';
 
 export interface PaintCalculatorProps {
   onTransferToQuote: (details: string) => void;
@@ -198,9 +199,12 @@ export const PaintCalculator: React.FC<PaintCalculatorProps> = ({ onTransferToQu
   // Compute active area
   const computedArea = useMemo(() => {
     if (mode === 'area') {
-      return area;
+      return Math.min(400, Math.max(10, area));
     }
-    return Math.max(1, Math.round(width * height * wallsCount));
+    const safeW = Math.min(50, Math.max(1, width));
+    const safeH = Math.min(15, Math.max(1, height));
+    const safeWalls = Math.min(20, Math.max(1, wallsCount));
+    return Math.max(1, Math.round(safeW * safeH * safeWalls));
   }, [mode, area, width, height, wallsCount]);
 
   // Compute paint requirements
@@ -242,7 +246,7 @@ export const PaintCalculator: React.FC<PaintCalculatorProps> = ({ onTransferToQu
       includeLabor,
     });
 
-    return `https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(rawMessage)}`;
+    return buildSafeWhatsAppUrl(BUSINESS_INFO.whatsappNumber, rawMessage);
   }, [currentSurfaceConfig, computedArea, materialVolumeText, coats, includeLabor]);
 
   return (
@@ -304,7 +308,7 @@ export const PaintCalculator: React.FC<PaintCalculatorProps> = ({ onTransferToQu
                   max="400"
                   step="5"
                   value={area}
-                  onChange={(e) => setArea(Number(e.target.value))}
+                  onChange={(e) => setArea(Math.min(400, Math.max(10, Number(e.target.value) || 10)))}
                   className="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
                 />
 
@@ -347,7 +351,7 @@ export const PaintCalculator: React.FC<PaintCalculatorProps> = ({ onTransferToQu
                     max="50"
                     step="0.5"
                     value={width}
-                    onChange={(e) => setWidth(Number(e.target.value))}
+                    onChange={(e) => setWidth(Math.min(50, Math.max(1, Number(e.target.value) || 1)))}
                     className="w-full text-sm font-bold px-3 py-2 rounded-xl border border-slate-300 focus:border-amber-500 focus:outline-none"
                   />
                 </div>
@@ -364,7 +368,7 @@ export const PaintCalculator: React.FC<PaintCalculatorProps> = ({ onTransferToQu
                     max="15"
                     step="0.1"
                     value={height}
-                    onChange={(e) => setHeight(Number(e.target.value))}
+                    onChange={(e) => setHeight(Math.min(15, Math.max(1, Number(e.target.value) || 1)))}
                     className="w-full text-sm font-bold px-3 py-2 rounded-xl border border-slate-300 focus:border-amber-500 focus:outline-none"
                   />
                 </div>
@@ -380,7 +384,7 @@ export const PaintCalculator: React.FC<PaintCalculatorProps> = ({ onTransferToQu
                     min="1"
                     max="20"
                     value={wallsCount}
-                    onChange={(e) => setWallsCount(Number(e.target.value))}
+                    onChange={(e) => setWallsCount(Math.min(20, Math.max(1, Math.round(Number(e.target.value) || 1))))}
                     className="w-full text-sm font-bold px-3 py-2 rounded-xl border border-slate-300 focus:border-amber-500 focus:outline-none"
                   />
                 </div>

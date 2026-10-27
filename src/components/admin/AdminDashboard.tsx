@@ -46,6 +46,7 @@ import {
   addQuoteNote,
   fetchQuoteStats,
 } from '../../lib/supabase';
+import { buildSafeWhatsAppUrl, sanitizeCsvCell } from '../../utils/security';
 
 interface AdminDashboardProps {
   onBackToSite: () => void;
@@ -234,12 +235,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
   // WhatsApp helper
   const openWhatsApp = (phone: string, clientName: string, service?: string | null) => {
-    const cleanPhone = phone.replace(/\D/g, '');
-    const fullPhone = cleanPhone.startsWith('502') ? cleanPhone : `502${cleanPhone}`;
-    const text = encodeURIComponent(
-      `¡Hola ${clientName}! Te saluda el equipo de Ideas & Colores Multi-Servicios 🎨. Recibimos tu solicitud de cotización para ${service || 'tu proyecto'}. ¿En qué horario te resultaría más cómodo coordinar una breve llamada o visita técnica?`
-    );
-    window.open(`https://wa.me/${fullPhone}?text=${text}`, '_blank');
+    const rawText = `¡Hola ${clientName}! Te saluda el equipo de Ideas & Colores Multi-Servicios 🎨. Recibimos tu solicitud de cotización para ${service || 'tu proyecto'}. ¿En qué horario te resultaría más cómodo coordinar una breve llamada o visita técnica?`;
+    const url = buildSafeWhatsAppUrl(phone, rawText);
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   // CSV Export helper
@@ -251,18 +249,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
     const headers = ['Fecha', 'Cliente', 'Teléfono', 'Email', 'Servicio', 'Tipo de Espacio', 'Área Estimada', 'Ubicación', 'Estado', 'Prioridad', 'Presupuesto Estimado', 'Mensaje'];
     const rows = leads.map((l) => [
-      new Date(l.created_at).toLocaleString('es-GT'),
-      `"${(l.name || '').replace(/"/g, '""')}"`,
-      `"${(l.phone || '').replace(/"/g, '""')}"`,
-      `"${(l.email || '').replace(/"/g, '""')}"`,
-      `"${(l.service || '').replace(/"/g, '""')}"`,
-      `"${(l.space_type || '').replace(/"/g, '""')}"`,
-      `"${(l.estimated_area || '').replace(/"/g, '""')}"`,
-      `"${(l.location || '').replace(/"/g, '""')}"`,
-      STATUS_LABELS[l.status]?.label || l.status,
-      PRIORITY_LABELS[l.priority]?.label || l.priority,
-      l.budget_estimate ? `Q${l.budget_estimate}` : '',
-      `"${(l.message || '').replace(/"/g, '""')}"`,
+      sanitizeCsvCell(new Date(l.created_at).toLocaleString('es-GT')),
+      sanitizeCsvCell(l.name || ''),
+      sanitizeCsvCell(l.phone || ''),
+      sanitizeCsvCell(l.email || ''),
+      sanitizeCsvCell(l.service || ''),
+      sanitizeCsvCell(l.space_type || ''),
+      sanitizeCsvCell(l.estimated_area || ''),
+      sanitizeCsvCell(l.location || ''),
+      sanitizeCsvCell(STATUS_LABELS[l.status]?.label || l.status),
+      sanitizeCsvCell(PRIORITY_LABELS[l.priority]?.label || l.priority),
+      sanitizeCsvCell(l.budget_estimate ? `Q${l.budget_estimate}` : ''),
+      sanitizeCsvCell(l.message || ''),
     ]);
 
     const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');

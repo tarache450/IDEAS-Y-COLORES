@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, MessageCircle, ArrowRight, Sparkles, Instagram, Facebook } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
+import { GoogleIcon } from './ui/GoogleIcon';
 import { BUSINESS_INFO } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
 import { MoodColorPicker } from './MoodColorPicker';
@@ -141,6 +142,21 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate }) => 
             >
               <Facebook className="w-3.5 h-3.5 text-blue-600" />
               <span className="hidden 2xl:inline">Facebook</span>
+            </a>
+
+            {/* Google Reviews link */}
+            <a
+              href={BUSINESS_INFO.googleReviewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              id="header-btn-google-reviews"
+              className="inline-flex items-center gap-1.5 px-2.5 py-2 rounded-xl text-xs font-semibold text-slate-800 bg-white/55 hover:bg-amber-50/80 border border-white/70 transition-all duration-200 hover:-translate-y-px"
+              title="Dejar reseña en Google - Calificación 5.0"
+              aria-label="Dejar reseña en Google para Ideas & Colores"
+            >
+              <GoogleIcon className="w-3.5 h-3.5" />
+              <span className="hidden xl:inline text-amber-600 font-bold">5.0 ★</span>
+              <span className="hidden 2xl:inline">Reseñas</span>
             </a>
 
             {/* WhatsApp secondary CTA */}
@@ -298,6 +314,16 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate }) => 
             >
               <Facebook className="w-4 h-4 text-blue-600" />
               <span>Facebook: {BUSINESS_INFO.facebook}</span>
+            </a>
+
+            <a
+              href={BUSINESS_INFO.googleReviewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-900 hover:bg-amber-100 font-semibold text-xs shadow-2xs transition-colors"
+            >
+              <GoogleIcon className="w-4 h-4" />
+              <span>Dejar reseña en Google (5.0 ★)</span>
             </a>
 
             <div className="pt-2 text-center text-[11px] text-slate-500 flex flex-col gap-0.5">

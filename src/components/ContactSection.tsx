@@ -11,11 +11,18 @@ import {
   ShieldCheck,
   Instagram,
   Facebook,
+  Star,
 } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/content';
 import { SpotlightCard } from './ui/SpotlightCard';
 import { StaggeredText } from './ui/StaggeredText';
+import { GoogleIcon } from './ui/GoogleIcon';
 import { submitQuoteRequest } from '../services/quotes';
+import {
+  buildSafeWhatsAppUrl,
+  getObfuscatedEmailDisplay,
+  buildSafeMailtoUrl,
+} from '../utils/security';
 
 export const ContactSection: React.FC = () => {
   const [contactForm, setContactForm] = useState({
@@ -65,7 +72,10 @@ export const ContactSection: React.FC = () => {
     }
   };
 
-  const directWhatsAppUrl = `https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=Hola%20Ideas%20%26%20Colores%2C%20quiero%20cotizar%20mi%20proyecto.`;
+  const directWhatsAppUrl = buildSafeWhatsAppUrl(
+    BUSINESS_INFO.whatsappNumber,
+    'Hola Ideas & Colores, quiero cotizar mi proyecto.'
+  );
 
   return (
     <section id="contacto" className="py-20 sm:py-24 bg-transparent border-b border-slate-200/50 relative overflow-hidden">
@@ -147,10 +157,10 @@ export const ContactSection: React.FC = () => {
                   Correo Electrónico
                 </h4>
                 <a
-                  href={`mailto:${BUSINESS_INFO.email}`}
+                  href={buildSafeMailtoUrl('Consulta de Proyecto - Ideas & Colores')}
                   className="text-sm font-bold text-slate-950 hover:text-sky-600 transition-colors block mt-1 truncate"
                 >
-                  {BUSINESS_INFO.email}
+                  {getObfuscatedEmailDisplay()}
                 </a>
                 <p className="text-xs text-slate-500 mt-1">Gerencia y presupuestos formales</p>
               </SpotlightCard>
@@ -173,8 +183,41 @@ export const ContactSection: React.FC = () => {
               </SpotlightCard>
             </div>
 
-            {/* Social Media Channels Grid (Instagram + Facebook) */}
+            {/* Social Media & Google Business Review Channels Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Google Reviews Banner - Full width banner */}
+              <a
+                href={BUSINESS_INFO.googleReviewUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                id="contact-btn-google-reviews"
+                className="sm:col-span-2 p-3.5 sm:p-4 rounded-2xl bg-white hover:bg-amber-50/40 border border-slate-200/90 hover:border-amber-300 shadow-2xs hover:shadow-md flex items-center justify-between gap-3 transition-all group"
+                aria-label="Dejar reseña y comentario en el perfil de Google de Ideas & Colores"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                    <GoogleIcon className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="text-[11px] font-bold uppercase tracking-wider text-amber-700">
+                        Perfil de Google
+                      </h4>
+                      <span className="inline-flex items-center text-amber-400 text-xs">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <span className="font-bold text-slate-800 ml-1 text-xs">{BUSINESS_INFO.googleRating}</span>
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-sm font-bold text-slate-950 group-hover:text-amber-700 transition-colors truncate">
+                      Deja tu reseña o comentario en Google
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 px-3 py-1.5 rounded-xl shadow-2xs transition-all shrink-0">
+                  Calificar ★
+                </span>
+              </a>
+
               {/* Instagram Banner */}
               <a
                 href={BUSINESS_INFO.instagramUrl}
@@ -273,16 +316,7 @@ export const ContactSection: React.FC = () => {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-3">
                   {/* Anti-Spam Honeypot */}
-                  <input
-                    type="text"
-                    name="quick_business_hp"
-                    value={honeypot}
-                    onChange={(e) => setHoneypot(e.target.value)}
-                    tabIndex={-1}
-                    aria-hidden="true"
-                    autoComplete="off"
-                    className="hidden absolute -left-[9999px]"
-                  />
+                  <input type="text" name="website_hp" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} style={{ display: 'none' }} tabIndex={-1} autoComplete="off" aria-hidden="true" />
 
                   {errorMsg && (
                     <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold">
@@ -296,6 +330,7 @@ export const ContactSection: React.FC = () => {
                       id="contact-name"
                       name="name"
                       required
+                      maxLength={150}
                       placeholder="Tu nombre"
                       aria-label="Tu nombre completo"
                       autoComplete="name"
@@ -308,6 +343,7 @@ export const ContactSection: React.FC = () => {
                       id="contact-phone"
                       name="phone"
                       required
+                      maxLength={25}
                       placeholder="Tu WhatsApp o celular"
                       aria-label="Tu WhatsApp o número de celular"
                       autoComplete="tel"
@@ -320,6 +356,7 @@ export const ContactSection: React.FC = () => {
                     rows={2}
                     id="contact-message"
                     name="message"
+                    maxLength={3000}
                     placeholder="¿Qué servicio o proyecto necesitas cotizar?"
                     aria-label="Mensaje o descripción de tu proyecto"
                     value={contactForm.message}
@@ -371,7 +408,18 @@ export const ContactSection: React.FC = () => {
                     Atención técnica en proyectos residenciales, comerciales e industriales
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <a
+                    href={BUSINESS_INFO.googleReviewUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    id="contact-map-btn-google-review"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-950 text-xs font-semibold transition-colors shadow-2xs"
+                    title="Dejar reseña o comentario en el perfil de Google"
+                  >
+                    <GoogleIcon className="w-3.5 h-3.5" />
+                    <span>Dejar reseña (5.0 ★)</span>
+                  </a>
                   <a
                     href="https://www.google.com/maps/search/?api=1&query=Carretera+a+El+Salvador+Guatemala"
                     target="_blank"
@@ -379,7 +427,7 @@ export const ContactSection: React.FC = () => {
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition-colors"
                   >
                     <Navigation className="w-3.5 h-3.5 text-sky-600" />
-                    <span>Ver en Google Maps</span>
+                    <span>Ver en Maps</span>
                   </a>
                 </div>
               </div>

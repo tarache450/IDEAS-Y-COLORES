@@ -8,6 +8,19 @@ coverage/
 !.env.example
 *.bak
 *.tmp
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.der
+*.csr
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+.npmrc
 Pack_Completo_Instagram_Ideas_y_Colores/
 drive-download*/
 entrega-logos-cliente/
@@ -15,3 +28,5 @@ TABY_PROMPT.md
 .vscode/
 .idea/
 
+# Logs de telemetría local de Orca y Antigravity
+.antigravity/logs/

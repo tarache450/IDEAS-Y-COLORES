@@ -3,6 +3,7 @@ import { Tag, ArrowRight, MessageCircle, ShieldCheck, CheckCircle2, Clock, Spark
 import { PROMOTIONS_LIST, BUSINESS_INFO } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
 import { SpotlightCard } from './ui/SpotlightCard';
+import { buildSafeWhatsAppUrl } from '../utils/security';
 
 interface PromoSectionProps {
   onQuoteClick: () => void;
@@ -60,7 +61,10 @@ export const PromoSection: React.FC<PromoSectionProps> = ({ onQuoteClick }) => {
               </button>
 
               <a
-                href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=Hola%20Ideas%20%26%20Colores%2C%20quiero%20informaci%C3%B3n%20sobre%20la%20promoci%C3%B3n%20de%20hasta%2020%25%20de%20descuento%20en%20pintura%20y%20aplicaci%C3%B3n.`}
+                href={buildSafeWhatsAppUrl(
+                  BUSINESS_INFO.whatsappNumber,
+                  'Hola Ideas & Colores, quiero información sobre la promoción de hasta 20% de descuento en pintura y aplicación.'
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 id="btn-claim-promo-wa"
@@ -121,9 +125,10 @@ export const PromoSection: React.FC<PromoSectionProps> = ({ onQuoteClick }) => {
                   * {promo.terms}
                 </p>
                 <a
-                  href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=Hola%20Ideas%20%26%20Colores%2C%20deseo%20aplicar%20la%20promoci%C3%B3n%3A%20${encodeURIComponent(
-                    promo.title
-                  )}.`}
+                  href={buildSafeWhatsAppUrl(
+                    BUSINESS_INFO.whatsappNumber,
+                    `Hola Ideas & Colores, deseo aplicar la promoción: ${promo.title}.`
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-[0.98]"

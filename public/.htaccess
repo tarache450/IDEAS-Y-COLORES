@@ -1,9 +1,34 @@
 # Apache / LiteSpeed Configuration for Ideas & Colores Multi-Servicios
-# Hostinger Production Optimization - Core Web Vitals & Mobile Performance
+# Hostinger Production Optimization - Core Web Vitals, Mobile Performance & ORCA Security Hardening
+
+# Block direct access to hidden files and directories (e.g. .env, .git, .htaccess)
+<FilesMatch "^\.">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# Block sensitive source/backup files that must never be served from public_html
+<FilesMatch "(?i)\.(sql|log|bak|sh|ini|conf|yml|yaml|lock)$|^tsconfig\.json$|^package-lock\.json$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # 0. Block hidden dotfiles/directories except .well-known/
+  RewriteRule (?:^|/)\.(?!well-known/) - [F,L]
 
   # 1. Force HTTPS
   RewriteCond %{HTTPS} !=on
@@ -64,12 +89,16 @@
 # SECURITY & CACHE-CONTROL HEADERS
 # ----------------------------------------------------------------------
 <IfModule mod_headers.c>
-  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-  Header always set X-Content-Type-Options "nosniff"
+  Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+  # JSON-LD structured data is allowed by SHA-256 hash (no 'unsafe-inline' for scripts).
+  # Recompute the hash if the JSON-LD block in index.html changes.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-RahpOtU9YhSSzuutDtalDT4B9HJ9lHtN0zgePHBQFuM='; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src 'self' https://maps.google.com https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
   Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-Content-Type-Options "nosniff"
   Header always set X-XSS-Protection "1; mode=block"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
-  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+  # microphone=(self) habilita el "Comando de voz" (Web Speech API) del propio sitio
+  Header always set Permissions-Policy "camera=(), microphone=(self), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
 
   # Long-term immutable caching for hashed production assets
   <FilesMatch "\.(js|css|webp|png|jpe?g|svg|woff2?)$">

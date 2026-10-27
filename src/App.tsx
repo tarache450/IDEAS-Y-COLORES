@@ -173,6 +173,7 @@ function AppContent() {
       'estudio-color',
       'calculadora',
       'servicios',
+      'proceso',
       'proyectos',
       'promociones',
       'nosotros',
