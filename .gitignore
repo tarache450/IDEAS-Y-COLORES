@@ -24,9 +24,15 @@ id_ed25519*
 Pack_Completo_Instagram_Ideas_y_Colores/
 drive-download*/
 entrega-logos-cliente/
+entrega/
 TABY_PROMPT.md
 .vscode/
 .idea/
 
 # Logs de telemetría local de Orca y Antigravity
 .antigravity/logs/
+data/
+*.jsonl
+docs/evidence/**/*.json
+docs/verificacion/**/raw/
+docs/verificacion/**/capturas/

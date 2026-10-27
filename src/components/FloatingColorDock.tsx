@@ -21,7 +21,7 @@ export const FloatingColorDock: React.FC<FloatingColorDockProps> = ({
       <button
         type="button"
         onClick={() => onNavigate('estudio-color')}
-        className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
+        className={`min-h-[44px] px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
           activeSection === 'estudio-color'
             ? 'bg-amber-400 text-slate-950 shadow-sm'
             : 'text-slate-300 hover:text-white hover:bg-slate-800'
@@ -62,7 +62,7 @@ export const FloatingColorDock: React.FC<FloatingColorDockProps> = ({
       <button
         type="button"
         onClick={() => onNavigate('promociones')}
-        className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
+        className={`min-h-[44px] px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
           activeSection === 'promociones'
             ? 'bg-amber-400 text-slate-950 shadow-sm'
             : 'text-amber-400 hover:bg-slate-800'
@@ -77,8 +77,8 @@ export const FloatingColorDock: React.FC<FloatingColorDockProps> = ({
         href={BUSINESS_INFO.whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-colors shadow-xs"
-        title="WhatsApp Inmediato"
+        className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-colors shadow-xs"
+        title="WhatsApp Inmediato" aria-label="WhatsApp Inmediato"
       >
         <MessageCircle className="w-4 h-4" />
       </a>
@@ -87,8 +87,8 @@ export const FloatingColorDock: React.FC<FloatingColorDockProps> = ({
       <button
         type="button"
         onClick={scrollToTop}
-        className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-        title="Volver arriba"
+        className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+        title="Volver arriba" aria-label="Volver arriba"
       >
         <ChevronUp className="w-4 h-4" />
       </button>

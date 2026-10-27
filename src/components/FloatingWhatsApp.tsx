@@ -94,8 +94,8 @@ export const FloatingWhatsApp: React.FC = () => {
                 maxLength={500}
                 value={customNote}
                 onChange={(e) => setCustomNote(e.target.value)}
-                placeholder="Escribe tu consulta o proyecto..."
-                className="w-full text-xs sm:text-sm pl-3 pr-10 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+                placeholder="Escribe tu consulta o proyecto..." aria-label="Escribe tu consulta o proyecto para WhatsApp"
+                className="w-full text-base sm:text-sm pl-3 pr-10 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
               />
               <button
                 type="submit"

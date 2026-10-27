@@ -28,6 +28,8 @@ export interface QuoteSubmissionResult {
   success: boolean;
   error?: string;
   id?: string;
+  leadId?: string;
+  whatsappRedirectUrl?: string;
   droppedByHoneypot?: boolean;
   rateLimited?: boolean;
 }
@@ -41,16 +43,13 @@ const isDev = Boolean(
 
 /**
  * Sanitiza texto destinado a almacenamiento o canales de texto plano.
- * Elimina etiquetas/bloques ejecutables, pseudoprotocolos y caracteres de control,
- * pero NO convierte `&`, `<`, `>` ni comillas en entidades HTML. React ya escapa
- * al renderizar; escapar en la entrada provoca doble escape en el CRM.
  */
 export function sanitizeString(val?: unknown, maxLength = 3000): string {
   return sanitizePlainText(val, maxLength);
 }
 
 /**
- * Valida los datos antes de enviarlos a la base de datos
+ * Valida los datos antes de enviarlos a la API
  */
 export function validateQuoteInput(input: CreateQuoteInput): { valid: boolean; error?: string } {
   if (!input || typeof input !== 'object') {
@@ -61,8 +60,8 @@ export function validateQuoteInput(input: CreateQuoteInput): { valid: boolean; e
   const rawMessage = typeof input.message === 'string' ? input.message.trim() : '';
   const rawEmail = typeof input.email === 'string' ? input.email.trim() : '';
 
-  if (rawName.length > 150) {
-    return { valid: false, error: 'El nombre no debe exceder 150 caracteres.' };
+  if (!rawName) {
+    return { valid: false, error: 'Por favor ingresa tu nombre completo.' };
   }
 
   const cleanName = sanitizePlainText(input.name, 150);
@@ -71,6 +70,10 @@ export function validateQuoteInput(input: CreateQuoteInput): { valid: boolean; e
 
   if (!cleanName || cleanName.length < 2) {
     return { valid: false, error: 'Por favor ingresa tu nombre completo (mínimo 2 caracteres).' };
+  }
+
+  if (cleanName.length > 80) {
+    return { valid: false, error: 'El nombre no debe exceder 80 caracteres.' };
   }
 
   if (!cleanPhone || !isValidGuatemalaPhone(input.phone)) {
@@ -94,20 +97,39 @@ export function validateQuoteInput(input: CreateQuoteInput): { valid: boolean; e
 }
 
 /**
- * Envía una solicitud de cotización / lead a Supabase
+ * Parsea el texto del área para extraer número estimado en m2
+ */
+function parseEstimatedArea(raw?: string): number | null {
+  if (!raw) return null;
+  const match = raw.match(/(\d+(?:\.\d+)?)/);
+  if (match) {
+    const val = parseFloat(match[1]);
+    return isNaN(val) ? null : val;
+  }
+  return null;
+}
+
+/**
+ * Envía la cotización al Backend Hardened API (/api/leads)
+ * con fallback a Supabase si el endpoint HTTP no estuviera disponible.
  */
 export async function submitQuoteRequest(
   input: CreateQuoteInput
 ): Promise<QuoteSubmissionResult> {
-  // 1. Detección de Bot / Honeypot: si el campo invisible fue rellenado, simular éxito silencioso sin consumir rate limit ni insertar en BD
+  // 1. Detección de Bot / Honeypot: si el campo invisible fue rellenado, simular éxito silencioso
   if (isHoneypotTriggered(input?.honeypot)) {
     if (isDev) {
-      console.warn('[Anti-Spam] Envío descartado por detección de bot (honeypot activado).');
+      console.warn('[Anti-Spam] Envío descartado en cliente por honeypot activado.');
     }
-    return { success: true, droppedByHoneypot: true };
+    return {
+      success: true,
+      droppedByHoneypot: true,
+      leadId: 'IYC-2026-HP01',
+      whatsappRedirectUrl: 'https://wa.me/50266617592',
+    };
   }
 
-  // 2. Validación de entrada en capa de servicio
+  // 2. Validación de entrada en cliente
   const validation = validateQuoteInput(input);
   if (!validation.valid) {
     return {
@@ -126,67 +148,132 @@ export async function submitQuoteRequest(
     };
   }
 
-  // 4. Sanitización estricta de datos
-  const payload: QuoteRequestInsert = {
-    name: sanitizePlainText(input.name, 150),
-    phone: sanitizePlainText(input.phone, 25),
-    email: sanitizePlainText(input.email, 254) || null,
-    service: sanitizePlainText(input.service, 150) || null,
-    space_type: sanitizePlainText(input.spaceType, 100) || null,
-    estimated_area: sanitizePlainText(input.estimatedArea, 100) || null,
-    desired_timeline: sanitizePlainText(input.desiredTimeline, 100) || null,
-    location: sanitizePlainText(input.location, 200) || null,
-    message: sanitizePlainText(input.message, 3000) || null,
-    status: 'new',
-    source: input.source || 'website_quote_form',
+  const metrosCuadrados = parseEstimatedArea(input.estimatedArea);
+  const compositeMessage = [
+    input.message ? sanitizeString(input.message, 3000) : '',
+    input.spaceType ? `Tipo de espacio: ${sanitizeString(input.spaceType, 100)}` : '',
+    input.desiredTimeline ? `Plazo: ${sanitizeString(input.desiredTimeline, 100)}` : '',
+  ]
+    .filter(Boolean)
+    .join(' | ');
+
+  const apiPayload = {
+    nombre: sanitizeString(input.name, 150),
+    telefono: sanitizeString(input.phone, 25),
+    email: sanitizeString(input.email, 254) || null,
+    servicio: sanitizeString(input.service, 150) || 'Pintura Airless',
+    ubicacion: sanitizeString(input.location, 200) || 'Carretera a El Salvador',
+    metrosCuadrados,
+    mensaje: compositeMessage || 'Cotización solicitada desde asistente web.',
+    website_hp: input.honeypot || '',
   };
 
-  // 5. Si Supabase no está configurado: simular solo en desarrollo.
-  // En producción un fallback "exitoso" perdería el lead silenciosamente.
-  if (!isSupabaseConfigured) {
-    if (isDev) {
-      console.info(
-        '[Supabase Fallback] Variables no configuradas. Simulando recepción de lead:',
-        payload
-      );
+  // 4. Envío primario a /api/leads (Node / PHP Gateway)
+  try {
+    const response = await fetch('/api/leads', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(apiPayload),
+    });
+
+    const data = await response.json().catch(() => null);
+
+    if (response.ok && data?.ok) {
+      // Sincronización secundaria opcional con Supabase si está disponible
+      if (isSupabaseConfigured) {
+        Promise.resolve(
+          supabase
+            .from('quote_requests')
+            .insert([
+              {
+                name: apiPayload.nombre,
+                phone: apiPayload.telefono,
+                email: apiPayload.email,
+                service: apiPayload.servicio,
+                space_type: input.spaceType ? sanitizeString(input.spaceType, 100) : null,
+                estimated_area: input.estimatedArea ? sanitizeString(input.estimatedArea, 100) : null,
+                desired_timeline: input.desiredTimeline ? sanitizeString(input.desiredTimeline, 100) : null,
+                location: apiPayload.ubicacion,
+                message: apiPayload.mensaje,
+                status: 'new',
+                source: input.source || 'website_quote_wizard',
+              } as QuoteRequestInsert,
+            ])
+        )
+          .then(() => {
+            if (isDev) console.info('[Supabase Sync] Cotización sincronizada:', data.leadId);
+          })
+          .catch((sbErr) => {
+            if (isDev) console.warn('[Supabase Sync Warning] Fallo secundario no crítico:', sbErr);
+          });
+      }
+
       return {
         success: true,
-        id: 'local-fallback-' + Date.now(),
+        leadId: data.leadId,
+        id: data.leadId,
+        whatsappRedirectUrl: data.whatsappRedirectUrl,
       };
     }
 
-    return {
-      success: false,
-      error: 'El sistema de cotizaciones no está configurado. Escríbenos directamente por WhatsApp.',
-    };
-  }
-
-  // 6. Inserción con cliente Supabase (con RLS y tipos)
-  try {
-    const { error } = await supabase
-      .from('quote_requests')
-      .insert([payload]);
-
-    if (error) {
-      if (isDev) {
-        console.error('[Supabase Error] Inserción fallida:', error);
-      }
+    if (response.status === 429) {
       return {
         success: false,
-        error: 'No pudimos registrar tu solicitud en este momento. Inténtalo nuevamente o escríbenos directamente a WhatsApp.',
+        rateLimited: true,
+        error: data?.error || 'Has superado el límite de solicitudes. Por favor espera unos minutos o escríbenos a WhatsApp.',
       };
     }
 
-    return {
-      success: true,
-    };
-  } catch (err) {
-    if (isDev) {
-      console.error('[Supabase Exception]', err);
+    if (data?.error) {
+      return {
+        success: false,
+        error: data.error,
+      };
     }
-    return {
-      success: false,
-      error: 'Ocurrió un error inesperado al procesar la cotización. Inténtalo de nuevo por favor.',
-    };
+  } catch (netErr) {
+    if (isDev) {
+      console.warn('[API Leads Network Exception] Intentando fallback local:', netErr);
+    }
   }
+
+  // 5. Fallback secundario si la API HTTP no responde (e.g. Supabase directo)
+  if (isSupabaseConfigured) {
+    try {
+      const { error } = await supabase.from('quote_requests').insert([
+        {
+          name: apiPayload.nombre,
+          phone: apiPayload.telefono,
+          email: apiPayload.email,
+          service: apiPayload.servicio,
+          space_type: input.spaceType ? sanitizeString(input.spaceType, 100) : null,
+          estimated_area: input.estimatedArea ? sanitizeString(input.estimatedArea, 100) : null,
+          desired_timeline: input.desiredTimeline ? sanitizeString(input.desiredTimeline, 100) : null,
+          location: apiPayload.ubicacion,
+          message: apiPayload.mensaje,
+          status: 'new',
+          source: input.source || 'website_quote_wizard',
+        } as QuoteRequestInsert,
+      ]);
+
+      if (!error) {
+        const fallbackId = 'IYC-2026-SB01';
+        return {
+          success: true,
+          leadId: fallbackId,
+          id: fallbackId,
+          whatsappRedirectUrl: `https://wa.me/50266617592?text=${encodeURIComponent(`Cotización [${fallbackId}] - ${apiPayload.nombre}`)}`,
+        };
+      }
+    } catch {
+      // Ignorar excepción de fallback
+    }
+  }
+
+  return {
+    success: false,
+    error: 'No pudimos registrar tu cotización en este momento. Por favor comunícate directamente a nuestro WhatsApp oficial: 6661-7592.',
+  };
 }

@@ -1,16 +1,16 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es-GT">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ideas & Colores | Pintura con Sistema Airless, Impermeabilización y Mantenimiento en Guatemala</title>
+    <title>Ideas & Colores | Pintura con Sistema Airless, ImpermeabilizaciÃ³n y Mantenimiento en Guatemala</title>
     <meta
       name="description"
-      content="Servicios profesionales de pintura arquitectónica con sistema Airless, impermeabilización de losas, mantenimiento, carpintería y resinas epóxicas con garantía por escrito en Carretera a El Salvador y Guatemala."
+      content="Servicios profesionales de pintura arquitectÃ³nica con sistema Airless, impermeabilizaciÃ³n de losas, mantenimiento, carpinterÃ­a y resinas epÃ³xicas con garantÃ­a por escrito en Carretera a El Salvador y Guatemala."
     />
     <meta
       name="keywords"
-      content="servicios de pintura Guatemala, pintura sistema airless Guatemala, impermeabilización de losas Guatemala, empresa de pintura Carretera a El Salvador, pintores Santa Catarina Pinula, pintura Fraijanes, mantenimiento residencial Guatemala, pisos epoxicos Guatemala, carpinteria a la medida Guatemala"
+      content="servicios de pintura Guatemala, pintura sistema airless Guatemala, impermeabilizaciÃ³n de losas Guatemala, empresa de pintura Carretera a El Salvador, pintores Santa Catarina Pinula, pintura Fraijanes, mantenimiento residencial Guatemala, pisos epoxicos Guatemala, carpinteria a la medida Guatemala"
     />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="theme-color" content="#0059FF" />
@@ -25,7 +25,7 @@
     <meta property="og:title" content="Ideas & Colores Multi-Servicios | Color que transforma espacios" />
     <meta
       property="og:description"
-      content="Transformamos, protegemos y mantenemos espacios con pintura profesional (Sistema Airless), impermeabilización de losas, carpintería, pisos epóxicos y plomería en Carretera a El Salvador y toda Guatemala."
+      content="Transformamos, protegemos y mantenemos espacios con pintura profesional (Sistema Airless), impermeabilizaciÃ³n de losas, carpinterÃ­a, pisos epÃ³xicos y plomerÃ­a en Carretera a El Salvador y toda Guatemala."
     />
     <meta property="og:url" content="https://ideasycoloresgt.site/" />
     <meta property="og:image" content="https://ideasycoloresgt.site/hero-interior-sala.jpg" />
@@ -33,14 +33,14 @@
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="800" />
-    <meta property="og:image:alt" content="Ideas & Colores Multi-Servicios - Pintura y mantenimiento arquitectónico en Guatemala" />
+    <meta property="og:image:alt" content="Ideas & Colores Multi-Servicios - Pintura y mantenimiento arquitectÃ³nico en Guatemala" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Ideas & Colores | Pintura Airless, Impermeabilización y Mantenimiento en Guatemala" />
+    <meta name="twitter:title" content="Ideas & Colores | Pintura Airless, ImpermeabilizaciÃ³n y Mantenimiento en Guatemala" />
     <meta
       name="twitter:description"
-      content="Soluciones profesionales de pintura con sistema Airless, impermeabilización de losas y multi-servicios en Carretera a El Salvador y Guatemala. Garantía formal por escrito."
+      content="Soluciones profesionales de pintura con sistema Airless, impermeabilizaciÃ³n de losas y multi-servicios en Carretera a El Salvador y Guatemala. GarantÃ­a formal por escrito."
     />
     <meta name="twitter:image" content="https://ideasycoloresgt.site/hero-interior-sala.jpg" />
     <meta name="twitter:image:alt" content="Ideas & Colores Multi-Servicios Guatemala" />
@@ -55,38 +55,41 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- Preload Critical LCP Assets (Hero Image + Logo) -->
+    <!-- Preload Critical LCP Asset (Hero Image) - Perf Optimization: avoid logo competing with critical render -->
     <link
       rel="preload"
       as="image"
       href="/studio/color-studio-azul-profundo.webp"
       type="image/webp"
+      media="(min-width: 1024px)"
       fetchpriority="high"
+    />
+    <!-- Non-render-blocking Typography: preload variable fonts to minimize swap CLS -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="https://fonts.gstatic.com/s/outfit/v15/QGYvz_MVcBeNP4NJtEtq.woff2"
+      crossorigin
     />
     <link
       rel="preload"
-      as="image"
-      href="/logo.webp"
-      type="image/webp"
-      fetchpriority="high"
+      as="font"
+      type="font/woff2"
+      href="https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2"
+      crossorigin
     />
-
-    <!-- Non-render-blocking Typography -->
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-    />
+    <!-- Typography: non-blocking stylesheet + preloaded fonts + display=optional (no swap CLS) -->
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=optional"
       media="print"
       data-async-css="fonts"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=optional"
       />
     </noscript>
     <script src="/font-loader.js" defer></script>
@@ -113,7 +116,7 @@
           ],
           "priceRange": "$$",
           "currenciesAccepted": "GTQ, USD",
-          "paymentAccepted": "Efectivo, Tarjeta de Crédito, Transferencia Bancaria",
+          "paymentAccepted": "Efectivo, Tarjeta de CrÃ©dito, Transferencia Bancaria",
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "Carretera a El Salvador",
@@ -147,7 +150,7 @@
             },
             {
               "@type": "AdministrativeArea",
-              "name": "San José Pinula"
+              "name": "San JosÃ© Pinula"
             },
             {
               "@type": "City",
@@ -168,7 +171,7 @@
               "closes": "13:00"
             }
           ],
-          "description": "Ideas & Colores Multi-Servicios transforma, protege y mantiene espacios con soluciones profesionales integrales en pintura arquitectónica con sistema Airless, impermeabilización de losas, carpintería, plomería, resinas epóxicas, remodelaciones e instalaciones generales.",
+          "description": "Ideas & Colores Multi-Servicios transforma, protege y mantiene espacios con soluciones profesionales integrales en pintura arquitectÃ³nica con sistema Airless, impermeabilizaciÃ³n de losas, carpinterÃ­a, plomerÃ­a, resinas epÃ³xicas, remodelaciones e instalaciones generales.",
           "hasOfferCatalog": {
             "@type": "OfferCatalog",
             "name": "Servicios Especializados de Pintura y Mantenimiento",
@@ -177,7 +180,7 @@
                 "@type": "Offer",
                 "itemOffered": {
                   "@type": "Service",
-                  "name": "Pintura y Recubrimientos Arquitectónicos",
+                  "name": "Pintura y Recubrimientos ArquitectÃ³nicos",
                   "description": "Pintura interior y exterior, acabados finos, resanes, muros de acento, tratamiento de humedad y recubrimientos impermeables."
                 }
               },
@@ -193,32 +196,32 @@
                 "@type": "Offer",
                 "itemOffered": {
                   "@type": "Service",
-                  "name": "Resinas Epóxicas para Pisos y Superficies",
-                  "description": "Recubrimientos autonivelantes, pisos de alta resistencia mecánica, barras y acabados estéticos duraderos."
+                  "name": "Resinas EpÃ³xicas para Pisos y Superficies",
+                  "description": "Recubrimientos autonivelantes, pisos de alta resistencia mecÃ¡nica, barras y acabados estÃ©ticos duraderos."
                 }
               },
               {
                 "@type": "Offer",
                 "itemOffered": {
                   "@type": "Service",
-                  "name": "Carpintería a la Medida y Pérgolas",
-                  "description": "Gabinetes de cocina, clósets, puertas, pérgolas y acabados finos para madera interior y exterior."
+                  "name": "CarpinterÃ­a a la Medida y PÃ©rgolas",
+                  "description": "Gabinetes de cocina, clÃ³sets, puertas, pÃ©rgolas y acabados finos para madera interior y exterior."
                 }
               },
               {
                 "@type": "Offer",
                 "itemOffered": {
                   "@type": "Service",
-                  "name": "Plomería y Remodelación de Baños",
-                  "description": "Reparación de filtraciones, sellado de juntas, cambio de grifería y remodelación integral de áreas húmedas."
+                  "name": "PlomerÃ­a y RemodelaciÃ³n de BaÃ±os",
+                  "description": "ReparaciÃ³n de filtraciones, sellado de juntas, cambio de griferÃ­a y remodelaciÃ³n integral de Ã¡reas hÃºmedas."
                 }
               },
               {
                 "@type": "Offer",
                 "itemOffered": {
                   "@type": "Service",
-                  "name": "Rotulación e Impresión Digital",
-                  "description": "Vinil decorativo, rotulación comercial, señalética arquitectónica y ambientación de espacios corporativos."
+                  "name": "RotulaciÃ³n e ImpresiÃ³n Digital",
+                  "description": "Vinil decorativo, rotulaciÃ³n comercial, seÃ±alÃ©tica arquitectÃ³nica y ambientaciÃ³n de espacios corporativos."
                 }
               }
             ]
@@ -241,58 +244,58 @@
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "¿Tiene algún costo la visita técnica y diagnóstico en sitio?",
+              "name": "Â¿Tiene algÃºn costo la visita tÃ©cnica y diagnÃ³stico en sitio?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "No, nuestra visita técnica de evaluación y asesoría en Carretera a El Salvador, Fraijanes, Santa Catarina Pinula y principales zonas de Ciudad de Guatemala (Zonas 10, 14, 15, 16, etc.) es completamente sin costo y sin compromiso. Evaluamos el estado real de tus paredes, posibles filtraciones o fisuras, y te entregamos un presupuesto formal detallado."
+                "text": "No, nuestra visita tÃ©cnica de evaluaciÃ³n y asesorÃ­a en Carretera a El Salvador, Fraijanes, Santa Catarina Pinula y principales zonas de Ciudad de Guatemala (Zonas 10, 14, 15, 16, etc.) es completamente sin costo y sin compromiso. Evaluamos el estado real de tus paredes, posibles filtraciones o fisuras, y te entregamos un presupuesto formal detallado."
               }
             },
             {
               "@type": "Question",
-              "name": "¿En qué consiste la garantía por escrito y qué cubre?",
+              "name": "Â¿En quÃ© consiste la garantÃ­a por escrito y quÃ© cubre?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Entregamos un documento formal de garantía respaldado por Ideas & Colores Multi-Servicios. Cubre tanto la calidad de los materiales originales como la adherencia y mano de obra profesional, garantizando que no existirá descascaramiento prematuro, ampollamiento ni fallas por mala preparación de superficie."
+                "text": "Entregamos un documento formal de garantÃ­a respaldado por Ideas & Colores Multi-Servicios. Cubre tanto la calidad de los materiales originales como la adherencia y mano de obra profesional, garantizando que no existirÃ¡ descascaramiento prematuro, ampollamiento ni fallas por mala preparaciÃ³n de superficie."
               }
             },
             {
               "@type": "Question",
-              "name": "¿Ustedes suministran los materiales o el cliente debe comprarlos?",
+              "name": "Â¿Ustedes suministran los materiales o el cliente debe comprarlos?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Ofrecemos ambas modalidades según tu conveniencia. En la modalidad recomendada 'Llave en mano', suministramos productos originales de marcas líderes (Sherwin-Williams, Corona, Lanco, Sika) con descuentos por volumen y sin diluciones perjudiciales. Si ya compraste tu pintura o recubrimiento, también brindamos exclusivamente el servicio de aplicación calificada."
+                "text": "Ofrecemos ambas modalidades segÃºn tu conveniencia. En la modalidad recomendada 'Llave en mano', suministramos productos originales de marcas lÃ­deres (Sherwin-Williams, Corona, Lanco, Sika) con descuentos por volumen y sin diluciones perjudiciales. Si ya compraste tu pintura o recubrimiento, tambiÃ©n brindamos exclusivamente el servicio de aplicaciÃ³n calificada."
               }
             },
             {
               "@type": "Question",
-              "name": "¿Cuánto tiempo toma recibir la cotización formal?",
+              "name": "Â¿CuÃ¡nto tiempo toma recibir la cotizaciÃ³n formal?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Entregamos el presupuesto formal desglosado en un plazo máximo de 24 horas hábiles después de realizada la visita técnica y levantadas las medidas. Si nos compartes tus medidas y fotos preliminares por WhatsApp, podemos darte un estimado orientativo el mismo día."
+                "text": "Entregamos el presupuesto formal desglosado en un plazo mÃ¡ximo de 24 horas hÃ¡biles despuÃ©s de realizada la visita tÃ©cnica y levantadas las medidas. Si nos compartes tus medidas y fotos preliminares por WhatsApp, podemos darte un estimado orientativo el mismo dÃ­a."
               }
             },
             {
               "@type": "Question",
-              "name": "¿Emiten factura contable para empresas y personas individuales?",
+              "name": "Â¿Emiten factura contable para empresas y personas individuales?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Sí, somos una empresa formalmente constituida en Guatemala. Emitimos Factura Electrónica (FEL) autorizada por la SAT con todos los requisitos de ley para particulares, condominios, colegios, oficinas y empresas corporativas."
+                "text": "SÃ­, somos una empresa formalmente constituida en Guatemala. Emitimos Factura ElectrÃ³nica (FEL) autorizada por la SAT con todos los requisitos de ley para particulares, condominios, colegios, oficinas y empresas corporativas."
               }
             },
             {
               "@type": "Question",
-              "name": "¿Cómo protegen el mobiliario, pisos y áreas limpias durante el trabajo?",
+              "name": "Â¿CÃ³mo protegen el mobiliario, pisos y Ã¡reas limpias durante el trabajo?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "La protección meticulosa es un estándar obligatorio en Ideas & Colores. Antes de empezar cualquier aplicación o lijado, cubrimos pisos con plástico o cartón de alta densidad, encintamos con precisión marcos, rodapiés y apagadores, y cubrimos todo el mobiliario. Entregamos el espacio limpio y listo para habitar."
+                "text": "La protecciÃ³n meticulosa es un estÃ¡ndar obligatorio en Ideas & Colores. Antes de empezar cualquier aplicaciÃ³n o lijado, cubrimos pisos con plÃ¡stico o cartÃ³n de alta densidad, encintamos con precisiÃ³n marcos, rodapiÃ©s y apagadores, y cubrimos todo el mobiliario. Entregamos el espacio limpio y listo para habitar."
               }
             },
             {
               "@type": "Question",
-              "name": "¿Qué otros servicios ofrecen además de pintura?",
+              "name": "Â¿QuÃ© otros servicios ofrecen ademÃ¡s de pintura?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Somos un grupo Multi-Servicios: además de pintura arquitectónica e industrial, contamos con divisiones especializadas en resinas epóxicas para pisos y barras, carpintería a la medida (pérgolas, decks, closets y cocinas), plomería, rotulación e impresión digital de gran formato, y mantenimiento general locativo."
+                "text": "Somos un grupo Multi-Servicios: ademÃ¡s de pintura arquitectÃ³nica e industrial, contamos con divisiones especializadas en resinas epÃ³xicas para pisos y barras, carpinterÃ­a a la medida (pÃ©rgolas, decks, closets y cocinas), plomerÃ­a, rotulaciÃ³n e impresiÃ³n digital de gran formato, y mantenimiento general locativo."
               }
             }
           ]
@@ -310,7 +313,7 @@
         </header>
         <main style="padding: 24px 16px; max-width: 1280px; margin: 0 auto; width: 100%; box-sizing: border-box;">
           <div style="display: inline-block; padding: 6px 14px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 9999px; font-size: 12px; font-weight: 600; color: #1e293b; margin-bottom: 16px;">
-            Ideas & Colores Multi-Servicios • Guatemala
+            Ideas & Colores Multi-Servicios â€¢ Guatemala
           </div>
           <h1 style="font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; color: #020617; line-height: 1.05; margin: 0 0 16px 0; letter-spacing: -0.035em;">
             Color que transforma espacios.
@@ -319,7 +322,7 @@
             Pintura, mantenimiento y soluciones para cada espacio.
           </p>
           <p style="font-size: 0.95rem; color: #475569; max-width: 620px; line-height: 1.6; margin: 0 0 24px 0;">
-            Transformamos, protegemos y mantenemos tus espacios con asesoría técnica personalizada, suministro de marcas reconocidas y personal calificado en Carretera a El Salvador y toda Guatemala.
+            Transformamos, protegemos y mantenemos tus espacios con asesorÃ­a tÃ©cnica personalizada, suministro de marcas reconocidas y personal calificado en Carretera a El Salvador y toda Guatemala.
           </p>
         </main>
       </div>

@@ -67,9 +67,10 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
 
       {/* Atmospheric Ambient Glow centered on the active brand mood */}
       <div
-        className="absolute top-1/4 left-1/3 w-[550px] h-[550px] rounded-full blur-3xl pointer-events-none transition-all duration-700 -z-10 opacity-60"
+        className="absolute top-8 left-1/2 -translate-x-1/2 w-[550px] max-w-[90vw] h-[550px] rounded-full blur-3xl pointer-events-none transition-all duration-700 -z-10 opacity-60 overflow-hidden"
         style={{
           background: `radial-gradient(circle, ${currentMood.glow} 0%, transparent 70%)`,
+          contain: 'strict',
         }}
       />
 
@@ -281,7 +282,7 @@ export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }
                     <button
                       type="button"
                       onClick={onExploreColorsClick}
-                      className="font-bold hover:underline flex items-center gap-1"
+                      className="font-bold hover:underline inline-flex items-center gap-1 min-h-[44px] py-1.5"
                       style={{ color: currentMood.color }}
                     >
                       <Palette className="w-3 h-3" />

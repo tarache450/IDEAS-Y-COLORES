@@ -165,7 +165,7 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({ onSelectSolu
 
                         {/* Surface / Speciality pills */}
                         <div className="mb-4">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 block mb-2">
                             Superficies y aplicaciones principales:
                           </span>
                           <div className="flex flex-wrap gap-1.5">
@@ -272,7 +272,7 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({ onSelectSolu
 
                 {/* Lines / Subservices */}
                 <div className="pt-2 border-t border-slate-800">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 block mb-2">
                     Líneas disponibles:
                   </span>
                   <div className="flex flex-wrap gap-1.5">

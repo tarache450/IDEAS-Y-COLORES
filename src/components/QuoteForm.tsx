@@ -218,6 +218,8 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submittedLeadId, setSubmittedLeadId] = useState('');
+  const [submittedWaUrl, setSubmittedWaUrl] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [honeypot, setHoneypot] = useState('');
 
@@ -326,6 +328,8 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
         return;
       }
 
+      setSubmittedLeadId(result.leadId || '');
+      setSubmittedWaUrl(result.whatsappRedirectUrl || '');
       setIsSubmitting(false);
       setSubmitted(true);
     } catch {
@@ -388,10 +392,16 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                   <CheckCircle2 className="w-12 h-12 stroke-[2.2]" />
                 </div>
 
-                <div className="space-y-2 max-w-lg mx-auto">
+                <div className="space-y-3 max-w-lg mx-auto">
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-950 font-display">
                     ¡Cotización recibida con éxito!
                   </h3>
+                  {submittedLeadId && (
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-slate-800 text-xs font-mono font-bold">
+                      <span className="text-slate-500 font-sans">No. de Seguimiento:</span>
+                      <span className="text-blue-700 font-bold">[{submittedLeadId}]</span>
+                    </div>
+                  )}
                   <p className="text-sm sm:text-base text-slate-600">
                     Gracias, <strong>{fullName}</strong>. Un asesor técnico de Ideas & Colores te
                     contactará al <strong>{phone}</strong> para coordinar la visita y afinar tu
@@ -408,7 +418,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                     Envía el resumen de tu cotización directo a nuestro equipo técnico:
                   </p>
                   <a
-                    href={buildWhatsAppLink()}
+                    href={submittedWaUrl || buildWhatsAppLink()}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-sm transition-all"
@@ -422,6 +432,8 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                   type="button"
                   onClick={() => {
                     setSubmitted(false);
+                    setSubmittedLeadId('');
+                    setSubmittedWaUrl('');
                     setCurrentStep(1);
                     setFullName('');
                     setPhone('');
@@ -440,7 +452,17 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
               /* Wizard Steps */
               <form onSubmit={handleSubmitWeb}>
                 {/* Honeypot Anti-Spam (Invisible para humanos, trampa para bots) */}
-                <input type="text" name="website_hp" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} style={{ display: 'none' }} tabIndex={-1} autoComplete="off" aria-hidden="true" />
+                <input
+                  type="text"
+                  name="website_hp"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  autoComplete="off"
+                  style={{ display: 'none' }}
+                  className="hidden absolute -left-[9999px]"
+                />
                 {/* Imported Configuration Alert */}
                 {description && (
                   <div className="mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
@@ -592,7 +614,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                       <button
                         type="button"
                         onClick={() => setCurrentStep(2)}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white shadow-md hover:opacity-95 transition-all"
+                        className="inline-flex items-center justify-center min-h-[44px] gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white shadow-md hover:opacity-95 transition-all"
                         style={{ backgroundColor: formAccentColor }}
                       >
                         <span>Siguiente: Tipo de espacio</span>
@@ -671,7 +693,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                         <select
                           value={estimatedArea}
                           onChange={(e) => setEstimatedArea(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm font-medium focus:outline-none bg-white"
                         >
                           <option value="Menos de 50 m² (Puntual o habitación)">
                             Menos de 50 m² (Puntual o habitación)
@@ -698,7 +720,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                         <select
                           value={desiredTimeline}
                           onChange={(e) => setDesiredTimeline(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm font-medium focus:outline-none bg-white"
                         >
                           <option value="Urgente (1-3 días)">Urgente (1-3 días)</option>
                           <option value="Próximos 7 días">Próximos 7 días</option>
@@ -714,7 +736,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                       <button
                         type="button"
                         onClick={() => setCurrentStep(1)}
-                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-600 hover:bg-slate-100 transition-colors"
+                        className="inline-flex items-center justify-center min-h-[44px] gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-600 hover:bg-slate-100 transition-colors"
                       >
                         <ArrowLeft className="w-4 h-4" />
                         <span>Atrás</span>
@@ -768,7 +790,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           onChange={(e) => setFullName(e.target.value)}
                           placeholder="Tu nombre y apellido"
                           autoComplete="name"
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm font-medium focus:outline-none bg-white"
                         />
                       </div>
 
@@ -787,7 +809,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           onChange={(e) => setPhone(e.target.value)}
                           placeholder="Ej: +502 6661-7592"
                           autoComplete="tel"
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm font-medium focus:outline-none bg-white"
                         />
                       </div>
 
@@ -805,7 +827,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="tu-correo@ejemplo.com"
                           autoComplete="email"
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm font-medium focus:outline-none bg-white"
                         />
                       </div>
 
@@ -823,7 +845,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           value={location}
                           onChange={(e) => setLocation(e.target.value)}
                           placeholder="Ej: Carretera a El Salvador Km 16, Z.10, Fraijanes..."
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium focus:outline-none bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm font-medium focus:outline-none bg-white"
                         />
                       </div>
                     </div>
@@ -841,7 +863,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Detalla dimensiones, estado de la superficie, requerimientos de color o fecha de inicio..."
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none bg-white"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm focus:outline-none bg-white"
                       />
                     </div>
 

@@ -117,8 +117,8 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
               <button
                 type="button"
                 onClick={onQuoteClick}
-                className="font-bold hover:underline inline-flex items-center gap-1"
-                style={{ color: currentMood.color }}
+                className="font-bold hover:underline inline-flex items-center gap-1 min-h-[44px] py-2 px-1"
+                style={{ color: '#93c5fd' }}
               >
                 <span>Solicitar visita técnica</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -139,7 +139,7 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
                   <ShieldCheck className="w-6 h-6" />
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold text-slate-400">02</span>
+                  <span className="text-xs font-mono font-bold text-slate-600">02</span>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-slate-700 bg-white border border-slate-200 px-3 py-1 rounded-full">
                     Marcas reconocidas
                   </span>
@@ -170,7 +170,7 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
               </div>
             </div>
 
-            <div className="pt-6 mt-6 border-t border-slate-200 text-xs font-semibold text-slate-500">
+            <div className="pt-6 mt-6 border-t border-slate-200 text-xs font-semibold text-slate-600">
               Suministro original con ficha técnica del fabricante.
             </div>
           </SpotlightCard>
@@ -188,7 +188,7 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
                   <Layers className="w-6 h-6" />
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold text-slate-400">03</span>
+                  <span className="text-xs font-mono font-bold text-slate-600">03</span>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-sky-800 bg-sky-50 border border-sky-200 px-3 py-1 rounded-full">
                     Integral y puntual
                   </span>
@@ -277,7 +277,7 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
               <button
                 type="button"
                 onClick={onQuoteClick}
-                className="text-emerald-400 font-bold hover:underline flex items-center gap-1"
+                className="text-emerald-400 font-bold hover:underline inline-flex items-center gap-1 min-h-[44px] py-2 px-1"
               >
                 <span>Cotizar con garantía</span>
                 <ArrowRight className="w-3.5 h-3.5" />

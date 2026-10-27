@@ -29,7 +29,7 @@ export const MoodColorPicker: React.FC<MoodColorPickerProps> = ({
               key={mood.id}
               type="button"
               onClick={() => setMood(mood.id)}
-              className={`relative w-6 h-6 rounded-full transition-all duration-300 flex items-center justify-center ${
+              className={`relative w-6 h-6 rounded-full transition-all duration-300 flex items-center justify-center before:absolute before:-inset-2.5 before:content-[''] ${
                 isActive ? 'scale-110 shadow-sm ring-2 ring-offset-2' : 'hover:scale-105 opacity-80 hover:opacity-100'
               }`}
               style={{
@@ -84,7 +84,7 @@ export const MoodColorPicker: React.FC<MoodColorPickerProps> = ({
               type="button"
               id={`btn-mood-${mood.id}`}
               onClick={() => setMood(mood.id)}
-              className={`relative px-3 py-2.5 rounded-xl border text-left transition-all duration-400 flex items-center gap-2.5 ${
+              className={`relative px-3 py-2.5 min-h-[44px] rounded-xl border text-left transition-all duration-400 flex items-center gap-2.5 ${
                 isActive
                   ? 'bg-white shadow-md border-transparent ring-2'
                   : 'bg-slate-50/80 hover:bg-white border-slate-200/80 hover:border-slate-300'
