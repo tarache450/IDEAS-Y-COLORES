@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://ideasycoloresgt.site/</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -24,5 +24,41 @@
       <image:loc>https://ideasycoloresgt.site/sectors/sector-institucional-colegio-discovery.webp</image:loc>
       <image:title>Proyecto Colegio Discovery Campus - Ideas y Colores</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://ideasycoloresgt.site/#servicio/pintura</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ideasycoloresgt.site/#servicio/resinas</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ideasycoloresgt.site/#servicio/carpinteria</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://ideasycoloresgt.site/#servicio/impresion</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://ideasycoloresgt.site/#servicio/plomeria</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://ideasycoloresgt.site/#servicio/instalaciones</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

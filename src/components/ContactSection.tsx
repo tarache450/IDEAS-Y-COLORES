@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   MapPin,
   Phone,
   MessageCircle,
-  Clock,
   Mail,
-  Send,
   Navigation,
-  CheckCircle2,
   ShieldCheck,
   Instagram,
   Facebook,
@@ -17,7 +14,6 @@ import { BUSINESS_INFO } from '../data/content';
 import { SpotlightCard } from './ui/SpotlightCard';
 import { StaggeredText } from './ui/StaggeredText';
 import { GoogleIcon } from './ui/GoogleIcon';
-import { submitQuoteRequest } from '../services/quotes';
 import {
   buildSafeWhatsAppUrl,
   getObfuscatedEmailDisplay,
@@ -25,53 +21,6 @@ import {
 } from '../utils/security';
 
 export const ContactSection: React.FC = () => {
-  const [contactForm, setContactForm] = useState({
-    name: '',
-    phone: '',
-    message: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-  const [honeypot, setHoneypot] = useState('');
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isSubmitting) return;
-    if (!contactForm.name.trim() || !contactForm.phone.trim()) {
-      setErrorMsg('Por favor completa tu nombre y número de contacto.');
-      return;
-    }
-
-    setIsSubmitting(true);
-    setErrorMsg('');
-
-    try {
-      const result = await submitQuoteRequest({
-        name: contactForm.name,
-        phone: contactForm.phone,
-        message: contactForm.message || undefined,
-        service: 'Consulta de Contacto Directo',
-        source: 'website_contact_section',
-        honeypot,
-      });
-
-      if (!result.success) {
-        setErrorMsg(result.error || 'No pudimos enviar tu mensaje. Inténtalo nuevamente o por WhatsApp.');
-        setIsSubmitting(false);
-        return;
-      }
-
-      setIsSubmitting(false);
-      setSent(true);
-      setContactForm({ name: '', phone: '', message: '' });
-      setHoneypot('');
-    } catch {
-      setErrorMsg('Ocurrió un inconveniente al enviar tu consulta. Por favor escríbenos a WhatsApp.');
-      setIsSubmitting(false);
-    }
-  };
-
   const directWhatsAppUrl = buildSafeWhatsAppUrl(
     BUSINESS_INFO.whatsappNumber,
     'Hola Ideas & Colores, quiero cotizar mi proyecto.'
@@ -83,25 +32,23 @@ export const ContactSection: React.FC = () => {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
           <span className="text-xs font-bold uppercase tracking-wider text-amber-900 bg-amber-50 px-3.5 py-1 rounded-full border border-amber-300">
-            Canales Verificados
+            Canales Verificados y Ubicación
           </span>
           <div className="mt-3">
             <StaggeredText
-              text="Hablemos de tu proyecto hoy mismo."
+              text="Atención directa en Carretera a El Salvador y toda Guatemala."
               as="h2"
               className="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight font-display"
             />
           </div>
           <p className="mt-3 text-base sm:text-lg text-slate-600">
-            Ideas & Colores Multi-Servicios transforma, protege y mantiene espacios con soluciones
-            profesionales integrales en Carretera a El Salvador y toda Guatemala.
+            Comunícate directamente con nuestra gerencia técnica por teléfono, WhatsApp o correo electrónico para coordinar tu visita sin costo.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left: Contact Info Cards + WhatsApp Large CTA */}
-          <div className="lg:col-span-6 space-y-6">
-            {/* Direct Information 4-Grid with SpotlightCard */}
+          {/* Left: 4 Direct Information Cards + Social & WhatsApp Banner */}
+          <div className="lg:col-span-6 space-y-5 text-left">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Phone Card */}
               <SpotlightCard
@@ -109,7 +56,7 @@ export const ContactSection: React.FC = () => {
                 spotlightColor="rgba(251, 191, 36, 0.15)"
               >
                 <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center mb-3">
-                  <Phone className="w-5 h-5" />
+                  <Phone className="w-5 h-5" aria-hidden="true" />
                 </div>
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600">
                   Teléfono directo
@@ -120,7 +67,7 @@ export const ContactSection: React.FC = () => {
                 >
                   {BUSINESS_INFO.phone}
                 </a>
-                <p className="text-xs text-slate-500 mt-1">Llamadas y coordinación de visitas</p>
+                <p className="text-xs text-slate-500 mt-1">{BUSINESS_INFO.scheduleWeekdays}</p>
               </SpotlightCard>
 
               {/* WhatsApp Card */}
@@ -129,7 +76,7 @@ export const ContactSection: React.FC = () => {
                 spotlightColor="rgba(16, 185, 129, 0.18)"
               >
                 <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-3">
-                  <MessageCircle className="w-5 h-5" />
+                  <MessageCircle className="w-5 h-5" aria-hidden="true" />
                 </div>
                 <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-800">
                   WhatsApp Oficial
@@ -151,10 +98,10 @@ export const ContactSection: React.FC = () => {
                 spotlightColor="rgba(0, 89, 255, 0.12)"
               >
                 <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-900 flex items-center justify-center mb-3">
-                  <Mail className="w-5 h-5" />
+                  <Mail className="w-5 h-5" aria-hidden="true" />
                 </div>
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                  Correo Electrónico
+                  Correo Corporativo
                 </h3>
                 <a
                   href={buildSafeMailtoUrl('Consulta de Proyecto - Ideas & Colores')}
@@ -171,40 +118,38 @@ export const ContactSection: React.FC = () => {
                 spotlightColor="rgba(168, 85, 247, 0.12)"
               >
                 <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-900 flex items-center justify-center mb-3">
-                  <MapPin className="w-5 h-5" />
+                  <MapPin className="w-5 h-5" aria-hidden="true" />
                 </div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
                   Ubicación Principal
-                </h4>
+                </h3>
                 <p className="text-sm font-bold text-slate-950 mt-1">
                   {BUSINESS_INFO.addressFull}
                 </p>
-                <p className="text-xs text-slate-500 mt-1">Cobertura en toda Guatemala</p>
+                <p className="text-xs text-slate-500 mt-1">{BUSINESS_INFO.scheduleSaturdays}</p>
               </SpotlightCard>
             </div>
 
             {/* Social Media & Google Business Review Channels Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {/* Google Reviews Banner - Full width banner */}
               <a
                 href={BUSINESS_INFO.googleReviewUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 id="contact-btn-google-reviews"
                 className="sm:col-span-2 p-3.5 sm:p-4 rounded-2xl bg-white hover:bg-amber-50/40 border border-slate-200/90 hover:border-amber-300 shadow-2xs hover:shadow-md flex items-center justify-between gap-3 transition-all group"
-                aria-label="Dejar reseña y comentario en el perfil de Google de Ideas & Colores"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center shrink-0 shadow-2xs">
                     <GoogleIcon className="w-5 h-5" />
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <h4 className="text-[11px] font-bold uppercase tracking-wider text-amber-700">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700">
                         Perfil de Google
-                      </h4>
+                      </span>
                       <span className="inline-flex items-center text-amber-400 text-xs">
-                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" aria-hidden="true" />
                         <span className="font-bold text-slate-800 ml-1 text-xs">{BUSINESS_INFO.googleRating}</span>
                       </span>
                     </div>
@@ -218,72 +163,68 @@ export const ContactSection: React.FC = () => {
                 </span>
               </a>
 
-              {/* Instagram Banner */}
               <a
                 href={BUSINESS_INFO.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 id="contact-btn-instagram"
                 className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md flex items-center justify-between gap-3 transition-all hover:border-pink-300 group"
-                aria-label="Instagram Ideas & Colores: ver perfil oficial"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
-                    <Instagram className="w-4 h-4" />
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                    <Instagram className="w-4 h-4" aria-hidden="true" />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-pink-600">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-pink-600 block">
                       Instagram
-                    </h3>
+                    </span>
                     <p className="text-xs font-bold text-slate-950 group-hover:text-pink-600 transition-colors truncate">
                       {BUSINESS_INFO.instagram}
                     </p>
                   </div>
                 </div>
-                <span className="text-[11px] font-semibold text-slate-600 bg-slate-50 group-hover:bg-pink-600 group-hover:text-white px-2.5 py-1 rounded-lg border border-slate-200 group-hover:border-pink-600 transition-all shrink-0">
+                <span className="text-[11px] font-semibold text-slate-600 bg-slate-50 group-hover:bg-pink-600 group-hover:text-white px-2.5 py-1 rounded-lg border border-slate-200 transition-all shrink-0">
                   Ver →
                 </span>
               </a>
 
-              {/* Facebook Banner */}
               <a
                 href={BUSINESS_INFO.facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 id="contact-btn-facebook"
                 className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md flex items-center justify-between gap-3 transition-all hover:border-blue-300 group"
-                aria-label="Facebook Ideas & Colores: ver página oficial"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
-                    <Facebook className="w-4 h-4" />
+                  <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                    <Facebook className="w-4 h-4" aria-hidden="true" />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 block">
                       Facebook
-                    </h3>
+                    </span>
                     <p className="text-xs font-bold text-slate-950 group-hover:text-blue-600 transition-colors truncate">
-                      Ideas & Colores
+                      Ideas &amp; Colores
                     </p>
                   </div>
                 </div>
-                <span className="text-[11px] font-semibold text-slate-600 bg-slate-50 group-hover:bg-blue-600 group-hover:text-white px-2.5 py-1 rounded-lg border border-slate-200 group-hover:border-blue-600 transition-all shrink-0">
+                <span className="text-[11px] font-semibold text-slate-600 bg-slate-50 group-hover:bg-blue-600 group-hover:text-white px-2.5 py-1 rounded-lg border border-slate-200 transition-all shrink-0">
                   Ver →
                 </span>
               </a>
             </div>
 
-            {/* Required Large WhatsApp CTA Button */}
-            <div className="p-8 rounded-3xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
+            {/* Large WhatsApp CTA Button */}
+            <div className="p-7 rounded-3xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
               <div className="space-y-1 text-center sm:text-left">
                 <span className="text-[11px] font-bold uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-full">
                   Atención Inmediata
                 </span>
                 <h3 className="text-xl sm:text-2xl font-bold font-display text-white">
-                  ¿Quieres cotizar por WhatsApp?
+                  ¿Prefieres enviar fotos por WhatsApp?
                 </h3>
                 <p className="text-xs sm:text-sm text-emerald-100">
-                  Envíanos fotos de tus paredes o las medidas y te asesoramos al instante.
+                  Envíanos fotos de tus ambientes o medidas aproximadas y te asesoramos al instante.
                 </p>
               </div>
 
@@ -294,105 +235,19 @@ export const ContactSection: React.FC = () => {
                 id="btn-large-whatsapp-contact"
                 className="w-full sm:w-auto px-6 py-4 rounded-xl bg-white hover:bg-slate-100 text-emerald-950 font-extrabold text-sm sm:text-base shadow-md transition-all flex items-center justify-center gap-2.5 shrink-0"
               >
-                <MessageCircle className="w-6 h-6 text-emerald-600" />
+                <MessageCircle className="w-6 h-6 text-emerald-600" aria-hidden="true" />
                 <span>Hablar por WhatsApp</span>
               </a>
-            </div>
-
-            {/* Quick Contact Form */}
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80">
-              <h4 className="text-base font-bold text-slate-950 font-display mb-1">
-                Déjanos tu consulta
-              </h4>
-              <p className="text-xs text-slate-600 mb-4">
-                Si prefieres que te contactemos por llamada o correo, completa tus datos:
-              </p>
-
-              {sent ? (
-                <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>¡Mensaje recibido! Te contactaremos a la brevedad posible.</span>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-3">
-                  {/* Anti-Spam Honeypot */}
-                  <input type="text" name="website_hp" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} style={{ display: 'none' }} tabIndex={-1} autoComplete="off" aria-hidden="true" />
-
-                  {errorMsg && (
-                    <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold">
-                      {errorMsg}
-                    </div>
-                  )}
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <input
-                      type="text"
-                      id="contact-name"
-                      name="name"
-                      required
-                      maxLength={150}
-                      placeholder="Tu nombre"
-                      aria-label="Tu nombre completo"
-                      autoComplete="name"
-                      value={contactForm.name}
-                      onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                      className="text-base sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-amber-500"
-                    />
-                    <input
-                      type="tel"
-                      id="contact-phone"
-                      name="phone"
-                      required
-                      maxLength={25}
-                      placeholder="Tu WhatsApp o celular"
-                      aria-label="Tu WhatsApp o número de celular"
-                      autoComplete="tel"
-                      value={contactForm.phone}
-                      onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
-                      className="text-base sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-amber-500"
-                    />
-                  </div>
-                  <textarea
-                    rows={2}
-                    id="contact-message"
-                    name="message"
-                    maxLength={3000}
-                    placeholder="¿Qué servicio o proyecto necesitas cotizar?"
-                    aria-label="Mensaje o descripción de tu proyecto"
-                    value={contactForm.message}
-                    onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                    className="w-full text-base sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-amber-500"
-                  />
-                  {errorMsg && (
-                    <p className="text-xs text-rose-600 font-semibold">{errorMsg}</p>
-                  )}
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full min-h-[44px] py-3 rounded-xl bg-slate-950 hover:bg-slate-800 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
-                  >
-                    {isSubmitting ? (
-                      <span>Enviando...</span>
-                    ) : (
-                      <>
-                        <span>Enviar mensaje</span>
-                        <Send className="w-3.5 h-3.5" />
-                      </>
-                    )}
-                  </button>
-                </form>
-              )}
             </div>
           </div>
 
           {/* Right: Map & Location Pin Representation */}
-          <div className="lg:col-span-6 space-y-4">
+          <div className="lg:col-span-6 space-y-4 text-left">
             <div className="rounded-3xl overflow-hidden border border-slate-200 shadow-md bg-slate-100 relative">
-              {/* Google Map embed for Carretera a El Salvador, Guatemala */}
               <div className="aspect-[4/3] sm:aspect-[16/11] w-full relative">
                 <iframe
-                  title="Ubicación Ideas & Colores Carretera a El Salvador"
-                  src="https://maps.google.com/maps?q=Carretera%20a%20El%20Salvador%20Guatemala&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                  title="Ubicación Ideas & Colores Carretera a El Salvador Km 21.5, Fraijanes, Guatemala"
+                  src="https://maps.google.com/maps?q=Carretera%20a%20El%20Salvador%20Km%2021.5%2C%20Fraijanes%2C%20Guatemala&t=&z=15&ie=UTF8&iwloc=&output=embed"
                   className="w-full h-full border-0"
                   loading="lazy"
                   allowFullScreen
@@ -401,33 +256,22 @@ export const ContactSection: React.FC = () => {
 
               <div className="p-5 bg-white border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h5 className="text-sm font-bold text-slate-950">
-                    Sede Carretera a El Salvador
-                  </h5>
+                  <h4 className="text-sm font-bold text-slate-950">
+                    Sede Carretera a El Salvador Km 21.5, Fraijanes
+                  </h4>
                   <p className="text-xs text-slate-500">
-                    Atención técnica en proyectos residenciales, comerciales e industriales
+                    Carretera a El Salvador Km 21.5, Fraijanes, Guatemala · Atención residencial, comercial e industrial
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                   <a
-                    href={BUSINESS_INFO.googleReviewUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    id="contact-map-btn-google-review"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-950 text-xs font-semibold transition-colors shadow-2xs"
-                    title="Dejar reseña o comentario en el perfil de Google"
-                  >
-                    <GoogleIcon className="w-3.5 h-3.5" />
-                    <span>Dejar reseña (5.0 ★)</span>
-                  </a>
-                  <a
-                    href="https://www.google.com/maps/search/?api=1&query=Carretera+a+El+Salvador+Guatemala"
+                    href="https://www.google.com/maps/search/?api=1&query=Carretera+a+El+Salvador+Km+21.5+Fraijanes+Guatemala"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition-colors"
                   >
-                    <Navigation className="w-3.5 h-3.5 text-sky-600" />
-                    <span>Ver en Maps</span>
+                    <Navigation className="w-3.5 h-3.5 text-sky-600" aria-hidden="true" />
+                    <span>Abrir en Google Maps</span>
                   </a>
                 </div>
               </div>
@@ -436,7 +280,7 @@ export const ContactSection: React.FC = () => {
             {/* Regional coverage list */}
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-600 space-y-2">
               <div className="flex items-center gap-2 text-slate-900 font-bold">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <ShieldCheck className="w-4 h-4 text-emerald-600" aria-hidden="true" />
                 <span>Cobertura en toda la República de Guatemala:</span>
               </div>
               <p className="leading-relaxed">

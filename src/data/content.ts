@@ -30,8 +30,8 @@ export const BUSINESS_INFO = {
     '50266617592',
     'Hola Ideas & Colores, quiero cotizar mi proyecto.'
   ),
-  location: 'Carretera a El Salvador, Guatemala',
-  addressFull: 'Carretera a El Salvador, Guatemala',
+  location: 'Carretera a El Salvador Km 21.5, Fraijanes, Guatemala',
+  addressFull: 'Carretera a El Salvador Km 21.5, Fraijanes, Guatemala',
   email: getDeobfuscatedCorporateEmail(),
   website: 'www.ideasycoloresgt.site',
   instagram: '@ideasycoloresgt',

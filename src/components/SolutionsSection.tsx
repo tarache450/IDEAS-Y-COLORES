@@ -8,10 +8,10 @@ import {
   Wrench,
   ArrowRight,
   MessageCircle,
-  CheckCircle2,
   Layers,
   ChevronRight,
   ShieldCheck,
+  ExternalLink,
 } from 'lucide-react';
 import { MULTI_SERVICES_CATEGORIES, BUSINESS_INFO } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
@@ -23,19 +23,23 @@ import { motion, AnimatePresence } from 'motion/react';
 
 interface SolutionsSectionProps {
   onSelectSolution: (solutionTitle: string) => void;
+  onOpenCategoryPage?: (categoryId: string) => void;
 }
 
-export const SolutionsSection: React.FC<SolutionsSectionProps> = ({ onSelectSolution }) => {
+export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
+  onSelectSolution,
+  onOpenCategoryPage,
+}) => {
   const { currentMood } = useColorMood();
   const [activeServiceId, setActiveServiceId] = useState<string>('pintura');
 
   const iconMap: Record<string, React.ReactNode> = {
-    pintura: <Paintbrush className="w-5 h-5" />,
-    impresion: <Printer className="w-5 h-5" />,
-    carpinteria: <Hammer className="w-5 h-5" />,
-    plomeria: <Droplets className="w-5 h-5" />,
-    resinas: <Sparkles className="w-5 h-5" />,
-    instalaciones: <Wrench className="w-5 h-5" />,
+    pintura: <Paintbrush className="w-5 h-5" aria-hidden="true" />,
+    impresion: <Printer className="w-5 h-5" aria-hidden="true" />,
+    carpinteria: <Hammer className="w-5 h-5" aria-hidden="true" />,
+    plomeria: <Droplets className="w-5 h-5" aria-hidden="true" />,
+    resinas: <Sparkles className="w-5 h-5" aria-hidden="true" />,
+    instalaciones: <Wrench className="w-5 h-5" aria-hidden="true" />,
   };
 
   const activeService =
@@ -47,10 +51,10 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({ onSelectSolu
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <FadeIn direction="up" distance={24}>
-          <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="text-center max-w-3xl mx-auto mb-14">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-800 shadow-2xs mb-3">
-              <Layers className="w-3.5 h-3.5" style={{ color: currentMood.color }} />
-              <span>Grupo Multi-Servicios Especializados</span>
+              <Layers className="w-3.5 h-3.5" style={{ color: currentMood.color }} aria-hidden="true" />
+              <span>6 Divisiones Especializadas • Páginas Dedicadas</span>
             </div>
 
             <StaggeredText
@@ -63,14 +67,12 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({ onSelectSolu
               Ideas &amp; Colores transforma, protege y mantiene espacios con{' '}
               <BlurHighlight color={currentMood.color}>
                 un solo interlocutor de confianza con garantía por escrito
-              </BlurHighlight>.
+              </BlurHighlight>. Explora cada categoría o abre su ficha técnica completa.
             </p>
           </div>
         </FadeIn>
 
-
-
-        {/* Features-13 Pattern: Interactive List + Sticky Architectural Visual Preview */}
+        {/* Interactive List + Sticky Architectural Visual Preview */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* Left Column (7 cols): Interactive Services Master List */}
           <div className="lg:col-span-7 space-y-3.5">
@@ -129,10 +131,9 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({ onSelectSolu
 
                     <ChevronRight
                       className={`w-5 h-5 shrink-0 transition-transform duration-200 ${
-                        isSelected
-                          ? 'rotate-90 text-slate-900'
-                          : 'text-slate-300'
+                        isSelected ? 'rotate-90 text-slate-900' : 'text-slate-300'
                       }`}
+                      aria-hidden="true"
                     />
                   </div>
 
@@ -181,19 +182,33 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({ onSelectSolu
                         </div>
 
                         {/* CTA Buttons */}
-                        <div className="flex flex-wrap items-center gap-3 pt-2">
+                        <div className="flex flex-wrap items-center gap-2.5 pt-2">
                           <button
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
                               onSelectSolution(cat.title);
                             }}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white shadow-sm hover:opacity-95 transition-all"
+                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white shadow-sm hover:opacity-95 transition-all"
                             style={{ backgroundColor: cat.accentColor }}
                           >
                             <span>{cat.ctaText}</span>
-                            <ArrowRight className="w-4 h-4" />
+                            <ArrowRight className="w-4 h-4" aria-hidden="true" />
                           </button>
+
+                          {onOpenCategoryPage && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onOpenCategoryPage(cat.id);
+                              }}
+                              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs text-slate-900 bg-slate-100 hover:bg-slate-200 border border-slate-300/80 transition-colors"
+                            >
+                              <span>Ver subpágina y ficha técnica</span>
+                              <ExternalLink className="w-3.5 h-3.5 text-slate-600" aria-hidden="true" />
+                            </button>
+                          )}
 
                           <a
                             href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=Hola%20Ideas%20%26%20Colores%2C%20quiero%20cotizar%20el%20servicio%20de%20${encodeURIComponent(
@@ -202,10 +217,10 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({ onSelectSolu
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl font-bold text-xs text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 transition-colors"
                           >
-                            <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
-                            <span>Consultar en WhatsApp</span>
+                            <MessageCircle className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
+                            <span>WhatsApp</span>
                           </a>
                         </div>
                       </motion.div>
@@ -216,8 +231,8 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({ onSelectSolu
             })}
           </div>
 
-          {/* Right Column (5 cols): Sticky Architectural Live Preview (Features-13 style) */}
-          <div className="hidden lg:block lg:col-span-5 sticky top-28">
+          {/* Right Column (5 cols): Sticky Architectural Live Preview */}
+          <div className="hidden lg:block lg:col-span-5 sticky top-24">
             <SpotlightCard
               spotlightColor={`${activeService.accentColor}25`}
               className="rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl relative text-left"
@@ -235,6 +250,8 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({ onSelectSolu
                     transition={{ duration: 0.35 }}
                     className="w-full h-full object-cover"
                     loading="lazy"
+                    width="520"
+                    height="390"
                   />
                 </AnimatePresence>
 
@@ -249,7 +266,7 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({ onSelectSolu
                     Línea {activeService.number}
                   </span>
                   <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-white border border-white/20">
-                    Ideas & Colores GT
+                    Ideas &amp; Colores GT
                   </span>
                 </div>
 
@@ -272,7 +289,7 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({ onSelectSolu
 
                 {/* Lines / Subservices */}
                 <div className="pt-2 border-t border-slate-800">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 block mb-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
                     Líneas disponibles:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
@@ -289,20 +306,33 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({ onSelectSolu
 
                 {/* Guarantee assurance */}
                 <div className="pt-3 border-t border-slate-800/80 flex items-center gap-2 text-xs text-slate-400">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden="true" />
                   <span>Personal calificado con garantía por escrito.</span>
                 </div>
 
-                {/* Direct Action Button */}
-                <button
-                  type="button"
-                  onClick={() => onSelectSolution(activeService.title)}
-                  className="w-full py-3 rounded-xl font-bold text-xs sm:text-sm text-white shadow-md hover:opacity-95 transition-all flex items-center justify-center gap-2"
-                  style={{ backgroundColor: activeService.accentColor }}
-                >
-                  <span>Solicitar cotización de {activeService.shortTitle}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+                {/* Direct Action Buttons */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => onSelectSolution(activeService.title)}
+                    className="py-3 px-4 rounded-xl font-bold text-xs text-white shadow-md hover:opacity-95 transition-all flex items-center justify-center gap-1.5"
+                    style={{ backgroundColor: activeService.accentColor }}
+                  >
+                    <span>Cotizar {activeService.shortTitle}</span>
+                    <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                  </button>
+
+                  {onOpenCategoryPage && (
+                    <button
+                      type="button"
+                      onClick={() => onOpenCategoryPage(activeService.id)}
+                      className="py-3 px-4 rounded-xl font-bold text-xs text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-700 transition-all flex items-center justify-center gap-1.5"
+                    >
+                      <span>Abrir página dedicada</span>
+                      <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+                    </button>
+                  )}
+                </div>
               </div>
             </SpotlightCard>
           </div>

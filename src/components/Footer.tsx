@@ -11,11 +11,17 @@ import {
 
 interface FooterProps {
   onNavigate: (sectionId: string) => void;
+  onOpenCategoryPage?: (categoryId: string) => void;
   onOpenAdmin?: () => void;
   onOpenPrivacy?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin, onOpenPrivacy }) => {
+export const Footer: React.FC<FooterProps> = ({
+  onNavigate,
+  onOpenCategoryPage,
+  onOpenAdmin,
+  onOpenPrivacy,
+}) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -105,23 +111,27 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin, onOpenP
             </ul>
           </div>
 
-          {/* 6 Multi-Services List */}
+          {/* 6 Multi-Services List (Direct Internal SEO Links to Subpages) */}
           <div className="space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200 font-display">
-              Multi-Servicios
+              Especialidades
             </h3>
             <ul className="space-y-2 text-xs sm:text-sm text-slate-400">
               {MULTI_SERVICES_CATEGORIES.map((cat) => (
                 <li key={cat.id}>
                   <a
-                    href="#soluciones"
+                    href={`#servicio/${cat.id}`}
                     onClick={(e) => {
                       e.preventDefault();
-                      onNavigate('soluciones');
+                      if (onOpenCategoryPage) {
+                        onOpenCategoryPage(cat.id);
+                      } else {
+                        onNavigate('soluciones');
+                      }
                     }}
-                    className="hover:text-white transition-colors text-left inline-block"
+                    className="hover:text-amber-400 transition-colors text-left inline-block py-0.5"
                   >
-                    {cat.shortTitle}
+                    {cat.title}
                   </a>
                 </li>
               ))}

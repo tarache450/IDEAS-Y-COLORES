@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ShieldCheck,
   Sparkles,
@@ -6,13 +6,12 @@ import {
   FileCheck,
   CheckCircle2,
   ArrowRight,
+  Award,
 } from 'lucide-react';
 import { useColorMood } from '../context/ColorMoodContext';
 import { SpotlightCard } from './ui/SpotlightCard';
 import { BUSINESS_INFO } from '../data/content';
 import FadeIn from './ui/FadeIn';
-
-
 
 interface BentoTrustGridProps {
   onQuoteClick: () => void;
@@ -20,19 +19,11 @@ interface BentoTrustGridProps {
 
 export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) => {
   const { currentMood } = useColorMood();
-  const [hoveredPillar, setHoveredPillar] = useState<string | null>(null);
-
-  const iconMap: Record<string, React.ReactNode> = {
-    Sparkles: <Sparkles className="w-6 h-6" />,
-    ShieldCheck: <ShieldCheck className="w-6 h-6" />,
-    Layers: <Layers className="w-6 h-6" />,
-    FileCheck: <FileCheck className="w-6 h-6" />,
-  };
 
   return (
     <section id="confianza" className="py-20 sm:py-24 bg-transparent border-b border-slate-200/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* Section Header + Consolidated About Identity */}
         <FadeIn direction="up" distance={24}>
           <div className="text-center max-w-3xl mx-auto mb-14">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-xs font-bold uppercase tracking-wider mb-3">
@@ -40,13 +31,13 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
                 className="w-2 h-2 rounded-full transition-colors duration-500"
                 style={{ backgroundColor: currentMood.color }}
               />
-              <span>Confianza y Respaldo Profesional</span>
+              <span>Desde {BUSINESS_INFO.foundationYear} • Empresa 100% Guatemalteca</span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight font-display">
               Por qué elegir Ideas &amp; Colores Multi-Servicios
             </h2>
             <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
-              Eliminamos la incertidumbre en pintura, mantenimiento y remodelación con 4 pilares
+              Eliminamos la dispersión de proveedores y la improvisación técnica con 4 pilares
               metodológicos, técnicos certificados, marcas avaladas y garantía formal por escrito.
             </p>
           </div>
@@ -56,12 +47,9 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {/* Pillar 1: Asesoría técnica personalizada (7 cols) */}
           <SpotlightCard
-            onMouseEnter={() => setHoveredPillar('asesoria')}
-            onMouseLeave={() => setHoveredPillar(null)}
             spotlightColor={currentMood.glow || 'rgba(0, 89, 255, 0.25)'}
             className="md:col-span-7 rounded-3xl p-8 bg-slate-950 text-white border border-slate-800 shadow-xl flex flex-col justify-between relative overflow-hidden transition-all duration-300"
           >
-            {/* Ambient glow */}
             <div
               className="absolute -top-20 -right-20 w-64 h-64 rounded-full blur-3xl opacity-20 pointer-events-none transition-opacity duration-300"
               style={{ backgroundColor: currentMood.color }}
@@ -73,7 +61,7 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
                   className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-white shadow-md transition-colors"
                   style={{ backgroundColor: currentMood.color }}
                 >
-                  <Sparkles className="w-6 h-6 text-white" />
+                  <Sparkles className="w-6 h-6 text-white" aria-hidden="true" />
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-mono font-bold text-slate-400">01</span>
@@ -92,7 +80,6 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
                 Evaluamos cada superficie, humedad, fisuras y recomendamos la solución química y estética precisa.
               </p>
 
-              {/* Technical specialities badges */}
               <div className="flex flex-wrap gap-2 pt-2">
                 {[
                   'Diagnóstico en sitio sin costo',
@@ -105,7 +92,7 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
                     key={item}
                     className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300"
                   >
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
                     <span>{item}</span>
                   </span>
                 ))}
@@ -121,22 +108,20 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
                 style={{ color: '#93c5fd' }}
               >
                 <span>Solicitar visita técnica</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
               </button>
             </div>
           </SpotlightCard>
 
           {/* Pillar 2: Personal calificado y materiales confiables (5 cols) */}
           <SpotlightCard
-            onMouseEnter={() => setHoveredPillar('calidad')}
-            onMouseLeave={() => setHoveredPillar(null)}
             spotlightColor="rgba(245, 158, 11, 0.15)"
             className="md:col-span-5 rounded-3xl p-8 bg-slate-50 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between mb-6">
                 <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center font-bold">
-                  <ShieldCheck className="w-6 h-6" />
+                  <ShieldCheck className="w-6 h-6" aria-hidden="true" />
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-mono font-bold text-slate-600">02</span>
@@ -156,16 +141,16 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
 
               <div className="space-y-2.5 text-xs text-slate-700">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
                   <span>Personal debidamente uniformado, capacitado y supervisado</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
                   <span>Formulaciones y recubrimientos certificados de fábrica</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Equipos de aplicación airless y de precisión</span>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
+                  <span>Equipos de aplicación Airless y de precisión</span>
                 </div>
               </div>
             </div>
@@ -177,15 +162,13 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
 
           {/* Pillar 3: Ejecución de principio a fin (5 cols) */}
           <SpotlightCard
-            onMouseEnter={() => setHoveredPillar('ejecucion')}
-            onMouseLeave={() => setHoveredPillar(null)}
             spotlightColor="rgba(0, 163, 255, 0.15)"
             className="md:col-span-5 rounded-3xl p-8 bg-slate-50 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between mb-6">
                 <div className="w-12 h-12 rounded-2xl bg-sky-100 text-sky-900 flex items-center justify-center font-bold">
-                  <Layers className="w-6 h-6" />
+                  <Layers className="w-6 h-6" aria-hidden="true" />
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-mono font-bold text-slate-600">03</span>
@@ -205,15 +188,15 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
 
               <div className="space-y-2.5 text-xs text-slate-700">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
                   <span>Preparación profunda, resane de fisuras y sellado base</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
                   <span>Cuidado estricto: plásticos y encintado de alta protección</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
                   <span>Entrega limpia sin salpicaduras y cumplimiento de fechas</span>
                 </div>
               </div>
@@ -226,15 +209,13 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
 
           {/* Pillar 4: Garantía por escrito en productos y mano de obra (7 cols) */}
           <SpotlightCard
-            onMouseEnter={() => setHoveredPillar('garantia')}
-            onMouseLeave={() => setHoveredPillar(null)}
             spotlightColor="rgba(16, 185, 129, 0.25)"
             className="md:col-span-7 rounded-3xl p-8 bg-gradient-to-br from-slate-900 to-slate-950 text-white border border-slate-800 shadow-xl flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between mb-6">
                 <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-slate-950 flex items-center justify-center font-bold">
-                  <FileCheck className="w-6 h-6" />
+                  <FileCheck className="w-6 h-6" aria-hidden="true" />
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-mono font-bold text-slate-400">04</span>
@@ -245,11 +226,11 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
               </div>
 
               <h3 className="text-2xl sm:text-3xl font-bold font-display text-white mb-3">
-                Garantía por escrito y presupuestos transparentes
+                Garantía por escrito y Facturación SAT
               </h3>
               <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-xl mb-6">
                 Entregamos un compromiso formal por escrito para tu tranquilidad: respondemos por la
-                adherencia, estabilidad del color y calidad de mano de obra. Presupuesto desglosado sin sorpresas ni sobrecostos.
+                adherencia, estabilidad del color y calidad de mano de obra. Presupuesto desglosado y Factura Electrónica FEL.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -273,31 +254,36 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
             </div>
 
             <div className="pt-6 mt-6 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
-              <span>Facturación contable para particulares, comercios y empresas.</span>
+              <span>Facturación contable FEL para particulares, comercios y empresas.</span>
               <button
                 type="button"
                 onClick={onQuoteClick}
                 className="text-emerald-400 font-bold hover:underline inline-flex items-center gap-1 min-h-[44px] py-2 px-1"
               >
                 <span>Cotizar con garantía</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
               </button>
             </div>
           </SpotlightCard>
         </div>
 
-        {/* Certified Brands Strip */}
-        <div className="mt-12 p-6 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-center sm:text-left">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
-              Marcas y recubrimientos de confianza
-            </span>
-            <span className="text-sm font-bold text-slate-900">
-              Aplicamos fórmulas avaladas de estándares nacionales e internacionales
-            </span>
+        {/* Certified Brands & Guatemalan Identity Strip */}
+        <div className="mt-10 p-6 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col lg:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 text-center sm:text-left">
+            <div className="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 hidden sm:flex items-center justify-center font-black shrink-0">
+              <Award className="w-5 h-5" aria-hidden="true" />
+            </div>
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
+                Marcas y recubrimientos certificados • Sede Carretera a El Salvador
+              </span>
+              <span className="text-sm font-bold text-slate-900">
+                Aplicamos fórmulas avaladas de estándares nacionales e internacionales
+              </span>
+            </div>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {['Sherwin-Williams', 'Corona', 'Lanco', 'Sika', 'Comex', 'Protecto'].map((brand) => (
+          <div className="flex flex-wrap items-center justify-center gap-2.5">
+            {['Sherwin-Williams', 'Paleta', 'Corona', 'Lanco', 'Sika', 'Protecto'].map((brand) => (
               <span
                 key={brand}
                 className="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 shadow-2xs"
@@ -305,40 +291,6 @@ export const BentoTrustGrid: React.FC<BentoTrustGridProps> = ({ onQuoteClick }) 
                 {brand}
               </span>
             ))}
-          </div>
-        </div>
-
-        {/* Local quote fast-lane banner (Integrated from TrustBlock) */}
-        <div className="mt-8 rounded-3xl bg-slate-950 text-white p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl border border-slate-800">
-          <div className="space-y-1.5 text-center md:text-left">
-            <div className="inline-flex items-center gap-1.5 text-xs text-amber-400 font-bold uppercase tracking-wider">
-              <span>Carretera a El Salvador y toda Guatemala</span>
-            </div>
-            <h4 className="text-xl sm:text-2xl font-bold font-display text-white">
-              ¿Listo para planificar tu proyecto con respaldo formal?
-            </h4>
-            <p className="text-sm text-slate-300 max-w-2xl font-normal">
-              Recibe asesoría técnica en sitio, marcas certificadas y un presupuesto claro sin costos ocultos.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3 shrink-0">
-            <button
-              type="button"
-              onClick={onQuoteClick}
-              className="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs sm:text-sm transition-all shadow-md hover:scale-102"
-            >
-              Cotizar mi proyecto
-            </button>
-            <a
-              href={BUSINESS_INFO.whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs sm:text-sm font-semibold border border-slate-700 flex items-center gap-1.5 transition-colors"
-            >
-              <span>Consultar WhatsApp</span>
-              <ArrowRight className="w-4 h-4" />
-            </a>
           </div>
         </div>
       </div>

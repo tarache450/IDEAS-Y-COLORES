@@ -1,12 +1,15 @@
 {
   "system": "orca-engine",
   "project": "IDEAS-Y-COLORES",
+  "master_conversation_id": "d7e9427f-0fce-4f4f-89a8-ee71102588c4",
+  "single_chat_mode": true,
   "domain": "https://ideasycoloresgt.site",
   "orchestrator": "ACTIVE",
   "live_status": "HEALTHY",
   "checklist_status": "PASSED",
   "corporateEmail": "gerencia@ideasycoloresgt.com",
-  "last_updated": "2026-10-27T22:30:00Z",
+  "whatsappTarget": "50266617592",
+  "last_updated": "2026-11-05T20:04:07+01:00",
   "backend": {
     "architecture": "dual-runtime-hybrid",
     "nodeRuntime": {
@@ -16,8 +19,16 @@
       "storage": "src/server/services/leadStorage.ts",
       "mailer": "src/server/services/mailer.ts",
       "endpoints": [
-        { "path": "/api/leads", "method": "POST", "handler": "handleLeadsRequest" },
-        { "path": "/api/health", "method": "GET", "handler": "handleHealthRequest" }
+        {
+          "path": "/api/leads",
+          "method": "POST",
+          "handler": "handleLeadsRequest"
+        },
+        {
+          "path": "/api/health",
+          "method": "GET",
+          "handler": "handleHealthRequest"
+        }
       ]
     },
     "phpFallbackRuntime": {
@@ -41,6 +52,6 @@
       "storage": "Protected append-only JSONL log (data/leads.jsonl)"
     },
     "status": "HEALTHY",
-    "updatedAt": "2026-10-27T22:30:00Z"
+    "updatedAt": "2026-11-05T20:04:07+01:00"
   }
 }

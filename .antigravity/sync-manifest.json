@@ -1,0 +1,72 @@
+{
+  "project_id": "IDEAS-Y-COLORES",
+  "sync_version": "1.1.0",
+  "master_conversation_id": "d7e9427f-0fce-4f4f-89a8-ee71102588c4",
+  "single_chat_lock": true,
+  "last_synced_at": "2026-11-05T20:36:33+01:00",
+  "active_agent": "NEXUS",
+  "current_sprint": {
+    "goal": "Arquitectura Híbrida (Landing Hub depurada + 6 Subpáginas por Especialidad + Hub Unificado de Herramientas en Pestañas + Corrección UTF-8 SEO)",
+    "status": "completed"
+  },
+  "context_stack": {
+    "framework": "React 19.3 + Vite 6.4 + TypeScript 5.8",
+    "styling": "Tailwind CSS 4.3 + Motion 12 + OGL",
+    "backend": "Dual-Runtime Hybrid (Node/TSX Middleware + PHP 8.2+ Fallback Gateway + Supabase)",
+    "deployment": "Hostinger Shared Hosting / Node Daemon (https://ideasycoloresgt.site)",
+    "corporate_email": "gerencia@ideasycoloresgt.com",
+    "whatsapp_target": "50266617592"
+  },
+  "architecture_map": {
+    "frontend_entry": "src/main.tsx",
+    "app_root": "src/App.tsx",
+    "state_context": "src/context/ColorMoodContext.tsx",
+    "data_sources": [
+      "src/data/content.ts",
+      "src/data/colorsData.ts"
+    ],
+    "key_features": [
+      "src/components/ServiceCategoryPage.tsx",
+      "src/components/InteractiveToolsHub.tsx",
+      "src/components/ColorStudioVisualizer.tsx",
+      "src/components/PaintCalculator.tsx",
+      "src/components/BeforeAfterSlider.tsx",
+      "src/components/QuoteForm.tsx",
+      "src/components/admin/AdminDashboard.tsx"
+    ],
+    "backend_node": {
+      "entry": "src/server/index.ts",
+      "handlers": [
+        "src/server/handlers/leadsHandler.ts",
+        "src/server/handlers/healthHandler.ts"
+      ],
+      "services": [
+        "src/server/services/mailer.ts",
+        "src/server/services/leadStorage.ts"
+      ],
+      "validators": "src/server/validators/leadSchema.ts",
+      "middleware": "src/server/middleware/cors.ts"
+    },
+    "backend_php_fallback": [
+      "public/api/leads.php",
+      "public/api/health.php",
+      "public/.htaccess"
+    ]
+  },
+  "execution_queue": [],
+  "environment_vars_required": [
+    "NODE_ENV",
+    "PORT",
+    "ALLOWED_ORIGINS",
+    "HOSTINGER_SMTP_HOST",
+    "HOSTINGER_SMTP_PORT",
+    "HOSTINGER_SMTP_SECURE",
+    "HOSTINGER_SMTP_USER",
+    "HOSTINGER_SMTP_PASS",
+    "SMTP_FROM_NAME",
+    "SMTP_NOTIFICATION_EMAIL",
+    "WHATSAPP_TARGET_NUMBER",
+    "VITE_SUPABASE_URL",
+    "VITE_SUPABASE_ANON_KEY"
+  ]
+}

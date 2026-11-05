@@ -3,6 +3,8 @@
 
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /data/
 
 # Sitemap Index
 Sitemap: https://ideasycoloresgt.site/sitemap.xml
