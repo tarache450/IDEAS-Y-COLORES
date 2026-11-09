@@ -89,6 +89,7 @@ export const Footer: React.FC<FooterProps> = ({
                 { id: 'confianza', label: 'Confianza & Respaldo' },
                 { id: 'soluciones', label: 'Multi-Servicios' },
                 { id: 'sectores', label: 'Sectores' },
+                { id: 'herramientas', label: 'Color & Calculadora' },
                 { id: 'proyectos', label: 'Galería de Proyectos' },
                 { id: 'promociones', label: 'Promociones' },
                 { id: 'faq', label: 'Preguntas Frecuentes' },

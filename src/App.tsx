@@ -1,48 +1,27 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { ColorMoodProvider, useColorMood } from './context/ColorMoodContext';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { BentoTrustGrid } from './components/BentoTrustGrid';
 import { SolutionsSection } from './components/SolutionsSection';
 import { SectorsSection } from './components/SectorsSection';
+import { InteractiveToolsHub } from './components/InteractiveToolsHub';
+import { ProjectsGallery } from './components/ProjectsGallery';
+import { ProcessSection } from './components/ProcessSection';
+import { TestimonialsGuaranteesSection } from './components/TestimonialsGuaranteesSection';
+import { PromoSection } from './components/PromoSection';
+import { FAQSection } from './components/FAQSection';
+import { QuoteForm } from './components/QuoteForm';
+import { ContactSection } from './components/ContactSection';
+import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { DynamicBackground } from './components/ui/DynamicBackground';
 import { PrivacyPolicyModal } from './components/PrivacyPolicyModal';
-import { LazySection } from './components/ui/LazySection';
 
-// Lazy-loaded below-the-fold sections and subpage views
-const InteractiveToolsHub = lazy(() =>
-  import('./components/InteractiveToolsHub').then((m) => ({ default: m.InteractiveToolsHub }))
-);
+// Separate full-screen views remain code-split
 const ServiceCategoryPage = lazy(() =>
   import('./components/ServiceCategoryPage').then((m) => ({ default: m.ServiceCategoryPage }))
-);
-const ProcessSection = lazy(() =>
-  import('./components/ProcessSection').then((m) => ({ default: m.ProcessSection }))
-);
-const ProjectsGallery = lazy(() =>
-  import('./components/ProjectsGallery').then((m) => ({ default: m.ProjectsGallery }))
-);
-const TestimonialsGuaranteesSection = lazy(() =>
-  import('./components/TestimonialsGuaranteesSection').then((m) => ({
-    default: m.TestimonialsGuaranteesSection,
-  }))
-);
-const PromoSection = lazy(() =>
-  import('./components/PromoSection').then((m) => ({ default: m.PromoSection }))
-);
-const FAQSection = lazy(() =>
-  import('./components/FAQSection').then((m) => ({ default: m.FAQSection }))
-);
-const QuoteForm = lazy(() =>
-  import('./components/QuoteForm').then((m) => ({ default: m.QuoteForm }))
-);
-const ContactSection = lazy(() =>
-  import('./components/ContactSection').then((m) => ({ default: m.ContactSection }))
-);
-const FinalCTA = lazy(() =>
-  import('./components/FinalCTA').then((m) => ({ default: m.FinalCTA }))
 );
 const AdminDashboard = lazy(() =>
   import('./components/admin/AdminDashboard').then((m) => ({ default: m.AdminDashboard }))
@@ -75,6 +54,19 @@ function parseCategoryFromUrl(): string | null {
   return null;
 }
 
+function resolveSectionTargetId(sectionId: string): string {
+  if (sectionId === 'estudio-color' || sectionId === 'calculadora' || sectionId === 'herramientas') {
+    return 'herramientas';
+  }
+  if (sectionId === 'servicios') {
+    return 'soluciones';
+  }
+  if (sectionId === 'nosotros') {
+    return 'confianza';
+  }
+  return sectionId;
+}
+
 function AppContent() {
   const [activeSection, setActiveSection] = useState('inicio');
   const [activeToolTab, setActiveToolTab] = useState<'color' | 'calculadora'>('color');
@@ -86,6 +78,8 @@ function AppContent() {
   const [customQuoteMessage, setCustomQuoteMessage] = useState<string>('');
   const { currentMood } = useColorMood();
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+  const isProgrammaticScrollRef = useRef(false);
+  const scrollLockTimeoutRef = useRef<number | null>(null);
 
   const [isAdminView, setIsAdminView] = useState(() => {
     return (
@@ -97,7 +91,11 @@ function AppContent() {
   useEffect(() => {
     const handleUrlChange = () => {
       setIsAdminView(window.location.pathname === '/admin' || window.location.hash === '#admin');
-      setActiveCategorySlug(parseCategoryFromUrl());
+      const nextCat = parseCategoryFromUrl();
+      setActiveCategorySlug(nextCat);
+      if (nextCat) {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      }
     };
 
     window.addEventListener('popstate', handleUrlChange);
@@ -115,10 +113,26 @@ function AppContent() {
     };
     window.addEventListener('keydown', handleKeyDown);
 
+    // If initial URL has a section hash (e.g. #proyectos, #promociones, #contacto, #cotizar), scroll to it
+    const initialHash = window.location.hash.replace('#', '').trim();
+    if (
+      initialHash &&
+      !initialHash.startsWith('servicio/') &&
+      initialHash !== 'admin' &&
+      initialHash !== 'inicio'
+    ) {
+      window.setTimeout(() => {
+        scrollToSection(initialHash);
+      }, 100);
+    }
+
     return () => {
       window.removeEventListener('popstate', handleUrlChange);
       window.removeEventListener('hashchange', handleUrlChange);
       window.removeEventListener('keydown', handleKeyDown);
+      if (scrollLockTimeoutRef.current) {
+        window.clearTimeout(scrollLockTimeoutRef.current);
+      }
     };
   }, []);
 
@@ -138,6 +152,7 @@ function AppContent() {
   const openCategoryPage = (categoryId: string) => {
     setActiveCategorySlug(categoryId);
     window.location.hash = `#servicio/${categoryId}`;
+    window.scrollTo({ top: 0, behavior: 'auto' });
   };
 
   const closeCategoryPage = () => {
@@ -154,34 +169,70 @@ function AppContent() {
       setActiveToolTab('color');
     }
 
-    const performScroll = () => {
-      const targetId =
-        sectionId === 'estudio-color' || sectionId === 'calculadora'
-          ? 'herramientas'
-          : sectionId;
-      window.dispatchEvent(new CustomEvent('navigate-section', { detail: sectionId }));
-      setActiveSection(sectionId);
+    const targetId = resolveSectionTargetId(sectionId);
+    setActiveSection(targetId);
+
+    // Lock scrollspy during programmatic scroll so header active underline stays on clicked target
+    isProgrammaticScrollRef.current = true;
+    if (scrollLockTimeoutRef.current) {
+      window.clearTimeout(scrollLockTimeoutRef.current);
+    }
+    scrollLockTimeoutRef.current = window.setTimeout(() => {
+      isProgrammaticScrollRef.current = false;
+    }, 900);
+
+    const scrollElementIntoPosition = (behavior: ScrollBehavior = 'smooth') => {
+      if (targetId === 'inicio') {
+        window.scrollTo({ top: 0, behavior });
+        return;
+      }
       const element = document.getElementById(targetId);
       if (element) {
-        const navOffset = 80;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - navOffset;
-
+        const navOffset = 78;
+        const elementTop = element.getBoundingClientRect().top + window.scrollY;
+        const offsetPosition = Math.max(0, elementTop - navOffset);
         window.scrollTo({
           top: offsetPosition,
-          behavior: 'smooth',
+          behavior,
         });
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     };
 
+    const executeNavigation = () => {
+      window.dispatchEvent(new CustomEvent('navigate-section', { detail: targetId }));
+      if (!window.location.hash.startsWith('#servicio/')) {
+        history.replaceState(null, '', targetId === 'inicio' ? window.location.pathname : `#${sectionId}`);
+      }
+      scrollElementIntoPosition('smooth');
+
+      // Follow-up alignment pass in case images/tabs expanded layout height
+      window.setTimeout(() => {
+        if (targetId === 'inicio') return;
+        const element = document.getElementById(targetId);
+        if (!element) return;
+        const navOffset = 78;
+        const delta = element.getBoundingClientRect().top - navOffset;
+        if (Math.abs(delta) > 16) {
+          window.scrollTo({
+            top: Math.max(0, window.scrollY + delta),
+            behavior: 'smooth',
+          });
+        }
+      }, 240);
+    };
+
     // If user is inside a category subpage and clicks a landing section (other than #cotizar/#contacto which exist on both)
-    if (activeCategorySlug && sectionId !== 'cotizar' && sectionId !== 'contacto') {
+    if (activeCategorySlug && targetId !== 'cotizar' && targetId !== 'contacto') {
       closeCategoryPage();
-      window.setTimeout(performScroll, 80);
+      window.setTimeout(() => {
+        history.replaceState(null, '', targetId === 'inicio' ? window.location.pathname : `#${sectionId}`);
+        scrollElementIntoPosition('smooth');
+      }, 60);
+      window.setTimeout(() => {
+        scrollElementIntoPosition('auto');
+      }, 220);
     } else {
-      performScroll();
+      executeNavigation();
     }
   };
 
@@ -245,6 +296,7 @@ function AppContent() {
 
     const observer = new IntersectionObserver(
       (entries) => {
+        if (isProgrammaticScrollRef.current) return;
         for (const entry of entries) {
           if (entry.isIntersecting && entry.target.id) {
             setActiveSection(entry.target.id);
@@ -253,23 +305,17 @@ function AppContent() {
         }
       },
       {
-        rootMargin: '-22% 0px -65% 0px',
+        rootMargin: '-20% 0px -65% 0px',
         threshold: 0,
       }
     );
 
-    const observeElements = () => {
-      for (const id of sectionIds) {
-        const el = document.getElementById(id);
-        if (el) observer.observe(el);
-      }
-    };
-
-    observeElements();
-    const timer = window.setTimeout(observeElements, 1200);
+    for (const id of sectionIds) {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    }
 
     return () => {
-      window.clearTimeout(timer);
       observer.disconnect();
     };
   }, [activeCategorySlug]);
@@ -323,24 +369,20 @@ function AppContent() {
                 onOpenTool={(tool) => {
                   closeCategoryPage();
                   setActiveToolTab(tool);
-                  window.setTimeout(() => scrollToSection('herramientas'), 80);
+                  window.setTimeout(() => scrollToSection('herramientas'), 60);
                 }}
               />
             </Suspense>
 
             {/* Pre-configured Quote Form & Contact right inside the Subpage for instant conversion */}
-            <Suspense fallback={<SectionSkeleton id="cotizar" minHeight="500px" />}>
-              <QuoteForm
-                initialProjectType={selectedProjectForQuote || 'Residencial'}
-                initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
-                initialMessage={customQuoteMessage}
-                onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
-              />
-            </Suspense>
+            <QuoteForm
+              initialProjectType={selectedProjectForQuote || 'Residencial'}
+              initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
+              initialMessage={customQuoteMessage}
+              onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+            />
 
-            <Suspense fallback={<SectionSkeleton id="contacto" minHeight="400px" />}>
-              <ContactSection />
-            </Suspense>
+            <ContactSection />
           </>
         ) : (
           <>
@@ -371,77 +413,41 @@ function AppContent() {
             />
 
             {/* 5. Hub Unificado de Herramientas en Pestañas (Estudio de Color + Calculadora m²) */}
-            <LazySection id="herramientas-wrapper" minHeight="480px">
-              <Suspense fallback={<SectionSkeleton id="herramientas" minHeight="480px" />}>
-                <InteractiveToolsHub
-                  activeToolTab={activeToolTab}
-                  onTabChange={setActiveToolTab}
-                  onSelectColorForQuote={handleColorSelectedForQuote}
-                  onTransferCalculatorToQuote={handleTransferCalculatorToQuote}
-                />
-              </Suspense>
-            </LazySection>
+            <InteractiveToolsHub
+              activeToolTab={activeToolTab}
+              onTabChange={setActiveToolTab}
+              onSelectColorForQuote={handleColorSelectedForQuote}
+              onTransferCalculatorToQuote={handleTransferCalculatorToQuote}
+            />
 
             {/* 6. Galería de Proyectos y Comparativa Antes/Después */}
-            <LazySection id="proyectos" minHeight="450px">
-              <Suspense fallback={<SectionSkeleton id="proyectos" minHeight="450px" />}>
-                <ProjectsGallery onRequestSimilar={handleRequestSimilarProject} />
-              </Suspense>
-            </LazySection>
+            <ProjectsGallery onRequestSimilar={handleRequestSimilarProject} />
 
             {/* 7. Proceso de Transformación en 4 Pasos */}
-            <LazySection id="proceso" minHeight="300px">
-              <Suspense fallback={<SectionSkeleton id="proceso" minHeight="300px" />}>
-                <ProcessSection onQuoteClick={() => scrollToSection('cotizar')} />
-              </Suspense>
-            </LazySection>
+            <ProcessSection onQuoteClick={() => scrollToSection('cotizar')} />
 
             {/* 8. Reseñas Verificadas Google 5.0 ★ y Trayectoria Corporativa (Sin duplicados) */}
-            <LazySection id="garantias" minHeight="280px">
-              <Suspense fallback={<SectionSkeleton id="garantias" minHeight="280px" />}>
-                <TestimonialsGuaranteesSection />
-              </Suspense>
-            </LazySection>
+            <TestimonialsGuaranteesSection />
 
             {/* 9. Promoción Oficial (-20%) */}
-            <LazySection id="promociones" minHeight="250px">
-              <Suspense fallback={<SectionSkeleton id="promociones" minHeight="250px" />}>
-                <PromoSection onQuoteClick={() => scrollToSection('cotizar')} />
-              </Suspense>
-            </LazySection>
+            <PromoSection onQuoteClick={() => scrollToSection('cotizar')} />
 
             {/* 10. Preguntas Frecuentes (Resolución de Objeciones) */}
-            <LazySection id="faq" minHeight="320px">
-              <Suspense fallback={<SectionSkeleton id="faq" minHeight="320px" />}>
-                <FAQSection onOpenPrivacy={() => setIsPrivacyModalOpen(true)} />
-              </Suspense>
-            </LazySection>
+            <FAQSection onOpenPrivacy={() => setIsPrivacyModalOpen(true)} />
 
             {/* 11. Formulario Único de Cotización de 3 Pasos */}
-            <LazySection id="cotizar" minHeight="500px">
-              <Suspense fallback={<SectionSkeleton id="cotizar" minHeight="500px" />}>
-                <QuoteForm
-                  initialProjectType={selectedProjectForQuote || 'Residencial'}
-                  initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
-                  initialMessage={customQuoteMessage}
-                  onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
-                />
-              </Suspense>
-            </LazySection>
+            <QuoteForm
+              initialProjectType={selectedProjectForQuote || 'Residencial'}
+              initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
+              initialMessage={customQuoteMessage}
+              onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+            />
 
-            {/* 12. Canales Verificados y Mapa Carretera a El Salvador (Sin segundo formulario repetido) */}
-            <LazySection id="contacto" minHeight="400px">
-              <Suspense fallback={<SectionSkeleton id="contacto" minHeight="400px" />}>
-                <ContactSection />
-              </Suspense>
-            </LazySection>
+            {/* 12. Canales Verificados y Mapa Carretera a El Salvador Km 21.5, Fraijanes */}
+            <ContactSection />
 
             {/* 13. Cierre Visual FinalCTA */}
-            <LazySection id="final-cta" minHeight="250px">
-              <Suspense fallback={<SectionSkeleton id="final-cta" minHeight="250px" />}>
-                <FinalCTA onQuoteClick={() => scrollToSection('cotizar')} />
-              </Suspense>
-            </LazySection>
+            <FinalCTA onQuoteClick={() => scrollToSection('cotizar')} />
           </>
         )}
       </main>

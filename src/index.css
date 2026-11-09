@@ -274,20 +274,24 @@ main > section.bg-transparent:nth-of-type(even) {
   main > section { scroll-margin-top: 72px; }
 }
 
-/* Core Web Vitals: Skip off-screen paint & layout during initial load */
+/* Ensure accurate scroll offsets for sticky header across all sections */
+#inicio,
+#confianza,
 #soluciones,
 #sectores,
+#herramientas,
 #estudio-color,
 #calculadora,
 #servicios,
 #proyectos,
+#proceso,
+#garantias,
 #promociones,
 #nosotros,
 #faq,
 #cotizar,
 #contacto {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 600px;
+  scroll-margin-top: 88px;
 }
 
 /* ─── Custom subtle scrollbar ──────────────────────────────── */

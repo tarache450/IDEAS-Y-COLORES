@@ -140,14 +140,28 @@ export const Header: React.FC<HeaderProps> = ({
                     {servicesMenuOpen && (
                       <div className="absolute left-0 top-full pt-2 w-72 z-50">
                         <div className="rounded-2xl bg-white/98 backdrop-blur-xl border border-slate-200 shadow-xl p-2 space-y-1">
-                          <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          <a
+                            href="#soluciones"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleNavClick('soluciones');
+                            }}
+                            className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between text-slate-900 bg-slate-50 hover:bg-slate-100 transition-colors"
+                          >
+                            <span>Ver sección Multi-Servicios</span>
+                            <ArrowRight className="w-3.5 h-3.5 text-slate-500" aria-hidden="true" />
+                          </a>
+                          <div className="px-3 pt-1.5 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
                             Subpáginas por Especialidad
                           </div>
                           {MULTI_SERVICES_CATEGORIES.map((cat) => (
-                            <button
+                            <a
                               key={cat.id}
-                              type="button"
-                              onClick={() => handleCategoryClick(cat.id)}
+                              href={`#servicio/${cat.id}`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleCategoryClick(cat.id);
+                              }}
                               className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors ${
                                 activeCategorySlug === cat.id
                                   ? 'bg-slate-900 text-white'
@@ -159,7 +173,7 @@ export const Header: React.FC<HeaderProps> = ({
                                 className="w-2 h-2 rounded-full shrink-0"
                                 style={{ backgroundColor: cat.accentColor }}
                               />
-                            </button>
+                            </a>
                           ))}
                         </div>
                       </div>

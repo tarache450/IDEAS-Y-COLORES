@@ -111,7 +111,7 @@ export const ColorStudioVisualizer: React.FC<ColorStudioVisualizerProps> = ({
 
   return (
     <section
-      id="estudio-color"
+      id="panel-estudio-color"
       className="py-20 bg-slate-900 text-white relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
