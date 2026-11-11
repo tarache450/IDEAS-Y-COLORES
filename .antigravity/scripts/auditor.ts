@@ -123,8 +123,12 @@ export function runChecklistAudit(): AuditorResult {
         scanDir(fullPath);
       } else if (/\.(tsx|ts|html)$/.test(entry.name)) {
         const content = fs.readFileSync(fullPath, 'utf8');
-        // Match raw literal string "gerencia@ideasycoloresgt.com" but ignore security.ts deobfuscation tests or comments
-        if (content.includes('gerencia@ideasycoloresgt.com') && !fullPath.includes('security.ts')) {
+        // Match raw literal string "gerencia@ideasycoloresgt.com" in client UI files (skip security.ts & server mailer)
+        if (
+          content.includes('gerencia@ideasycoloresgt.com') &&
+          !fullPath.includes('security.ts') &&
+          !fullPath.includes(`${path.sep}server${path.sep}`)
+        ) {
           plainTextEmailFound = true;
         }
       }

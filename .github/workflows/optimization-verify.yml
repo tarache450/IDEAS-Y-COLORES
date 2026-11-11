@@ -1,0 +1,43 @@
+name: Optimization & Performance Verification
+
+on:
+  push:
+    branches: [ 'verify/optimization', 'main' ]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'index.html'
+      - 'vite.config.ts'
+      - 'package.json'
+      - 'scripts/verify-optimization-automation.ts'
+  schedule:
+    # Every Monday at 14:00 UTC (08:00 Guatemala)
+    - cron: '0 14 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-optimization:
+    name: Build Budget, Web Vitals Hygiene & Live Delivery
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run optimization verification suite
+        run: npm run verify:optimization
+
+      - name: Publish verification summary
+        if: always() && hashFiles('docs/verificacion/optimization/REPORTE.md') != ''
+        run: cat docs/verificacion/optimization/REPORTE.md >> "$GITHUB_STEP_SUMMARY"

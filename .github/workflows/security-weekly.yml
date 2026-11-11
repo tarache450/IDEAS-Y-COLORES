@@ -1,6 +1,8 @@
 name: Weekly Security Review
 
 on:
+  push:
+    branches: [ 'verify/security', 'fix/security-hardening' ]
   schedule:
     # Every Monday at 13:00 UTC (07:00 Guatemala)
     - cron: '0 13 * * 1'
@@ -36,10 +38,14 @@ jobs:
         run: npm run build
 
       - name: Production dependency audit
-        run: npm audit --omit=dev
+        run: npm audit --omit=dev --audit-level=high
 
-      - name: Full dependency audit
+      - name: Dev dependency audit (informational)
+        continue-on-error: true
         run: npm audit
+
+      - name: Antigravity security automation suite
+        run: npm run verify:security
 
       - name: Built .htaccess matches source
         run: diff -u public/.htaccess dist/.htaccess

@@ -11,6 +11,8 @@
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "test:security": "tsx --test tests/security.spec.ts",
+    "verify:security": "tsx scripts/verify-security-automation.ts",
+    "verify:optimization": "tsx scripts/verify-optimization-automation.ts",
     "orca:orch": "tsx .antigravity/scripts/orchestrator.ts",
     "orca:watchdog": "tsx .antigravity/scripts/watchdog.ts",
     "orca:auditor": "tsx .antigravity/scripts/auditor.ts"
