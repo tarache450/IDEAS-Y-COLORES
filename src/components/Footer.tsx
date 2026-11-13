@@ -95,9 +95,9 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Navigation Links */}
           <div className="space-y-3 text-left">
-            <h3 className="text-xs font-extrabold uppercase tracking-[0.14em] text-white font-display">
+            <h2 className="text-xs font-extrabold uppercase tracking-[0.14em] text-white font-display">
               Navegación
-            </h3>
+            </h2>
             <ul className="space-y-2 text-xs sm:text-sm">
               {[
                 { id: 'inicio', label: 'Inicio' },
@@ -129,9 +129,9 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* 6 Multi-Services Subpage Links */}
           <div className="space-y-3 text-left">
-            <h3 className="text-xs font-extrabold uppercase tracking-[0.14em] text-white font-display">
+            <h2 className="text-xs font-extrabold uppercase tracking-[0.14em] text-white font-display">
               Especialidades
-            </h3>
+            </h2>
             <ul className="space-y-2 text-xs sm:text-sm text-[#80828C]">
               {MULTI_SERVICES_CATEGORIES.map((cat) => (
                 <li key={cat.id}>
@@ -154,11 +154,11 @@ export const Footer: React.FC<FooterProps> = ({
             </ul>
           </div>
 
-          {/* Contact Direct */}
+          {/* Contact Direct (NAP) */}
           <div className="space-y-3 text-left">
-            <h3 className="text-xs font-extrabold uppercase tracking-[0.14em] text-white font-display">
-              Contacto Verificado
-            </h3>
+            <h2 className="text-xs font-extrabold uppercase tracking-[0.14em] text-white font-display">
+              Contacto y Cobertura (NAP)
+            </h2>
             <ul className="space-y-3 text-xs sm:text-sm">
               <li className="flex items-start gap-2.5">
                 <MapPin
@@ -166,7 +166,10 @@ export const Footer: React.FC<FooterProps> = ({
                   style={{ color: currentMood.color }}
                   aria-hidden="true"
                 />
-                <span>{BUSINESS_INFO.addressFull}</span>
+                <span>
+                  {BUSINESS_INFO.addressFull} — Cobertura en Ciudad de Guatemala (Zonas 10, 14, 15
+                  y 16), Carretera a El Salvador, Fraijanes, Mixco y Villa Nueva.
+                </span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone

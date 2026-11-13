@@ -203,13 +203,16 @@ export const SectorsSection: React.FC<SectorsSectionProps> = ({ onQuoteSector })
               <motion.img
                 key={activeSector.id}
                 src={activeSector.image}
-                alt={activeSector.title}
+                alt={`${activeSector.title} — Proyectos de pintura Airless, impermeabilización y mantenimiento en Guatemala por Ideas & Colores`}
+                width={1264}
+                height={848}
                 initial={{ opacity: 0, scale: 1.04 }}
                 animate={{ opacity: 0.9, scale: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
                 className="w-full h-full object-cover"
                 loading="lazy"
+                decoding="async"
               />
             </AnimatePresence>
             <div className="absolute inset-0 bg-gradient-to-t from-[#090E19] via-transparent to-transparent pointer-events-none" />

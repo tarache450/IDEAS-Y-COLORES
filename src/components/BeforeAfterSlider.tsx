@@ -93,7 +93,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
         {/* After image (Background full) */}
         <img
           src={afterImage}
-          alt={`Resultado final después - ${title}`}
+          alt={`Resultado final después: ${title} en Guatemala por Ideas & Colores`}
           className="absolute inset-0 w-full h-full object-cover pointer-events-none"
           loading="lazy"
           decoding="async"
@@ -108,7 +108,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
         >
           <img
             src={beforeImage}
-            alt={`Estado previo antes - ${title}`}
+            alt={`Estado previo antes de intervención: ${title} — Ideas & Colores Guatemala`}
             className="absolute inset-0 w-full h-full object-cover pointer-events-none"
             loading="lazy"
             decoding="async"

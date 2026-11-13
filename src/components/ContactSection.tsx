@@ -269,6 +269,8 @@ export const ContactSection: React.FC = () => {
                 <iframe
                   title="Ubicación Ideas & Colores Carretera a El Salvador Km 21.5, Fraijanes, Guatemala"
                   src="https://maps.google.com/maps?q=Carretera%20a%20El%20Salvador%20Km%2021.5%2C%20Fraijanes%2C%20Guatemala&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  width={600}
+                  height={450}
                   className="w-full h-full border-0"
                   loading="lazy"
                   allowFullScreen
@@ -277,9 +279,9 @@ export const ContactSection: React.FC = () => {
 
               <div className="p-5 bg-white border-t border-[#E8E9EE] flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h4 className="text-sm font-black text-[#090E19] font-display">
+                  <h3 className="text-sm font-black text-[#090E19] font-display">
                     Sede Carretera a El Salvador Km 21.5, Fraijanes
-                  </h4>
+                  </h3>
                   <p className="text-xs text-[#525663]">
                     Carretera a El Salvador Km 21.5, Fraijanes, Guatemala · Atención residencial,
                     comercial e industrial
@@ -302,15 +304,15 @@ export const ContactSection: React.FC = () => {
             </div>
 
             {/* Regional coverage */}
-            <div className="p-5 rounded-xl bg-white border border-[#E8E9EE] text-xs text-[#525663] space-y-2">
+            <div id="cobertura" className="p-5 rounded-xl bg-white border border-[#E8E9EE] text-xs text-[#525663] space-y-2">
               <div className="flex items-center gap-2 text-[#090E19] font-extrabold">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" aria-hidden="true" />
-                <span>Cobertura en toda la República de Guatemala:</span>
+                <span>Cobertura en Ciudad de Guatemala, Carretera a El Salvador y alrededores:</span>
               </div>
               <p className="leading-relaxed">
-                Carretera a El Salvador (km 8 al 30), Santa Catarina Pinula, Fraijanes, San José
-                Pinula, Muxbal, Zonas 10, 14, 15 y 16, y atención técnica en departamentos para
-                obras comerciales e industriales.
+                Ciudad de Guatemala (Zonas 10, 14, 15 y 16), Carretera a El Salvador (km 8 al 30),
+                Fraijanes, Santa Catarina Pinula, San José Pinula, Muxbal, Mixco y Villa Nueva, más
+                atención en departamentos para obras comerciales e industriales.
               </p>
             </div>
           </div>

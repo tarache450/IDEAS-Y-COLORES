@@ -78,7 +78,9 @@ export const Hero: React.FC<HeroProps> = ({
             src={moodShowcases.image}
             srcSet={moodShowcases.srcSet}
             sizes="100vw"
-            alt="Acabados profesionales de pintura arquitectónica e impermeabilización en Guatemala por Ideas & Colores"
+            width={1200}
+            height={670}
+            alt={`${moodShowcases.title} — ${moodShowcases.caption} por Ideas & Colores Guatemala`}
             className="w-full h-full object-cover object-[72%_25%] sm:object-center"
             fetchPriority="high"
             loading="eager"
@@ -148,6 +150,12 @@ export const Hero: React.FC<HeroProps> = ({
           >
             Color que transforma espacios
             <span style={{ color: currentMood.color }}>.</span>
+            <span className="sr-only">
+              {' '}
+              — Pintura Profesional Airless, Impermeabilización Técnica de Losas, Hidrolavado a
+              Presión, Resinas Epóxicas y Entrega de Pintura a Domicilio en Ciudad de Guatemala y
+              Carretera a El Salvador | Ideas &amp; Colores Guatemala
+            </span>
           </motion.h1>
 
           {/* Animated Logo Spectrum Accent Rule */}

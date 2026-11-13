@@ -507,11 +507,12 @@ export const ServiceCategoryPage: React.FC<ServiceCategoryPageProps> = ({
               <div className="rounded-xl overflow-hidden bg-[#151D30] border border-[#27324D] shadow-2xl relative aspect-[4/3.4]">
                 <img
                   src={category.image}
-                  alt={`${category.title} - Ideas & Colores Multi-Servicios`}
+                  alt={`${category.title} en Ciudad de Guatemala, Carretera a El Salvador y Fraijanes — Ideas & Colores Multi-Servicios`}
                   className="w-full h-full object-cover"
-                  width="600"
-                  height="510"
+                  width={1264}
+                  height={848}
                   fetchPriority="high"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#090E19]/90 via-[#090E19]/20 to-transparent" />
                 <div className="absolute bottom-5 left-5 right-5 p-4 rounded-xl bg-[#090E19]/90 backdrop-blur-md border border-[#27324D] text-left">

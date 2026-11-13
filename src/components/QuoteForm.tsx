@@ -411,9 +411,12 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
               <div className="relative rounded-xl overflow-hidden border border-[#27324D] aspect-[16/10] bg-[#151D30]">
                 <img
                   src={assetUrl('projects/fachada-residencial-carretera.webp')}
-                  alt="Acabado arquitectónico profesional Ideas & Colores"
+                  alt="Acabado profesional de pintura Airless en fachada residencial de Carretera a El Salvador por Ideas & Colores Guatemala"
                   className="w-full h-full object-cover opacity-85"
+                  width={1200}
+                  height={670}
                   loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#090E19] via-[#090E19]/25 to-transparent pointer-events-none" />
                 <div className="absolute bottom-3.5 left-4 right-4 flex items-center justify-between text-xs">
@@ -1095,7 +1098,11 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                               >
                                 <img
                                   src={item.preview}
-                                  alt={`Subida ${idx + 1}`}
+                                  alt={`Fotografía de referencia para cotización ${idx + 1} — Ideas & Colores Guatemala`}
+                                  width={160}
+                                  height={160}
+                                  loading="lazy"
+                                  decoding="async"
                                   className="w-full h-full object-cover"
                                 />
                                 <button

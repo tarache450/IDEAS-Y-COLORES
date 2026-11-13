@@ -91,8 +91,11 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
   return (
     <section
       id="soluciones"
+      aria-label="Divisiones de Servicio y Especialidades en Guatemala"
       className="py-20 sm:py-28 bg-white border-b border-[#E8E9EE] relative overflow-hidden"
     >
+      <span id="servicios" className="sr-only" aria-hidden="true" />
+      <span id="impermeabilizacion" className="sr-only" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Roofera-Style Architectural Services Header */}
         <FadeIn direction="up" distance={20}>
@@ -241,12 +244,12 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
                   >
                     <img
                       src={cat.image}
-                      alt={cat.title}
+                      alt={`${cat.title} en Ciudad de Guatemala y Carretera a El Salvador — Ideas & Colores`}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
                       loading="lazy"
                       decoding="async"
-                      width="480"
-                      height="300"
+                      width={1264}
+                      height={848}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#090E19] via-[#090E19]/30 to-transparent" />
 
