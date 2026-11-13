@@ -124,11 +124,14 @@ export const Header: React.FC<HeaderProps> = ({
       </a>
 
       <div
-        className={`w-full transition-all duration-300 ${
+        className={`w-full transition-all duration-300 backdrop-blur-md ${
           isSolidDark
-            ? 'bg-[#090E19]/95 backdrop-blur-md border-b border-[#27324D] shadow-[0_12px_32px_-12px_rgba(9,14,25,0.65)] py-2.5'
-            : 'bg-gradient-to-b from-[#090E19]/85 via-[#090E19]/50 to-transparent border-b border-white/10 py-3.5'
+            ? 'border-b border-[#27324D] shadow-[0_12px_32px_-12px_rgba(9,14,25,0.65)] py-2.5'
+            : 'border-b border-white/15 py-3 sm:py-3.5'
         }`}
+        style={{
+          backgroundColor: isSolidDark ? 'rgba(9, 14, 25, 0.96)' : 'rgba(9, 14, 25, 0.88)',
+        }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
           {/* Official Light Logo */}

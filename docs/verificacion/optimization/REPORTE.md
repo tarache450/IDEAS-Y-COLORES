@@ -1,9 +1,9 @@
 # Reporte Automatizado de Verificación de Optimización — Ideas & Colores
 
-- **Fecha:** 2026-11-13T17:07:39.397Z
-- **Rama:** `fix/security-hardening` (`4050ba1`)
+- **Fecha:** 2026-11-13T17:17:40.538Z
+- **Rama:** `fix/security-hardening` (`3f9f72a`)
 - **Dominio:** https://ideasycoloresgt.site
-- **Veredicto:** **APTO CON RESERVAS**
+- **Veredicto:** **APTO**
 
 | ID | Métrica / Control | Meta | Medido | Estado |
 | :--- | :--- | :--- | :--- | :--- |
@@ -13,6 +13,6 @@
 | OPT-04 | Presupuesto Imágenes Raster & Hero LCP | Hero ≤ 120 KB; 0 imágenes raster > 200 KB | Hero desktop=68.3 KB, mobile=29.3 KB, >200KB=0 | **PASS** |
 | OPT-05 | Integridad Scroll-Margin & Anclas de Navegación | scroll-margin-top activo, sin content-visibility en secciones ni IDs duplicados | scroll_margin=true, content_visibility_bug=false, dup_tool_ids=false | **PASS** |
 | OPT-06 | SEO, Codificación UTF-8, Geo Km 21.5 & Sitemap | Sin mojibake, JSON-LD Km 21.5 Fraijanes, 6 subpáginas en sitemap.xml | mojibake=false, km21_5_fraijanes=true, subpages_sitemap=true | **PASS** |
-| OPT-07 | Producción: TTFB, Compresión & Sincronización de Build | HTTP 200, TTFB ≤ 800 ms, encoding br/gzip, bundle sincronizado con local | HTTP=200, TTFB=324ms, encoding=br, cache=public, max-age=31536000, immutable, sync=false (live=index-CH_4gaaz.js, local=index-I_Io6hEe.js) | **WARN** |
+| OPT-07 | Producción: TTFB, Compresión & Sincronización de Build | HTTP 200, TTFB ≤ 800 ms, encoding br/gzip, bundle sincronizado con local | HTTP=200, TTFB=265ms, encoding=br, cache=public, max-age=31536000, immutable, sync=true (live=index-I_Io6hEe.js, local=index-I_Io6hEe.js) | **PASS** |
 
 > Generado automáticamente por `scripts/verify-optimization-automation.ts` (`npm run verify:optimization`).

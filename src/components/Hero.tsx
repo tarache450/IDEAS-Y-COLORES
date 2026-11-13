@@ -67,24 +67,32 @@ export const Hero: React.FC<HeroProps> = ({
       id="inicio"
       className="relative bg-[#090E19] text-white pt-24 pb-16 sm:pt-32 sm:pb-32 lg:pt-36 lg:pb-36 overflow-hidden"
     >
-      {/* Mobile-first background framing & eye-comfortable dark scrim */}
-      <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
-        <motion.img
-          key={moodShowcases.image}
-          initial={prefersReduced ? false : { scale: 1.06, opacity: 0.85 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1.25, ease: [0.22, 1, 0.36, 1] }}
-          src={moodShowcases.image}
-          srcSet={moodShowcases.srcSet}
-          sizes="100vw"
-          alt="Acabados profesionales de pintura arquitectónica e impermeabilización en Guatemala por Ideas & Colores"
-          className="w-full h-full object-cover object-[72%_25%] sm:object-center opacity-55 sm:opacity-100"
-          fetchPriority="high"
-          loading="eager"
-          decoding="async"
+      {/* Mobile-first background framing & guaranteed high-contrast dark scrim */}
+      <div className="absolute inset-0 z-0 overflow-hidden bg-[#090E19]" aria-hidden="true">
+        <div className="w-full h-full opacity-35 sm:opacity-75 transition-opacity">
+          <motion.img
+            key={moodShowcases.image}
+            initial={prefersReduced ? false : { scale: 1.06 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 1.25, ease: [0.22, 1, 0.36, 1] }}
+            src={moodShowcases.image}
+            srcSet={moodShowcases.srcSet}
+            sizes="100vw"
+            alt="Acabados profesionales de pintura arquitectónica e impermeabilización en Guatemala por Ideas & Colores"
+            className="w-full h-full object-cover object-[72%_25%] sm:object-center"
+            fetchPriority="high"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+        {/* Browser-safe rgba veil so mobile white text stays crisp regardless of iOS/Brave dark-mode engines */}
+        <div
+          className="sm:hidden absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(180deg, rgba(9, 14, 25, 0.88) 0%, rgba(9, 14, 25, 0.78) 42%, rgba(9, 14, 25, 0.94) 100%)',
+          }}
         />
-        {/* Soft mobile dark veil so white text & controls never fight the background photo */}
-        <div className="sm:hidden absolute inset-0 bg-gradient-to-b from-[#090E19]/92 via-[#090E19]/78 to-[#090E19]/98" />
         <div
           className="sm:hidden absolute inset-0 opacity-20"
           style={{
@@ -92,8 +100,20 @@ export const Hero: React.FC<HeroProps> = ({
           }}
         />
         {/* Desktop architectural vignette */}
-        <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-[#090E19]/95 via-[#090E19]/82 to-[#090E19]/45" />
-        <div className="hidden sm:block absolute inset-0 bg-gradient-to-t from-[#090E19]/92 via-transparent to-[#090E19]/65" />
+        <div
+          className="hidden sm:block absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(90deg, rgba(9, 14, 25, 0.95) 0%, rgba(9, 14, 25, 0.80) 52%, rgba(9, 14, 25, 0.42) 100%)',
+          }}
+        />
+        <div
+          className="hidden sm:block absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(0deg, rgba(9, 14, 25, 0.92) 0%, rgba(9, 14, 25, 0) 45%, rgba(9, 14, 25, 0.68) 100%)',
+          }}
+        />
       </div>
 
       {/* Main Content Container */}
@@ -104,7 +124,8 @@ export const Hero: React.FC<HeroProps> = ({
             initial={prefersReduced ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            className="inline-flex items-center gap-2.5 sm:gap-3 px-3 py-1.5 rounded-md bg-white/10 backdrop-blur-md border border-white/15 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-100 max-w-full"
+            className="inline-flex items-center gap-2.5 sm:gap-3 px-3 py-1.5 rounded-md backdrop-blur-md border border-white/20 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-100 max-w-full"
+            style={{ backgroundColor: 'rgba(15, 23, 42, 0.82)' }}
           >
             <span className="inline-flex items-center gap-1 shrink-0" aria-hidden="true">
               {LOGO_SPECTRUM_LIST.map((hex) => (
@@ -170,7 +191,10 @@ export const Hero: React.FC<HeroProps> = ({
                   color: currentMood.textColorOnAccent,
                 }}
               >
-                <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-sm bg-white flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-95">
+                <span
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-sm bg-white flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-95"
+                  style={{ backgroundColor: '#FFFFFF' }}
+                >
                   <ArrowRight
                     className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
                     style={{ color: currentMood.color }}
@@ -191,7 +215,10 @@ export const Hero: React.FC<HeroProps> = ({
                   color: currentMood.textColorOnAccent,
                 }}
               >
-                <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-sm bg-white flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-95">
+                <span
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-sm bg-white flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-95"
+                  style={{ backgroundColor: '#FFFFFF' }}
+                >
                   <ArrowRight
                     className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
                     style={{ color: currentMood.color }}
@@ -207,7 +234,8 @@ export const Hero: React.FC<HeroProps> = ({
                 type="button"
                 id="hero-btn-quote"
                 onClick={onQuoteClick}
-                className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 min-h-[48px] sm:min-h-[54px] rounded-md bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-base border border-white/20 backdrop-blur-md transition-all cursor-pointer whitespace-nowrap"
+                className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 min-h-[48px] sm:min-h-[54px] rounded-md text-white font-bold text-xs sm:text-base border border-white/25 transition-all cursor-pointer whitespace-nowrap hover:opacity-90"
+                style={{ backgroundColor: 'rgba(15, 23, 42, 0.85)' }}
               >
                 <span>Cotizar</span>
                 <span className="hidden sm:inline">proyecto</span>
@@ -218,16 +246,18 @@ export const Hero: React.FC<HeroProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 id="hero-btn-whatsapp"
-                className="inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 min-h-[48px] sm:min-h-[54px] rounded-md bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 font-bold text-xs sm:text-sm border border-emerald-400/30 backdrop-blur-md transition-all whitespace-nowrap"
+                className="inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 min-h-[48px] sm:min-h-[54px] rounded-md text-emerald-300 font-bold text-xs sm:text-sm border border-emerald-400/40 transition-all whitespace-nowrap hover:opacity-90"
+                style={{ backgroundColor: 'rgba(6, 78, 59, 0.82)' }}
               >
-                <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden="true" />
+                <MessageCircle className="w-4 h-4 text-emerald-300 shrink-0" aria-hidden="true" />
                 <span>WhatsApp</span>
               </a>
 
               <button
                 type="button"
                 onClick={onExploreColorsClick}
-                className="col-span-2 sm:col-span-1 inline-flex items-center justify-center gap-2 px-4 py-3 min-h-[46px] sm:min-h-[54px] rounded-md bg-[#151D30]/85 hover:bg-[#151D30] text-slate-200 hover:text-white font-semibold text-xs sm:text-sm border border-[#27324D] backdrop-blur-md transition-all cursor-pointer whitespace-nowrap"
+                className="col-span-2 sm:col-span-1 inline-flex items-center justify-center gap-2 px-4 py-3 min-h-[46px] sm:min-h-[54px] rounded-md text-slate-100 hover:text-white font-semibold text-xs sm:text-sm border border-[#27324D] transition-all cursor-pointer whitespace-nowrap hover:opacity-95"
+                style={{ backgroundColor: 'rgba(21, 29, 48, 0.92)' }}
               >
                 <Palette className="w-4 h-4 shrink-0" style={{ color: '#00A3FF' }} aria-hidden="true" />
                 <span>Simulador de color</span>
