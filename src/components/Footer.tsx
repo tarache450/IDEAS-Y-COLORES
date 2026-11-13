@@ -1,8 +1,19 @@
 import React from 'react';
-import { Phone, MessageCircle, MapPin, Clock, ShieldCheck, Mail, ArrowUp, Instagram, Facebook, Star } from 'lucide-react';
+import {
+  Phone,
+  MessageCircle,
+  MapPin,
+  Clock,
+  ShieldCheck,
+  Mail,
+  ArrowUp,
+  Instagram,
+  Facebook,
+} from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { GoogleIcon } from './ui/GoogleIcon';
 import { BUSINESS_INFO, MULTI_SERVICES_CATEGORIES } from '../data/content';
+import { useColorMood } from '../context/ColorMoodContext';
 import {
   buildSafeWhatsAppUrl,
   getObfuscatedEmailDisplay,
@@ -22,65 +33,69 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenAdmin,
   onOpenPrivacy,
 }) => {
+  const { currentMood } = useColorMood();
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <footer className="bg-slate-950 text-slate-300 pt-16 pb-12 border-t border-slate-800">
+    <footer className="bg-[#090E19] text-[#B8BCC6] pt-16 pb-12 border-t border-[#27324D]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-[#27324D]">
           {/* Brand Info & Mission */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-2 space-y-4 text-left">
             <BrandLogo variant="light" size="md" showSlogan={true} />
-            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm pt-2">
+            <p className="text-xs sm:text-sm text-[#80828C] leading-relaxed max-w-sm pt-2">
               {BUSINESS_INFO.positioning}
             </p>
-            <div className="pt-2 flex items-center gap-2 text-xs text-slate-400">
-              <ShieldCheck className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>
-                Garantía por escrito en mano de obra y productos seleccionados.
-              </span>
+            <div className="pt-1 flex items-center gap-2 text-xs text-[#B8BCC6]">
+              <ShieldCheck
+                className="w-4 h-4 shrink-0"
+                style={{ color: currentMood.color }}
+                aria-hidden="true"
+              />
+              <span>Garantía por escrito en mano de obra y productos seleccionados.</span>
             </div>
-            <div className="pt-1 flex flex-wrap items-center gap-2.5">
+            <div className="pt-2 flex flex-wrap items-center gap-2">
               <a
                 href={BUSINESS_INFO.googleReviewUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 id="footer-btn-google-reviews"
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-amber-400/50 hover:bg-amber-950/20 text-xs font-semibold transition-all group"
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-[#151D30] border border-[#27324D] text-[#E8E9EE] hover:text-white hover:border-white/30 text-xs font-bold transition-all"
                 aria-label="Dejar reseña en Google para Ideas & Colores"
                 title="Dejar reseña en Google (5.0 ★)"
               >
-                <GoogleIcon className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <GoogleIcon className="w-4 h-4" />
                 <span>Google (5.0 ★)</span>
               </a>
               <a
                 href={BUSINESS_INFO.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-pink-500/50 hover:bg-pink-950/20 text-xs font-semibold transition-all group"
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-[#151D30] border border-[#27324D] text-[#E8E9EE] hover:text-white hover:border-pink-400/50 text-xs font-bold transition-all"
                 aria-label="Seguir a Ideas & Colores en Instagram"
               >
-                <Instagram className="w-4 h-4 text-pink-400 group-hover:scale-110 transition-transform" />
+                <Instagram className="w-4 h-4 text-pink-400" aria-hidden="true" />
                 <span>Instagram</span>
               </a>
               <a
                 href={BUSINESS_INFO.facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-blue-500/50 hover:bg-blue-950/20 text-xs font-semibold transition-all group"
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-[#151D30] border border-[#27324D] text-[#E8E9EE] hover:text-white hover:border-blue-400/50 text-xs font-bold transition-all"
                 aria-label="Seguir a Ideas & Colores en Facebook"
               >
-                <Facebook className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
+                <Facebook className="w-4 h-4 text-blue-400" aria-hidden="true" />
                 <span>Facebook</span>
               </a>
             </div>
           </div>
 
           {/* Navigation Links */}
-          <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200 font-display">
+          <div className="space-y-3 text-left">
+            <h3 className="text-xs font-extrabold uppercase tracking-[0.14em] text-white font-display">
               Navegación
             </h3>
             <ul className="space-y-2 text-xs sm:text-sm">
@@ -93,7 +108,7 @@ export const Footer: React.FC<FooterProps> = ({
                 { id: 'proyectos', label: 'Galería de Proyectos' },
                 { id: 'promociones', label: 'Promociones' },
                 { id: 'faq', label: 'Preguntas Frecuentes' },
-                { id: 'cotizar', label: 'Cotización Inteligente' },
+                { id: 'cotizar', label: 'Cotizar Proyecto' },
                 { id: 'contacto', label: 'Contacto' },
               ].map((item) => (
                 <li key={item.id}>
@@ -103,7 +118,7 @@ export const Footer: React.FC<FooterProps> = ({
                       e.preventDefault();
                       onNavigate(item.id);
                     }}
-                    className="text-slate-400 hover:text-amber-400 transition-colors inline-block"
+                    className="text-[#80828C] hover:text-white transition-colors inline-block"
                   >
                     {item.label}
                   </a>
@@ -112,12 +127,12 @@ export const Footer: React.FC<FooterProps> = ({
             </ul>
           </div>
 
-          {/* 6 Multi-Services List (Direct Internal SEO Links to Subpages) */}
-          <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200 font-display">
+          {/* 6 Multi-Services Subpage Links */}
+          <div className="space-y-3 text-left">
+            <h3 className="text-xs font-extrabold uppercase tracking-[0.14em] text-white font-display">
               Especialidades
             </h3>
-            <ul className="space-y-2 text-xs sm:text-sm text-slate-400">
+            <ul className="space-y-2 text-xs sm:text-sm text-[#80828C]">
               {MULTI_SERVICES_CATEGORIES.map((cat) => (
                 <li key={cat.id}>
                   <a
@@ -130,7 +145,7 @@ export const Footer: React.FC<FooterProps> = ({
                         onNavigate('soluciones');
                       }
                     }}
-                    className="hover:text-amber-400 transition-colors text-left inline-block py-0.5"
+                    className="hover:text-white transition-colors text-left inline-block py-0.5"
                   >
                     {cat.title}
                   </a>
@@ -140,26 +155,35 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
 
           {/* Contact Direct */}
-          <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200 font-display">
+          <div className="space-y-3 text-left">
+            <h3 className="text-xs font-extrabold uppercase tracking-[0.14em] text-white font-display">
               Contacto Verificado
             </h3>
             <ul className="space-y-3 text-xs sm:text-sm">
               <li className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <MapPin
+                  className="w-4 h-4 shrink-0 mt-0.5"
+                  style={{ color: currentMood.color }}
+                  aria-hidden="true"
+                />
                 <span>{BUSINESS_INFO.addressFull}</span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-amber-400 shrink-0" />
-                <a
-                  href={`tel:${BUSINESS_INFO.phoneClean}`}
-                  className="hover:text-white transition-colors"
-                >
+                <Phone
+                  className="w-4 h-4 shrink-0"
+                  style={{ color: currentMood.color }}
+                  aria-hidden="true"
+                />
+                <a href={`tel:${BUSINESS_INFO.phoneClean}`} className="hover:text-white transition-colors">
                   {BUSINESS_INFO.phone}
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-amber-400 shrink-0" />
+                <Mail
+                  className="w-4 h-4 shrink-0"
+                  style={{ color: currentMood.color }}
+                  aria-hidden="true"
+                />
                 <a
                   href={buildSafeMailtoUrl('Consulta Web - Ideas & Colores')}
                   className="hover:text-white transition-colors truncate"
@@ -168,7 +192,7 @@ export const Footer: React.FC<FooterProps> = ({
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
-                <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden="true" />
                 <a
                   href={buildSafeWhatsAppUrl(
                     BUSINESS_INFO.whatsappNumber,
@@ -182,7 +206,7 @@ export const Footer: React.FC<FooterProps> = ({
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
-                <Instagram className="w-4 h-4 text-pink-400 shrink-0" />
+                <Instagram className="w-4 h-4 text-pink-400 shrink-0" aria-hidden="true" />
                 <a
                   href={BUSINESS_INFO.instagramUrl}
                   target="_blank"
@@ -193,7 +217,7 @@ export const Footer: React.FC<FooterProps> = ({
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
-                <Facebook className="w-4 h-4 text-blue-400 shrink-0" />
+                <Facebook className="w-4 h-4 text-blue-400 shrink-0" aria-hidden="true" />
                 <a
                   href={BUSINESS_INFO.facebookUrl}
                   target="_blank"
@@ -209,26 +233,26 @@ export const Footer: React.FC<FooterProps> = ({
                   href={BUSINESS_INFO.googleReviewUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-amber-400 transition-colors flex items-center gap-1 truncate"
+                  className="hover:text-white transition-colors flex items-center gap-1 truncate"
                 >
-                  <span>Google: Reseñas &amp; Calificación ({BUSINESS_INFO.googleRating} ★)</span>
+                  <span>Google: Reseñas ({BUSINESS_INFO.googleRating} ★)</span>
                 </a>
               </li>
-              <li className="flex items-start gap-2.5 text-slate-400">
-                <Clock className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+              <li className="flex items-start gap-2.5 text-[#80828C]">
+                <Clock className="w-4 h-4 text-[#80828C] shrink-0 mt-0.5" aria-hidden="true" />
                 <div>
                   <p>{BUSINESS_INFO.scheduleWeekdays}</p>
-                  <p className="text-[11px] text-slate-400">{BUSINESS_INFO.scheduleSaturdays}</p>
+                  <p className="text-[11px] text-[#80828C]">{BUSINESS_INFO.scheduleSaturdays}</p>
                 </div>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom copyright + Back to top */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+        {/* Bottom bar */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#80828C]">
           <p>
-            © {new Date().getFullYear()} Ideas & Colores Multi-Servicios Guatemala. Fundada en{' '}
+            © {new Date().getFullYear()} Ideas &amp; Colores Multi-Servicios Guatemala. Fundada en{' '}
             {BUSINESS_INFO.foundationYear}. Todos los derechos reservados.
           </p>
           <div className="flex flex-wrap items-center justify-center sm:justify-end gap-4">
@@ -237,10 +261,10 @@ export const Footer: React.FC<FooterProps> = ({
               <button
                 type="button"
                 onClick={onOpenPrivacy}
-                className="text-slate-400 hover:text-blue-400 transition-colors text-[11px] font-semibold cursor-pointer flex items-center gap-1"
+                className="text-[#B8BCC6] hover:text-white transition-colors text-[11px] font-semibold cursor-pointer flex items-center gap-1"
                 title="Aviso de Privacidad y Protección de Datos Personales (Guatemala - Decreto 57-2008)"
               >
-                <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
                 <span>Privacidad (Dto. 57-2008)</span>
               </button>
             )}
@@ -248,7 +272,7 @@ export const Footer: React.FC<FooterProps> = ({
               <button
                 type="button"
                 onClick={onOpenAdmin}
-                className="text-slate-400 hover:text-amber-400 transition-colors text-[11px] font-semibold cursor-pointer"
+                className="text-[#B8BCC6] hover:text-white transition-colors text-[11px] font-semibold cursor-pointer"
                 title="Acceso exclusivo al CRM de Administrador"
               >
                 🔒 Staff CRM
@@ -257,10 +281,10 @@ export const Footer: React.FC<FooterProps> = ({
             <button
               type="button"
               onClick={scrollToTop}
-              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors flex items-center gap-1.5"
+              className="px-3 py-2 min-h-[40px] rounded-md bg-[#151D30] hover:bg-black text-white border border-[#27324D] transition-colors flex items-center gap-1.5 cursor-pointer"
               title="Volver al inicio"
             >
-              <ArrowUp className="w-3.5 h-3.5" />
+              <ArrowUp className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Subir</span>
             </button>
           </div>

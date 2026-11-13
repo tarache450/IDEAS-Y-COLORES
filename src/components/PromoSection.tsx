@@ -1,8 +1,7 @@
 import React from 'react';
-import { Tag, ArrowRight, MessageCircle, ShieldCheck, CheckCircle2, Clock, Sparkles } from 'lucide-react';
+import { Tag, ArrowRight, MessageCircle, ShieldCheck, Clock } from 'lucide-react';
 import { PROMOTIONS_LIST, BUSINESS_INFO } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
-import { SpotlightCard } from './ui/SpotlightCard';
 import { buildSafeWhatsAppUrl } from '../utils/security';
 
 interface PromoSectionProps {
@@ -13,51 +12,55 @@ export const PromoSection: React.FC<PromoSectionProps> = ({ onQuoteClick }) => {
   const { currentMood } = useColorMood();
 
   return (
-    <section id="promociones" className="py-20 bg-transparent border-b border-slate-200/50">
+    <section id="promociones" className="py-20 sm:py-24 bg-[#F4F5F7] border-b border-[#E8E9EE]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Highlight Hero Promo Banner */}
-        <div className="rounded-3xl bg-slate-950 text-white p-8 sm:p-12 lg:p-14 shadow-2xl relative overflow-hidden mb-12 border border-slate-800">
-          <div className="absolute inset-0 z-0 promo-light pointer-events-none" aria-hidden="true" />
-          <div className="absolute inset-0 z-[1] bg-gradient-to-r from-slate-950/90 via-slate-950/70 to-slate-950/40 pointer-events-none" />
-
-
+        <div className="rounded-xl bg-[#090E19] text-white p-8 sm:p-12 lg:p-14 shadow-2xl relative overflow-hidden mb-10 border border-[#27324D] text-left">
           <div className="relative z-10 max-w-3xl">
             <div className="flex flex-wrap items-center gap-3 mb-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider shadow-sm">
-                <Tag className="w-4 h-4" />
+              <div
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md text-white font-extrabold text-xs uppercase tracking-wider shadow-sm"
+                style={{ backgroundColor: currentMood.color }}
+              >
+                <Tag className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>Promoción Oficial</span>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/90 border border-slate-700/80 text-amber-300 text-xs font-semibold">
-                <Clock className="w-3.5 h-3.5" />
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#151D30] border border-[#27324D] text-[#E8E9EE] text-xs font-semibold">
+                <Clock className="w-3.5 h-3.5 text-amber-400" aria-hidden="true" />
                 <span>Cupos mensuales limitados por agenda técnica</span>
               </div>
             </div>
 
-            {/* Exact verified headline requested */}
-            <h2 className="text-3xl sm:text-5xl font-black font-display tracking-tight text-white leading-tight">
-              Color que transforma, ahora con hasta <span className="text-amber-400">20% de descuento</span>.
+            <h2 className="text-3xl sm:text-5xl font-black font-display tracking-[-0.04em] text-white leading-[1.06]">
+              Color que transforma, ahora con hasta{' '}
+              <span style={{ color: currentMood.color }}>20% de descuento</span>.
             </h2>
 
-            {/* Exact secondary text requested */}
-            <p className="mt-4 text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl">
+            <p className="mt-4 text-base sm:text-lg text-[#B8BCC6] leading-relaxed max-w-2xl">
               Pregunta por nuestras promociones en pintura y aplicación.
             </p>
 
-            <p className="mt-2 text-xs sm:text-sm text-slate-400 max-w-xl">
+            <p className="mt-2 text-xs sm:text-sm text-[#80828C] max-w-xl">
               Asesoría técnica en sitio, suministro de producto de marcas de confianza y aplicación
               con personal calificado respaldado por garantía por escrito.
             </p>
 
-            {/* CTAs requested */}
-            <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
               <button
                 type="button"
                 id="btn-claim-promo-quote"
                 onClick={onQuoteClick}
-                className="px-7 py-4 rounded-xl bg-amber-400 hover:bg-amber-300 active:scale-[0.98] text-slate-950 font-bold text-sm sm:text-base shadow-md transition-all flex items-center justify-center gap-2"
+                className="inline-flex items-center justify-center gap-3 pl-2 pr-6 py-2 min-h-[48px] rounded-md font-bold text-sm sm:text-base text-white shadow-lg hover:opacity-95 transition-all cursor-pointer"
+                style={{ backgroundColor: currentMood.color }}
               >
+                <span className="w-8 h-8 rounded-sm bg-white flex items-center justify-center shrink-0">
+                  <ArrowRight
+                    className="w-4 h-4"
+                    style={{ color: currentMood.color }}
+                    aria-hidden="true"
+                  />
+                </span>
                 <span>Solicitar promoción</span>
-                <ArrowRight className="w-5 h-5" />
               </button>
 
               <a
@@ -68,62 +71,58 @@ export const PromoSection: React.FC<PromoSectionProps> = ({ onQuoteClick }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 id="btn-claim-promo-wa"
-                className="px-6 py-4 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-[0.98] text-white font-semibold text-sm sm:text-base border border-slate-700 transition-all flex items-center justify-center gap-2"
+                className="px-6 py-3.5 min-h-[48px] rounded-md bg-[#151D30] hover:bg-black text-white font-bold text-sm sm:text-base border border-[#27324D] transition-all flex items-center justify-center gap-2"
               >
-                <MessageCircle className="w-5 h-5 text-emerald-400" />
+                <MessageCircle className="w-5 h-5 text-emerald-400" aria-hidden="true" />
                 <span>Hablar por WhatsApp</span>
               </a>
             </div>
 
-            <div className="mt-6 flex items-center gap-2 text-xs text-slate-400">
-              <ShieldCheck className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>Válido para proyectos residenciales, comerciales e industriales en Guatemala.</span>
+            <div className="mt-6 flex items-center gap-2 text-xs text-[#80828C]">
+              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden="true" />
+              <span>
+                Válido para proyectos residenciales, comerciales e industriales en Guatemala.
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Individual Promo Cards with SpotlightCard */}
+        {/* Individual Promo Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {PROMOTIONS_LIST.map((promo) => (
-            <SpotlightCard
+            <div
               key={promo.id}
-              className={`rounded-3xl p-6 sm:p-7 border flex flex-col justify-between transition-all duration-300 ${
+              className={`rounded-xl p-6 sm:p-7 border flex flex-col justify-between transition-all duration-200 text-left ${
                 promo.highlight
-                  ? 'bg-amber-50/70 border-amber-300 shadow-md ring-1 ring-amber-300/60'
-                  : 'bg-slate-50/70 border-slate-200/80 hover:bg-white hover:shadow-lg'
+                  ? 'bg-[#FFF0E6] border-[#FF5C00]/50 shadow-sm'
+                  : 'bg-white border-[#E8E9EE] hover:border-[#090E19]/30'
               }`}
-              spotlightColor={promo.highlight ? 'rgba(251, 191, 36, 0.2)' : 'rgba(0, 89, 255, 0.12)'}
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span
-                    className={`text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider ${
-                      promo.highlight
-                        ? 'bg-amber-400 text-slate-950 shadow-xs'
-                        : 'bg-slate-200 text-slate-800'
+                    className={`text-xs font-extrabold px-3 py-1 rounded-md uppercase tracking-wider ${
+                      promo.highlight ? 'text-white shadow-xs' : 'bg-[#090E19] text-white'
                     }`}
+                    style={promo.highlight ? { backgroundColor: currentMood.color } : undefined}
                   >
                     {promo.discount}
                   </span>
-                  <span className="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
-                    <Clock className="w-3 h-3 text-slate-400" />
+                  <span className="text-[11px] font-semibold text-[#525663] flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-[#80828C]" aria-hidden="true" />
                     <span>{promo.validUntil}</span>
                   </span>
                 </div>
 
-                <h3 className="text-xl font-bold text-slate-900 font-display mb-2">
+                <h3 className="text-xl font-black text-[#090E19] font-display tracking-tight mb-2">
                   {promo.title}
                 </h3>
 
-                <p className="text-sm text-slate-600 leading-relaxed mb-4">
-                  {promo.description}
-                </p>
+                <p className="text-sm text-[#525663] leading-relaxed mb-4">{promo.description}</p>
               </div>
 
-              <div className="pt-4 border-t border-slate-200/60">
-                <p className="text-[11px] text-slate-500 mb-3 italic">
-                  * {promo.terms}
-                </p>
+              <div className="pt-4 border-t border-[#E8E9EE]">
+                <p className="text-[11px] text-[#80828C] mb-3 italic">* {promo.terms}</p>
                 <a
                   href={buildSafeWhatsAppUrl(
                     BUSINESS_INFO.whatsappNumber,
@@ -131,13 +130,13 @@ export const PromoSection: React.FC<PromoSectionProps> = ({ onQuoteClick }) => {
                   )}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-[0.98]"
+                  className="w-full py-2.5 min-h-[44px] rounded-md bg-[#090E19] hover:bg-[#151D30] text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5"
                 >
-                  <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
+                  <MessageCircle className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
                   <span>Aplicar por WhatsApp</span>
                 </a>
               </div>
-            </SpotlightCard>
+            </div>
           ))}
         </div>
       </div>

@@ -1,305 +1,341 @@
 import React from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import {
   ArrowRight,
   MessageCircle,
   ShieldCheck,
-  Truck,
-  CheckCircle2,
   Palette,
-  Award,
+  Star,
+  ExternalLink,
 } from 'lucide-react';
-import { BUSINESS_INFO } from '../data/content';
+import { BUSINESS_INFO, MULTI_SERVICES_CATEGORIES } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
 import { MoodColorPicker } from './MoodColorPicker';
 import { NumberTicker } from './ui/NumberTicker';
-import { motion, AnimatePresence } from 'motion/react';
 import { assetUrl } from '../utils/asset';
+import {
+  LOGO_SPECTRUM_GRADIENT,
+  LOGO_SPECTRUM_LIST,
+  getCategoryLogoTheme,
+} from '../utils/logoPalette';
 
 interface HeroProps {
   onQuoteClick: () => void;
   onExploreColorsClick: () => void;
+  onExploreServicesClick?: () => void;
+  onOpenCategoryPage?: (categoryId: string) => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onQuoteClick, onExploreColorsClick }) => {
+export const Hero: React.FC<HeroProps> = ({
+  onQuoteClick,
+  onExploreColorsClick,
+  onExploreServicesClick,
+  onOpenCategoryPage,
+}) => {
   const { currentMood, activeMood } = useColorMood();
+  const prefersReduced = useReducedMotion();
 
-  // Curated architectural project showcase photos corresponding to the 4 moods
   const moodShowcases = {
+    naranja: {
+      image: assetUrl('hero-interior-sala.webp'),
+      srcSet: `${assetUrl('hero-interior-sala-mobile.webp')} 640w, ${assetUrl('hero-interior-sala.webp')} 1200w`,
+      title: 'Residencia Carretera a El Salvador Km 21.5',
+      caption: 'Pintura Airless + Acabados Arquitectónicos',
+    },
     azul: {
       image: assetUrl('studio/color-studio-azul-profundo.webp'),
       srcSet: undefined,
       title: 'Estudio Contemporáneo Zona 14',
-      tag: 'Pintura Arquitectónica & Asesoría',
-      tone: 'Azul Naval & Nogal Cálido',
-      desc: 'Acabado mate de alta cobertura con iluminación arquitectónica 3000K.',
-    },
-    naranja: {
-      image: assetUrl('studio/color-studio-terracota-coral.webp'),
-      srcSet: undefined,
-      title: 'Comedor Residencial Carretera a El Salvador',
-      tag: 'Muros de Acento & Calidez',
-      tone: 'Terracota Orgánico & Roble',
-      desc: 'Pigmentación uniforme resistente a luz solar con textura aterciopelada.',
+      caption: 'Azul Naval & Iluminación 3000K',
     },
     amarillo: {
       image: assetUrl('studio/color-studio-neutros-calidos.webp'),
       srcSet: undefined,
-      title: 'Dormitorio Master Condominio',
-      tag: 'Luz Natural & Sensación de Amplitud',
-      tone: 'Arena Suave & Greige Cálido',
-      desc: 'Pintura lavable de ultra bajo olor y acabado sedoso.',
+      title: 'Condominio Santa Catarina Pinula',
+      caption: 'Neutros Cálidos Lavables Bajo Olor',
     },
     celeste: {
-      image: assetUrl('hero-interior-sala.webp'),
-      srcSet: `${assetUrl('hero-interior-sala-mobile.webp')} 640w, ${assetUrl('hero-interior-sala.webp')} 1200w`,
-      title: 'Sala Panorámica Carretera a El Salvador',
-      tag: 'Integración Visual & Armonía',
-      tone: 'Off-White & Greige Arquitectónico',
-      desc: 'Transición limpia en zócalos, esquinas perfectas y máxima luminosidad.',
+      image: assetUrl('studio/color-studio-terracota-coral.webp'),
+      srcSet: undefined,
+      title: 'Comedor Residencial Fraijanes',
+      caption: 'Muros de Acento & Protección UV',
     },
   }[activeMood];
 
   return (
     <section
       id="inicio"
-      className="relative overflow-hidden bg-transparent pt-5 pb-16 md:pt-9 md:pb-24 border-b border-white/45 transition-colors duration-700"
+      className="relative bg-[#090E19] text-white pt-28 pb-24 sm:pt-32 sm:pb-32 lg:pt-36 lg:pb-36 overflow-hidden"
     >
-      {/* Atmospheric Ambient Glow centered on the active brand mood */}
-      <div
-        className="absolute top-8 left-1/2 -translate-x-1/2 w-[550px] max-w-[90vw] h-[550px] rounded-full blur-3xl pointer-events-none transition-all duration-700 -z-10 opacity-60 overflow-hidden"
-        style={{
-          background: `radial-gradient(circle, ${currentMood.glow} 0%, transparent 70%)`,
-          contain: 'strict',
-        }}
-      />
+      {/* Full-bleed dark-vignette background image with subtle Ken Burns settle */}
+      <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+        <motion.img
+          key={moodShowcases.image}
+          initial={prefersReduced ? false : { scale: 1.07, opacity: 0.85 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.35, ease: [0.22, 1, 0.36, 1] }}
+          src={moodShowcases.image}
+          srcSet={moodShowcases.srcSet}
+          sizes="100vw"
+          alt="Acabados profesionales de pintura arquitectónica e impermeabilización en Guatemala por Ideas & Colores"
+          className="w-full h-full object-cover object-center"
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#090E19]/95 via-[#090E19]/82 to-[#090E19]/45" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#090E19]/92 via-transparent to-[#090E19]/65" />
+      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-          {/* Left Column: Core Copy & CTAs — rendered immediately for instantaneous FCP/LCP */}
-          <div className="lg:col-span-7 space-y-5 text-left">
-            {/* Eyebrow badge */}
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200 shadow-xs text-xs font-semibold">
-              <span
-                className="w-2.5 h-2.5 rounded-full transition-colors duration-500 animate-pulse"
-                style={{ backgroundColor: currentMood.color }}
-              />
-              <span className="font-medium text-slate-800">Ideas &amp; Colores Multi-Servicios • Guatemala</span>
-              <span className="hidden sm:inline text-slate-300">|</span>
-              <span className="hidden sm:inline font-bold" style={{ color: currentMood.color }}>
-                {currentMood.name}
-              </span>
-            </div>
+      {/* Main Content Container */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-3xl space-y-6 text-left">
+          {/* Multicolor Logo Spectrum Eyebrow Badge */}
+          <motion.div
+            initial={prefersReduced ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            className="inline-flex items-center gap-3 px-3.5 py-1.5 rounded-md bg-white/10 backdrop-blur-md border border-white/15 text-[11px] font-bold uppercase tracking-wider text-slate-100"
+          >
+            <span className="inline-flex items-center gap-1" aria-hidden="true">
+              {LOGO_SPECTRUM_LIST.map((hex) => (
+                <span
+                  key={hex}
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: hex }}
+                />
+              ))}
+            </span>
+            <span>6 Divisiones Especializadas • Personal Certificado &amp; Garantía Escrita</span>
+          </motion.div>
 
-            {/* Main H1 Title - critical LCP candidate */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-[-0.035em] leading-[1.04] font-display text-balance">
-              Color que <br className="hidden sm:inline" />
-              <span className="relative inline-block text-slate-950 mr-2">
-                transforma
-                <svg
-                  className="absolute -bottom-2.5 left-0 w-full h-3.5 opacity-90 transition-colors duration-500"
-                  style={{ color: currentMood.color }}
-                  viewBox="0 0 200 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  preserveAspectRatio="none"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M2 10C50 3 150 2 198 9"
-                    stroke="currentColor"
-                    strokeWidth="5"
-                    strokeLinecap="round"
+          {/* Primary Display H1 */}
+          <motion.h1
+            initial={prefersReduced ? false : { opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+            className="text-4xl sm:text-5xl lg:text-[62px] font-black text-white tracking-[-0.04em] leading-[1.03] font-display text-balance"
+          >
+            Color que transforma espacios
+            <span style={{ color: currentMood.color }}>.</span>
+          </motion.h1>
+
+          {/* Animated Logo Spectrum Accent Rule */}
+          <motion.div
+            initial={prefersReduced ? false : { scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
+            style={{ background: LOGO_SPECTRUM_GRADIENT, transformOrigin: 'left' }}
+            className="h-1 w-32 rounded-full"
+            aria-hidden="true"
+          />
+
+          {/* Focused Services Lead Copy */}
+          <motion.p
+            initial={prefersReduced ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            className="text-base sm:text-xl text-slate-200 max-w-2xl font-normal leading-relaxed"
+          >
+            Pintura con <strong className="text-white font-semibold">sistema Airless</strong>,
+            impresión digital, carpintería a medida, plomería técnica, pisos epóxicos e
+            instalaciones generales en{' '}
+            <strong className="text-white font-semibold">Carretera a El Salvador y toda Guatemala</strong>.
+          </motion.p>
+
+          {/* Primary Roofera CTA Row */}
+          <motion.div
+            initial={prefersReduced ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.26, ease: [0.22, 1, 0.36, 1] }}
+            className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5"
+          >
+            {onExploreServicesClick ? (
+              <button
+                type="button"
+                id="hero-btn-services"
+                onClick={onExploreServicesClick}
+                className="group inline-flex items-center justify-center sm:justify-start gap-3 pl-2 pr-6 py-2 min-h-[54px] rounded-md font-bold text-base shadow-xl hover:-translate-y-0.5 active:scale-[0.98] transition-all cursor-pointer"
+                style={{
+                  backgroundColor: currentMood.color,
+                  color: currentMood.textColorOnAccent,
+                }}
+              >
+                <span className="w-9 h-9 rounded-sm bg-white flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-95">
+                  <ArrowRight
+                    className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                    style={{ color: currentMood.color }}
+                    aria-hidden="true"
                   />
-                </svg>
-              </span>
-              <span>espacios.</span>
-            </h1>
-
-            {/* Subtitle / Lead Description */}
-            <div className="space-y-2">
-              <p className="text-xl sm:text-2xl text-slate-800 font-semibold tracking-tight">
-                Pintura con sistema Airless, impermeabilización de losas y mantenimiento integral.
-              </p>
-              <p className="text-base sm:text-lg text-slate-600 max-w-2xl font-normal leading-relaxed">
-                Transformamos, protegemos y mantenemos tus espacios con asesoría técnica personalizada,
-                recubrimientos de alto estándar, marcas reconocidas y personal calificado de principio a fin.
-              </p>
-            </div>
-
-            {/* Value Checkpoints */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-700">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
-                <span>Asesoría técnica en sitio</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-700">
-                <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0" aria-hidden="true" />
-                <span>Garantía por escrito</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-700">
-                <Truck className="w-4 h-4 text-sky-600 shrink-0" aria-hidden="true" />
-                <span>Sistema Airless &amp; Losa</span>
-              </div>
-            </div>
-
-            {/* Primary Conversion CTAs prioritized above Mood Picker for immediate mobile conversion */}
-            <div className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+                </span>
+                <span>Explorar nuestros 6 servicios</span>
+              </button>
+            ) : (
               <button
                 type="button"
                 id="hero-btn-quote"
                 onClick={onQuoteClick}
-                className="group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl text-base font-bold shadow-[0_12px_22px_-15px_rgba(15,23,42,0.62)] hover:shadow-[0_16px_28px_-16px_rgba(15,23,42,0.7)] transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 overflow-hidden"
+                className="group inline-flex items-center justify-center sm:justify-start gap-3 pl-2 pr-6 py-2 min-h-[54px] rounded-md font-bold text-base shadow-xl hover:-translate-y-0.5 active:scale-[0.98] transition-all cursor-pointer"
                 style={{
                   backgroundColor: currentMood.color,
                   color: currentMood.textColorOnAccent,
-                  boxShadow: `0 4px 16px ${currentMood.glow}`,
                 }}
               >
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                <span className="relative">Cotiza tu proyecto</span>
-                <ArrowRight className="w-5 h-5 relative transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
-              </button>
-
-              <a
-                href={BUSINESS_INFO.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                id="hero-btn-whatsapp"
-                className="inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl text-base font-semibold text-emerald-800 bg-white/80 hover:bg-emerald-50/90 border border-slate-200/80 shadow-xs backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
-              >
-                <MessageCircle className="w-5 h-5 text-emerald-600" aria-hidden="true" />
-                <span>Hablar por WhatsApp</span>
-              </a>
-            </div>
-
-            {/* Interactive Mood Selector Bar */}
-            <div className="w-full pt-1">
-              <MoodColorPicker variant="full" className="max-w-2xl" />
-            </div>
-
-            {/* Partner trust note + social proof */}
-            <div className="space-y-1.5">
-              <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                <span className="font-semibold text-slate-700">Respaldo de marca:</span>
-                <span>
-                  Soluciones y recubrimientos oficiales con respaldo {BUSINESS_INFO.partnerBrand}.
-                </span>
-              </div>
-              <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600">
-                <div className="flex items-center gap-1">
-                  <span className="text-amber-400 text-sm leading-none" aria-hidden="true">★★★★★</span>
-                  <NumberTicker value={5.0} decimals={1} className="font-extrabold text-slate-900 ml-1" />
-                  <span className="text-slate-500">/5 en Google</span>
-                </div>
-                <span className="text-slate-300">|</span>
-                <div className="flex items-center gap-1 font-medium text-slate-700">
-                  <span>+</span>
-                  <NumberTicker value={500} className="font-bold text-slate-900" />
-                  <span>proyectos entregados en Carretera a El Salvador y toda Guatemala</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Architectural Visual Composition responding to mood */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative mx-auto max-w-md lg:max-w-none">
-              <div
-                className="relative rounded-3xl overflow-hidden shadow-2xl border-4 transition-all duration-700 bg-slate-900 group aspect-[4/4.8] sm:aspect-[4/4.5]"
-                style={{
-                  borderColor: currentMood.borderColor,
-                  boxShadow: `0 20px 40px -15px ${currentMood.glow}`,
-                }}
-              >
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={activeMood}
-                    src={moodShowcases.image}
-                    srcSet={moodShowcases.srcSet}
-                    sizes="(max-width: 640px) 100vw, 600px"
-                    alt={`${moodShowcases.title} - Proyecto de pintura y acabados por Ideas & Colores Guatemala`}
-                    initial={{ opacity: 1, scale: 1 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="w-full h-full object-cover"
-                    loading="eager"
-                    fetchPriority="high"
-                    width="600"
-                    height="675"
-                    decoding="async"
+                <span className="w-9 h-9 rounded-sm bg-white flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-95">
+                  <ArrowRight
+                    className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                    style={{ color: currentMood.color }}
+                    aria-hidden="true"
                   />
-                </AnimatePresence>
+                </span>
+                <span>Solicitar cotización gratis</span>
+              </button>
+            )}
 
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent pointer-events-none" />
+            <button
+              type="button"
+              id="hero-btn-quote"
+              onClick={onQuoteClick}
+              className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 min-h-[54px] rounded-md bg-white/10 hover:bg-white/20 text-white font-bold text-sm sm:text-base border border-white/20 backdrop-blur-md transition-all cursor-pointer"
+            >
+              <span>Cotizar proyecto</span>
+            </button>
 
-                <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-                  <span
-                    className="text-[11px] font-bold px-3 py-1 rounded-full shadow-md backdrop-blur-md transition-colors duration-400"
-                    style={{
-                      backgroundColor: currentMood.color,
-                      color: currentMood.textColorOnAccent,
-                    }}
-                  >
-                    {moodShowcases.tag}
-                  </span>
-                  <span className="text-[10px] font-semibold text-white/90 bg-slate-900/70 backdrop-blur-md px-2.5 py-1 rounded-full">
-                    Guatemala
-                  </span>
-                </div>
+            <a
+              href={BUSINESS_INFO.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              id="hero-btn-whatsapp"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3.5 min-h-[54px] rounded-md bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 font-bold text-sm border border-emerald-400/30 backdrop-blur-md transition-all"
+            >
+              <MessageCircle className="w-4 h-4 text-emerald-400" aria-hidden="true" />
+              <span>WhatsApp</span>
+            </a>
 
-                <div className="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-white/95 backdrop-blur-md border border-white/40 shadow-lg text-left">
-                  <div className="flex items-center justify-between gap-2 mb-1">
-                    <span className="text-xs font-black text-slate-900 font-display">
-                      {moodShowcases.title}
-                    </span>
-                    <span
-                      className="text-[10px] font-bold px-2 py-0.5 rounded-md"
-                      style={{
-                        backgroundColor: currentMood.lightBg,
-                        color: currentMood.id === 'amarillo' ? '#854D0E' : currentMood.color,
+            <button
+              type="button"
+              onClick={onExploreColorsClick}
+              className="inline-flex items-center justify-center gap-2 px-4 py-3.5 min-h-[54px] rounded-md bg-[#151D30]/85 hover:bg-[#151D30] text-slate-200 hover:text-white font-semibold text-xs sm:text-sm border border-[#27324D] backdrop-blur-md transition-all cursor-pointer"
+            >
+              <Palette className="w-4 h-4" style={{ color: '#00A3FF' }} aria-hidden="true" />
+              <span>Simulador</span>
+            </button>
+          </motion.div>
+
+          {/* Direct Category Page Quick-Jump Chips with Logo Color Identity */}
+          {onOpenCategoryPage && (
+            <motion.div
+              initial={prefersReduced ? false : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.34, ease: [0.22, 1, 0.36, 1] }}
+              className="pt-2"
+            >
+              <span className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-300 block mb-2.5">
+                Acceso directo a cada categoría de servicio:
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {MULTI_SERVICES_CATEGORIES.map((cat) => {
+                  const catTheme = getCategoryLogoTheme(cat.id, cat.accentColor);
+                  return (
+                    <a
+                      key={cat.id}
+                      href={`#servicio/${cat.id}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onOpenCategoryPage(cat.id);
                       }}
+                      className="group inline-flex items-center gap-2 px-3 py-2 min-h-[38px] rounded-md bg-[#151D30]/90 hover:bg-[#090E19] border border-white/15 hover:border-white/45 text-xs font-semibold text-white backdrop-blur-md transition-all hover:-translate-y-0.5"
                     >
-                      {moodShowcases.tone}
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-slate-600 leading-snug line-clamp-2">
-                    {moodShowcases.desc}
-                  </p>
-                  <div className="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                    <span>Mano de obra certificada</span>
-                    <button
-                      type="button"
-                      onClick={onExploreColorsClick}
-                      className="font-bold hover:underline inline-flex items-center gap-1 min-h-[44px] py-1.5"
-                      style={{ color: currentMood.color }}
-                    >
-                      <Palette className="w-3 h-3" aria-hidden="true" />
-                      <span>Probar en Estudio de Color</span>
-                    </button>
-                  </div>
+                      <span
+                        className="w-2 h-2 rounded-full shrink-0 transition-transform group-hover:scale-125"
+                        style={{ backgroundColor: catTheme.accent }}
+                      />
+                      <span
+                        className="font-mono font-extrabold text-[10px]"
+                        style={{ color: catTheme.accent }}
+                      >
+                        {cat.number}
+                      </span>
+                      <span>{cat.shortTitle}</span>
+                      <ExternalLink
+                        className="w-3 h-3 text-slate-400 group-hover:text-white transition-colors"
+                        aria-hidden="true"
+                      />
+                    </a>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Metrics & Mood Switcher */}
+          <motion.div
+            initial={prefersReduced ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="pt-5 border-t border-white/15 flex flex-wrap items-center justify-between gap-6"
+          >
+            <div className="flex flex-wrap items-center gap-6 sm:gap-8">
+              <div className="flex items-center gap-2.5">
+                <div className="flex items-center text-amber-400" aria-hidden="true">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <div className="text-xs leading-tight">
+                  <strong className="text-white block font-bold">
+                    {BUSINESS_INFO.googleRating} / 5 en Google
+                  </strong>
+                  <span className="text-slate-300">Clientes verificados</span>
                 </div>
               </div>
 
-              <div className="absolute -bottom-5 left-1 sm:-left-6 bg-white rounded-2xl p-3 sm:p-3.5 shadow-xl border border-slate-200/90 flex items-center gap-2.5 sm:gap-3 max-w-[90vw]">
-                <div
-                  className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center text-white shrink-0 transition-colors duration-400"
-                  style={{ backgroundColor: currentMood.color }}
-                >
-                  <Award className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: currentMood.textColorOnAccent }} aria-hidden="true" />
-                </div>
-                <div className="text-left">
-                  <div className="text-xs sm:text-sm font-black text-slate-900 leading-none">
-                    +500 Proyectos
-                  </div>
-                  <div className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5">
-                    Ejecutados con garantía por escrito
-                  </div>
+              <div className="h-7 w-px bg-white/15 hidden sm:block" />
+
+              <div className="flex items-center gap-2 text-xs">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden="true" />
+                <div>
+                  <strong className="text-white block font-bold">
+                    +<NumberTicker value={500} /> Proyectos
+                  </strong>
+                  <span className="text-slate-300">Desde {BUSINESS_INFO.foundationYear}</span>
                 </div>
               </div>
             </div>
-          </div>
+
+            <div className="flex items-center gap-3 px-3.5 py-2 rounded-lg bg-[#151D30]/85 border border-[#27324D] backdrop-blur-md">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-300">
+                Color acento:
+              </span>
+              <MoodColorPicker variant="compact" />
+            </div>
+          </motion.div>
         </div>
+      </div>
+
+      {/* Roofera Signature Angular Chevron Divider with Official Logo Spectrum Stroke */}
+      <div
+        className="absolute bottom-0 left-0 right-0 z-10 w-full overflow-hidden leading-none pointer-events-none"
+        aria-hidden="true"
+      >
+        <svg
+          viewBox="0 0 1440 72"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full h-10 sm:h-14 lg:h-[68px] block"
+          preserveAspectRatio="none"
+        >
+          <defs>
+            <linearGradient id="logoChevronGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#0059FF" />
+              <stop offset="34%" stopColor="#00A3FF" />
+              <stop offset="68%" stopColor="#FAB82A" />
+              <stop offset="100%" stopColor="#FF5C00" />
+            </linearGradient>
+          </defs>
+          <path d="M0 0L720 62L1440 0V72H0V0Z" fill="#090E19" />
+          <path d="M0 0L720 62L1440 0" stroke="url(#logoChevronGrad)" strokeWidth="3.5" />
+        </svg>
       </div>
     </section>
   );

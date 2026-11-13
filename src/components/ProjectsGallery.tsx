@@ -2,29 +2,17 @@ import React, { useState } from 'react';
 import {
   MapPin,
   ArrowRight,
-  Sparkles,
-  Layers,
-  Palette,
-  Clock,
-  ShieldCheck,
   CheckCircle2,
   SlidersHorizontal,
-  Eye,
   Info,
-  Building2,
-  Home,
-  Briefcase,
-  Trophy,
 } from 'lucide-react';
 import { BeforeAfterSlider } from './BeforeAfterSlider';
 import { useColorMood } from '../context/ColorMoodContext';
-import { PROJECTS_GALLERY, BUSINESS_INFO } from '../data/content';
+import { PROJECTS_GALLERY } from '../data/content';
 import { ProjectGalleryFilter } from '../types';
 import { AnimatedTabs } from './ui/AnimatedTabs';
-import { SpotlightCard } from './ui/SpotlightCard';
 import { StaggeredText } from './ui/StaggeredText';
 import { assetUrl } from '../utils/asset';
-import { BlurHighlight } from './ui/BlurHighlight';
 import FadeIn from './ui/FadeIn';
 
 interface ProjectsGalleryProps {
@@ -107,7 +95,6 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onRequestSimil
   const [activeBeforeAfterId, setActiveBeforeAfterId] = useState<string>('futeca-concepcion');
   const { currentMood } = useColorMood();
 
-  // Exact filters required by user prompt: Residencial, Comercial, Deportivo, Institucional, Antes y después
   const filterOptions: { id: ProjectGalleryFilter; label: string }[] = [
     { id: 'todos', label: 'Todos los proyectos' },
     { id: 'residencial', label: 'Residencial' },
@@ -128,39 +115,62 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onRequestSimil
     BEFORE_AFTER_CASES.find((p) => p.id === activeBeforeAfterId) || BEFORE_AFTER_CASES[0];
 
   return (
-    <section id="proyectos" className="py-20 sm:py-24 bg-transparent border-b border-slate-200/50 relative overflow-hidden">
+    <section
+      id="proyectos"
+      className="py-20 sm:py-28 bg-white border-b border-[#E8E9EE] relative overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header */}
+        {/* Roofera Showcase Header */}
         <FadeIn direction="up" distance={24}>
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-800 shadow-2xs mb-3">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              <span>Proyectos &amp; Portafolio de Soluciones</span>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 pb-8 border-b border-[#E8E9EE]">
+            <div className="max-w-3xl text-left">
+              <div className="inline-flex items-center gap-2.5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#80828C] mb-3">
+                <span
+                  className="w-2.5 h-2.5 rounded-xs shrink-0"
+                  style={{ backgroundColor: currentMood.color }}
+                />
+                <span>Nuestros Proyectos &amp; Portafolio</span>
+              </div>
+
+              <div className="flex items-baseline">
+                <StaggeredText
+                  text="Transformaciones Comprobadas"
+                  as="h2"
+                  className="text-3xl sm:text-5xl font-black text-[#090E19] tracking-[-0.04em] leading-[1.06] font-display inline"
+                />
+                <span
+                  className="text-4xl sm:text-5xl font-black leading-none select-none"
+                  style={{ color: currentMood.color }}
+                >
+                  .
+                </span>
+              </div>
             </div>
 
-            <StaggeredText
-              text="Transformaciones y capacidad técnica comprobada."
-              as="h2"
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight font-display"
-            />
-
-            <p className="mt-4 text-base sm:text-lg text-slate-600 font-normal">
-              Explora proyectos residenciales, comerciales, deportivos e institucionales con{' '}
-              <BlurHighlight color="#FAB82A">garantía formal por escrito</BlurHighlight>.
+            <p className="text-sm sm:text-base text-[#525663] leading-relaxed max-w-md text-left">
+              Explora obras residenciales, comerciales, deportivas e institucionales ejecutadas con
+              garantía formal por escrito en Guatemala.
             </p>
           </div>
         </FadeIn>
 
-        {/* Transparency note about reference visualizations */}
-        <div className="max-w-4xl mx-auto mb-10 p-4 rounded-2xl bg-amber-50/80 border border-amber-200/80 flex items-start gap-3 text-xs text-amber-900 leading-relaxed">
-          <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+        {/* Portfolio Transparency Note */}
+        <div className="mb-8 p-4 rounded-xl bg-[#F4F5F7] border border-[#E8E9EE] flex items-start gap-3 text-xs text-[#3F434D] leading-relaxed text-left">
+          <Info
+            className="w-4 h-4 shrink-0 mt-0.5"
+            style={{ color: currentMood.color }}
+            aria-hidden="true"
+          />
           <p>
-            <strong>Transparencia de portafolio:</strong> Las muestras marcadas como <em>“Visualización de referencia”</em> ilustran acabados técnicos y transformaciones posibles de superficies. Cada tarjeta está estructurada para sustitución directa con fotografía de obra ejecutada.
+            <strong className="text-[#090E19]">Transparencia de portafolio:</strong> Las muestras
+            marcadas como <em>“Visualización de referencia”</em> ilustran acabados técnicos y
+            transformaciones posibles de superficies; las marcadas como{' '}
+            <em>“Proyecto verificado”</em> corresponden a obras ejecutadas en sitio.
           </p>
         </div>
 
-        {/* Filters Tabs: Residencial, Comercial, Deportivo, Institucional, Antes y después */}
-        <div className="flex items-center justify-center mb-12">
+        {/* Category Filter Bar */}
+        <div className="flex items-center justify-start sm:justify-center mb-10 overflow-x-auto pb-1">
           <AnimatedTabs
             tabs={filterOptions}
             activeId={activeFilter}
@@ -169,13 +179,17 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onRequestSimil
           />
         </div>
 
-        {/* Section A: Interactive Before / After Slider (When filter is 'antes-despues' or default 'todos') */}
+        {/* Section A: Interactive Before / After Slider Showcase */}
         {(activeFilter === 'antes-despues' || activeFilter === 'todos') && (
           <div className="mb-14">
-            <div className="bg-white/90 rounded-3xl p-5 sm:p-8 lg:p-10 shadow-[0_26px_60px_-48px_rgba(15,23,42,.55)]">
-              <div className="flex items-center justify-between flex-wrap gap-3 mb-6 pb-4 border-b border-slate-100">
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-                  <SlidersHorizontal className="w-4 h-4 text-amber-500" />
+            <div className="bg-[#090E19] text-white rounded-xl p-5 sm:p-8 lg:p-10 border border-[#27324D] shadow-2xl">
+              <div className="flex items-center justify-between flex-wrap gap-3 mb-6 pb-4 border-b border-[#27324D]">
+                <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.14em] text-[#B8BCC6]">
+                  <SlidersHorizontal
+                    className="w-4 h-4"
+                    style={{ color: currentMood.color }}
+                    aria-hidden="true"
+                  />
                   <span>Comparador Interactivo: Antes / Después</span>
                 </div>
 
@@ -185,11 +199,16 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onRequestSimil
                       key={item.id}
                       type="button"
                       onClick={() => setActiveBeforeAfterId(item.id)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${
+                      className={`px-3.5 py-2 min-h-[40px] rounded-md text-xs font-bold transition-colors cursor-pointer ${
                         activeBeforeAfterId === item.id
-                          ? 'bg-slate-900 text-white shadow-xs'
-                          : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                          ? 'text-white shadow-xs'
+                          : 'bg-[#151D30] text-[#B8BCC6] border border-[#27324D] hover:text-white'
                       }`}
+                      style={
+                        activeBeforeAfterId === item.id
+                          ? { backgroundColor: currentMood.color }
+                          : undefined
+                      }
                     >
                       {item.categoryLabel}
                     </button>
@@ -197,8 +216,7 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onRequestSimil
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                {/* Left: Interactive Slider */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                 <div className="lg:col-span-7">
                   <BeforeAfterSlider
                     key={activeBeforeAfter.id}
@@ -207,47 +225,55 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onRequestSimil
                     title={activeBeforeAfter.title}
                     showQuickButtons={true}
                   />
-                  <div className="mt-2 text-center">
-                    <span className="inline-flex items-center gap-1 text-[11px] text-slate-400 font-medium">
-                      <Info className="w-3.5 h-3.5" />
-                      <span>Visualización de referencia técnica antes / después</span>
+                  <div className="mt-2.5 text-center">
+                    <span className="inline-flex items-center gap-1.5 text-[11px] text-[#80828C] font-medium">
+                      <Info className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span>Visualización comparativa de proyecto antes / después</span>
                     </span>
                   </div>
                 </div>
 
-                {/* Right: Technical Sheet */}
                 <div className="lg:col-span-5 space-y-4 text-left">
                   <div>
-                    <div className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 mb-1">
-                      <MapPin className="w-3.5 h-3.5 text-amber-500" />
+                    <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#B8BCC6] mb-1.5">
+                      <MapPin
+                        className="w-3.5 h-3.5 shrink-0"
+                        style={{ color: currentMood.color }}
+                        aria-hidden="true"
+                      />
                       <span>{activeBeforeAfter.location}</span>
                     </div>
-                    <h3 className="text-2xl font-extrabold text-slate-950 font-display">
+                    <h3 className="text-2xl font-black text-white font-display tracking-tight">
                       {activeBeforeAfter.title}
                     </h3>
-                    <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    <p className="mt-2 text-xs sm:text-sm text-[#B8BCC6] leading-relaxed">
                       {activeBeforeAfter.summary}
                     </p>
                   </div>
 
-                  <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs">
-                    <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                      <span className="font-bold text-slate-800">Ficha Técnica</span>
-                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                  <div className="p-4 sm:p-5 rounded-lg bg-[#151D30] border border-[#27324D] space-y-2.5 text-xs">
+                    <div className="flex items-center justify-between border-b border-[#27324D] pb-2">
+                      <span className="font-extrabold uppercase tracking-wider text-white">
+                        Ficha Técnica
+                      </span>
+                      <span className="text-[10px] font-bold text-emerald-300 bg-emerald-500/15 border border-emerald-500/25 px-2.5 py-0.5 rounded-md">
                         Garantía por escrito
                       </span>
                     </div>
-                    <div className="space-y-1.5 text-slate-700">
+                    <div className="space-y-1.5 text-[#B8BCC6]">
                       <p>
-                        <strong>Producto:</strong> {activeBeforeAfter.technicalSheet.productApplied}
+                        <strong className="text-white">Producto:</strong>{' '}
+                        {activeBeforeAfter.technicalSheet.productApplied}
                       </p>
                       <p>
-                        <strong>Acabado:</strong> {activeBeforeAfter.technicalSheet.finishType}
+                        <strong className="text-white">Acabado:</strong>{' '}
+                        {activeBeforeAfter.technicalSheet.finishType}
                       </p>
                       <p>
-                        <strong>Tiempo estimado:</strong> {activeBeforeAfter.technicalSheet.executionTime}
+                        <strong className="text-white">Tiempo estimado:</strong>{' '}
+                        {activeBeforeAfter.technicalSheet.executionTime}
                       </p>
-                      <p className="text-emerald-700 font-semibold">
+                      <p className="text-emerald-300 font-semibold">
                         <strong>Garantía:</strong> {activeBeforeAfter.technicalSheet.warranty}
                       </p>
                     </div>
@@ -258,14 +284,17 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onRequestSimil
                     onClick={() =>
                       onRequestSimilar(activeBeforeAfter.title, activeBeforeAfter.categoryLabel)
                     }
-                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white shadow-md hover:shadow-lg transition-all"
-                    style={{
-                      backgroundColor: currentMood.color,
-                      color: currentMood.textColorOnAccent,
-                    }}
+                    className="w-full inline-flex items-center justify-center gap-2.5 pl-2 pr-5 py-2.5 min-h-[48px] rounded-md text-xs sm:text-sm font-bold text-white shadow-md hover:opacity-95 transition-all cursor-pointer"
+                    style={{ backgroundColor: currentMood.color }}
                   >
+                    <span className="w-7 h-7 rounded-sm bg-white flex items-center justify-center shrink-0">
+                      <ArrowRight
+                        className="w-4 h-4"
+                        style={{ color: currentMood.color }}
+                        aria-hidden="true"
+                      />
+                    </span>
                     <span>Cotizar proyecto similar</span>
-                    <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -273,85 +302,86 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onRequestSimil
           </div>
         )}
 
-        {/* Section B: Filtered Projects Grid (Categorías verificadas: Residencial, Comercial, Deportivo, Institucional) */}
+        {/* Section B: Filtered Projects Grid */}
         {activeFilter !== 'antes-despues' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProjects.map((project) => (
-              <SpotlightCard
+              <div
                 key={project.id}
-                spotlightColor="rgba(250, 184, 42, 0.15)"
-                className="bg-white rounded-3xl border border-slate-200/90 shadow-2xs hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col justify-between group"
+                className="bg-[#F4F5F7] rounded-xl border border-[#E8E9EE] hover:border-[#090E19]/40 transition-all duration-200 overflow-hidden flex flex-col justify-between group text-left"
               >
                 <div>
-                  {/* Image with Transparency Badge */}
-                  <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-900">
+                  <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-[#090E19]">
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.035] opacity-95"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
                       loading="lazy"
                       decoding="async"
                       width="400"
                       height="288"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#090E19]/85 via-transparent to-transparent" />
 
-                    {/* Badge: Fotografía real de obra vs Visualización de referencia */}
                     <div className="absolute top-3 left-3">
                       {project.isReferenceVisualization ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/75 backdrop-blur-md text-amber-300 text-[10px] font-bold border border-amber-400/30">
-                          <Info className="w-3 h-3" />
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#090E19]/85 backdrop-blur-md text-[#FFCC99] text-[10px] font-bold border border-white/15">
+                          <Info className="w-3 h-3" aria-hidden="true" />
                           <span>Visualización de referencia</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/75 backdrop-blur-md text-emerald-300 text-[10px] font-bold border border-emerald-400/30">
-                          <CheckCircle2 className="w-3 h-3" />
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#090E19]/85 backdrop-blur-md text-emerald-300 text-[10px] font-bold border border-emerald-400/30">
+                          <CheckCircle2 className="w-3 h-3" aria-hidden="true" />
                           <span>Proyecto verificado</span>
                         </span>
                       )}
                     </div>
 
                     <div className="absolute top-3 right-3">
-                      <span className="px-2.5 py-1 rounded-lg bg-white/95 backdrop-blur-xs text-[11px] font-bold text-slate-800 shadow-xs">
+                      <span className="px-2.5 py-1 rounded-md bg-white text-[11px] font-extrabold text-[#090E19] shadow-xs">
                         {project.categoryLabel}
                       </span>
                     </div>
 
                     {project.location && (
-                      <div className="absolute bottom-3 left-3 flex items-center gap-1.5 text-xs text-slate-200">
-                        <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                      <div className="absolute bottom-3 left-3 flex items-center gap-1.5 text-xs font-semibold text-white">
+                        <MapPin
+                          className="w-3.5 h-3.5 shrink-0"
+                          style={{ color: currentMood.color }}
+                          aria-hidden="true"
+                        />
                         <span>{project.location}</span>
                       </div>
                     )}
                   </div>
 
-                  {/* Body */}
                   <div className="p-6 space-y-3">
-                    <h3 className="text-xl font-bold font-display text-slate-950 group-hover:text-slate-900 transition-colors">
+                    <h3 className="text-xl font-black font-display text-[#090E19] tracking-tight">
                       {project.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    <p className="text-xs sm:text-sm text-[#525663] leading-relaxed">
                       {project.result}
                     </p>
-                    <div className="pt-2 border-t border-slate-100 text-xs text-slate-500">
-                      <strong className="text-slate-700 block mb-0.5">Solución aplicada:</strong>
+                    <div className="pt-3 border-t border-[#E8E9EE] text-xs text-[#525663]">
+                      <strong className="text-[#090E19] block mb-0.5 uppercase text-[10px] tracking-wider">
+                        Solución aplicada
+                      </strong>
                       <span>{project.solutionApplied}</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Footer Action */}
                 <div className="p-6 pt-0">
                   <button
                     type="button"
                     onClick={() => onRequestSimilar(project.title, project.categoryLabel)}
-                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 transition-colors flex items-center justify-center gap-1.5"
+                    className="w-full py-3 px-4 min-h-[44px] rounded-md text-xs font-bold text-[#090E19] bg-white hover:bg-[#090E19] hover:text-white border border-[#E8E9EE] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <span>Cotizar este tipo de solución</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
                   </button>
                 </div>
-              </SpotlightCard>
+              </div>
             ))}
           </div>
         )}

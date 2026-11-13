@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
-import { Palette, Calculator, Sparkles, ArrowRight } from 'lucide-react';
+import { Palette, Calculator, ArrowRight } from 'lucide-react';
 import { useColorMood } from '../context/ColorMoodContext';
 
 const ColorStudioVisualizer = lazy(() =>
@@ -75,7 +75,6 @@ export const InteractiveToolsHub: React.FC<InteractiveToolsHubProps> = ({
         colorEl.setAttribute('hidden', 'until-found');
       }
     } else {
-      // Fallback for browsers without hidden="until-found": standard boolean hidden attribute
       colorEl.hidden = activeTab !== 'color';
       calcEl.hidden = activeTab !== 'calculadora';
     }
@@ -108,25 +107,30 @@ export const InteractiveToolsHub: React.FC<InteractiveToolsHubProps> = ({
   return (
     <section
       id="herramientas"
-      className="pt-16 pb-8 bg-transparent border-b border-slate-200/50 relative"
+      className="pt-20 pb-10 bg-[#F4F5F7] border-b border-[#E8E9EE] relative"
     >
       {/* Anchor targets for deep links */}
       <div id="estudio-color" className="absolute -top-20" aria-hidden="true" />
       <div id="calculadora" className="absolute -top-20" aria-hidden="true" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Unified Tools Header & Accessible Tab Switcher */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-6 pb-6 border-b border-slate-200/80">
+        {/* Roofera Workbench Header & Accessible Tab Switcher */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8 pb-8 border-b border-[#E8E9EE]">
           <div className="max-w-2xl text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-800 shadow-2xs mb-3">
-              <Sparkles className="w-3.5 h-3.5" style={{ color: currentMood.color }} aria-hidden="true" />
-              <span>Herramientas Interactivas de Planificación</span>
+            <div className="inline-flex items-center gap-2.5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#80828C] mb-3">
+              <span
+                className="w-2.5 h-2.5 rounded-xs shrink-0"
+                style={{ backgroundColor: currentMood.color }}
+              />
+              <span>Herramientas Técnicas de Planificación</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-950 tracking-tight font-display">
-              Visualiza tu color y calcula tu proyecto al instante.
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#090E19] tracking-[-0.04em] leading-[1.06] font-display">
+              Visualiza y calcula tu proyecto
+              <span style={{ color: currentMood.color }}>.</span>
             </h2>
-            <p className="mt-2 text-sm sm:text-base text-slate-600">
-              Alterna entre el simulador arquitectónico de ambientes en tiempo real y la calculadora técnica de rendimiento en m² y galones.
+            <p className="mt-3 text-sm sm:text-base text-[#525663]">
+              Alterna entre el simulador arquitectónico de ambientes en tiempo real y la
+              calculadora técnica de rendimiento en m² y galones.
             </p>
           </div>
 
@@ -134,7 +138,7 @@ export const InteractiveToolsHub: React.FC<InteractiveToolsHubProps> = ({
           <div
             role="tablist"
             aria-label="Herramientas de planificación de pintura"
-            className="inline-flex p-1.5 rounded-2xl bg-slate-900/95 border border-slate-800 shadow-lg self-start lg:self-auto w-full sm:w-auto"
+            className="inline-flex p-1.5 rounded-xl bg-[#090E19] border border-[#27324D] shadow-lg self-start lg:self-auto w-full sm:w-auto"
           >
             <button
               ref={colorTabBtnRef}
@@ -146,11 +150,12 @@ export const InteractiveToolsHub: React.FC<InteractiveToolsHubProps> = ({
               tabIndex={activeTab === 'color' ? 0 : -1}
               onClick={() => selectTab('color')}
               onKeyDown={(e) => handleKeyDown(e, 'color')}
-              className={`flex-1 sm:flex-initial min-h-[44px] px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 ${
+              className={`flex-1 sm:flex-initial min-h-[44px] px-4 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                 activeTab === 'color'
-                  ? 'bg-amber-400 text-slate-950 shadow-sm'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/70'
+                  ? 'text-white shadow-sm'
+                  : 'text-[#B8BCC6] hover:text-white hover:bg-[#151D30]'
               }`}
+              style={activeTab === 'color' ? { backgroundColor: currentMood.color } : undefined}
             >
               <Palette className="w-4 h-4 shrink-0" aria-hidden="true" />
               <span>1. Estudio de Color</span>
@@ -166,11 +171,14 @@ export const InteractiveToolsHub: React.FC<InteractiveToolsHubProps> = ({
               tabIndex={activeTab === 'calculadora' ? 0 : -1}
               onClick={() => selectTab('calculadora')}
               onKeyDown={(e) => handleKeyDown(e, 'calculadora')}
-              className={`flex-1 sm:flex-initial min-h-[44px] px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 ${
+              className={`flex-1 sm:flex-initial min-h-[44px] px-4 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                 activeTab === 'calculadora'
-                  ? 'bg-amber-400 text-slate-950 shadow-sm'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/70'
+                  ? 'text-white shadow-sm'
+                  : 'text-[#B8BCC6] hover:text-white hover:bg-[#151D30]'
               }`}
+              style={
+                activeTab === 'calculadora' ? { backgroundColor: currentMood.color } : undefined
+              }
             >
               <Calculator className="w-4 h-4 shrink-0" aria-hidden="true" />
               <span>2. Calculadora m² y Galones</span>
@@ -179,7 +187,7 @@ export const InteractiveToolsHub: React.FC<InteractiveToolsHubProps> = ({
         </div>
       </div>
 
-      {/* Panel 1: Color Studio Visualizer (Nested wrapper carries spacing per search-hidden-content guide) */}
+      {/* Panel 1: Color Studio Visualizer */}
       <div
         ref={colorPanelRef}
         id="tabpanel-estudio-color"
@@ -190,7 +198,7 @@ export const InteractiveToolsHub: React.FC<InteractiveToolsHubProps> = ({
           <Suspense
             fallback={
               <div className="min-h-[420px] flex items-center justify-center">
-                <div className="w-6 h-6 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" />
+                <div className="w-6 h-6 border-2 border-[#E8E9EE] border-t-[#FF5C00] rounded-full animate-spin" />
               </div>
             }
           >
@@ -201,9 +209,13 @@ export const InteractiveToolsHub: React.FC<InteractiveToolsHubProps> = ({
             <button
               type="button"
               onClick={() => selectTab('calculadora')}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-xs transition-all"
+              className="inline-flex items-center gap-2.5 px-5 py-2.5 min-h-[44px] rounded-md bg-[#090E19] hover:bg-[#151D30] text-white text-xs font-bold shadow-xs transition-all cursor-pointer"
             >
-              <Calculator className="w-3.5 h-3.5 text-amber-400" aria-hidden="true" />
+              <Calculator
+                className="w-4 h-4"
+                style={{ color: currentMood.color }}
+                aria-hidden="true"
+              />
               <span>¿Ya elegiste tu tono? Calcula tus m² y galones aquí</span>
               <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
             </button>
@@ -222,7 +234,7 @@ export const InteractiveToolsHub: React.FC<InteractiveToolsHubProps> = ({
           <Suspense
             fallback={
               <div className="min-h-[420px] flex items-center justify-center">
-                <div className="w-6 h-6 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" />
+                <div className="w-6 h-6 border-2 border-[#E8E9EE] border-t-[#FF5C00] rounded-full animate-spin" />
               </div>
             }
           >
@@ -233,4 +245,3 @@ export const InteractiveToolsHub: React.FC<InteractiveToolsHubProps> = ({
     </section>
   );
 };
-

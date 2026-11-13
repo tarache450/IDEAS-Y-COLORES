@@ -1,27 +1,48 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ColorMoodProvider, useColorMood } from './context/ColorMoodContext';
-import { Header } from './components/Header';
+import { Header, NavPage } from './components/Header';
 import { Hero } from './components/Hero';
-import { BentoTrustGrid } from './components/BentoTrustGrid';
+import { ServicesMarquee } from './components/ui/ServicesMarquee';
 import { SolutionsSection } from './components/SolutionsSection';
-import { SectorsSection } from './components/SectorsSection';
-import { InteractiveToolsHub } from './components/InteractiveToolsHub';
-import { ProjectsGallery } from './components/ProjectsGallery';
 import { ProcessSection } from './components/ProcessSection';
-import { TestimonialsGuaranteesSection } from './components/TestimonialsGuaranteesSection';
-import { PromoSection } from './components/PromoSection';
-import { FAQSection } from './components/FAQSection';
 import { QuoteForm } from './components/QuoteForm';
-import { ContactSection } from './components/ContactSection';
 import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
-import { DynamicBackground } from './components/ui/DynamicBackground';
 import { PrivacyPolicyModal } from './components/PrivacyPolicyModal';
+import { SubpageHero } from './components/SubpageHero';
+import { NAV_PAGE_ACCENTS } from './utils/logoPalette';
 
-// Separate full-screen views remain code-split
+// Separate views and navbar subpages remain code-split to keep initial Home JS lean
 const ServiceCategoryPage = lazy(() =>
   import('./components/ServiceCategoryPage').then((m) => ({ default: m.ServiceCategoryPage }))
+);
+const ProjectsGallery = lazy(() =>
+  import('./components/ProjectsGallery').then((m) => ({ default: m.ProjectsGallery }))
+);
+const InteractiveToolsHub = lazy(() =>
+  import('./components/InteractiveToolsHub').then((m) => ({ default: m.InteractiveToolsHub }))
+);
+const BentoTrustGrid = lazy(() =>
+  import('./components/BentoTrustGrid').then((m) => ({ default: m.BentoTrustGrid }))
+);
+const SectorsSection = lazy(() =>
+  import('./components/SectorsSection').then((m) => ({ default: m.SectorsSection }))
+);
+const TestimonialsGuaranteesSection = lazy(() =>
+  import('./components/TestimonialsGuaranteesSection').then((m) => ({
+    default: m.TestimonialsGuaranteesSection,
+  }))
+);
+const PromoSection = lazy(() =>
+  import('./components/PromoSection').then((m) => ({ default: m.PromoSection }))
+);
+const FAQSection = lazy(() =>
+  import('./components/FAQSection').then((m) => ({ default: m.FAQSection }))
+);
+const ContactSection = lazy(() =>
+  import('./components/ContactSection').then((m) => ({ default: m.ContactSection }))
 );
 const AdminDashboard = lazy(() =>
   import('./components/admin/AdminDashboard').then((m) => ({ default: m.AdminDashboard }))
@@ -29,15 +50,15 @@ const AdminDashboard = lazy(() =>
 
 const SectionSkeleton: React.FC<{ id: string; minHeight?: string }> = ({
   id,
-  minHeight = '300px',
+  minHeight = '360px',
 }) => (
   <section
     id={id}
     style={{ minHeight }}
-    className="w-full flex items-center justify-center py-12"
+    className="w-full flex items-center justify-center py-14 bg-[#090E19]/5"
     aria-busy="true"
   >
-    <div className="w-6 h-6 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" />
+    <div className="w-6 h-6 border-2 border-slate-300 border-t-[#0059FF] rounded-full animate-spin" />
   </section>
 );
 
@@ -54,6 +75,21 @@ function parseCategoryFromUrl(): string | null {
   return null;
 }
 
+function parseNavPageFromHash(): NavPage {
+  if (typeof window === 'undefined') return 'inicio';
+  const raw = window.location.hash.replace('#', '').trim().toLowerCase();
+  if (!raw || raw === 'inicio' || raw === 'soluciones' || raw === 'servicios' || raw === 'proceso' || raw === 'cotizar' || raw === 'quote') {
+    return 'inicio';
+  }
+  if (raw === 'proyectos') return 'proyectos';
+  if (raw === 'herramientas' || raw === 'estudio-color' || raw === 'calculadora') return 'herramientas';
+  if (raw === 'confianza' || raw === 'nosotros' || raw === 'sectores' || raw === 'garantias' || raw === 'promociones') {
+    return 'nosotros';
+  }
+  if (raw === 'contacto' || raw === 'faq') return 'contacto';
+  return 'inicio';
+}
+
 function resolveSectionTargetId(sectionId: string): string {
   if (sectionId === 'estudio-color' || sectionId === 'calculadora' || sectionId === 'herramientas') {
     return 'herramientas';
@@ -64,11 +100,30 @@ function resolveSectionTargetId(sectionId: string): string {
   if (sectionId === 'nosotros') {
     return 'confianza';
   }
+  if (sectionId === 'quote') {
+    return 'cotizar';
+  }
   return sectionId;
+}
+
+function mapTargetIdToSubpage(targetId: string): NavPage | null {
+  if (targetId === 'proyectos') return 'proyectos';
+  if (targetId === 'herramientas') return 'herramientas';
+  if (
+    targetId === 'confianza' ||
+    targetId === 'sectores' ||
+    targetId === 'garantias' ||
+    targetId === 'promociones'
+  ) {
+    return 'nosotros';
+  }
+  if (targetId === 'contacto' || targetId === 'faq') return 'contacto';
+  return null;
 }
 
 function AppContent() {
   const [activeSection, setActiveSection] = useState('inicio');
+  const [activePage, setActivePage] = useState<NavPage>(() => parseNavPageFromHash());
   const [activeToolTab, setActiveToolTab] = useState<'color' | 'calculadora'>('color');
   const [activeCategorySlug, setActiveCategorySlug] = useState<string | null>(() =>
     parseCategoryFromUrl()
@@ -80,6 +135,7 @@ function AppContent() {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const isProgrammaticScrollRef = useRef(false);
   const scrollLockTimeoutRef = useRef<number | null>(null);
+  const prefersReduced = useReducedMotion();
 
   const [isAdminView, setIsAdminView] = useState(() => {
     return (
@@ -95,6 +151,12 @@ function AppContent() {
       setActiveCategorySlug(nextCat);
       if (nextCat) {
         window.scrollTo({ top: 0, behavior: 'auto' });
+      } else {
+        const nextPage = parseNavPageFromHash();
+        setActivePage(nextPage);
+        if (window.location.hash === '#calculadora') {
+          setActiveToolTab('calculadora');
+        }
       }
     };
 
@@ -113,17 +175,15 @@ function AppContent() {
     };
     window.addEventListener('keydown', handleKeyDown);
 
-    // If initial URL has a section hash (e.g. #proyectos, #promociones, #contacto, #cotizar), scroll to it
-    const initialHash = window.location.hash.replace('#', '').trim();
-    if (
-      initialHash &&
-      !initialHash.startsWith('servicio/') &&
-      initialHash !== 'admin' &&
-      initialHash !== 'inicio'
-    ) {
+    // Handle initial section scrolling for anchors on initial load (e.g. #soluciones or #cotizar)
+    const initialHash = window.location.hash.replace('#', '').trim().toLowerCase();
+    if (initialHash === 'calculadora') {
+      setActiveToolTab('calculadora');
+    }
+    if (initialHash === 'soluciones' || initialHash === 'servicios' || initialHash === 'cotizar' || initialHash === 'quote') {
       window.setTimeout(() => {
         scrollToSection(initialHash);
-      }, 100);
+      }, 120);
     }
 
     return () => {
@@ -162,6 +222,22 @@ function AppContent() {
     }
   };
 
+  const scrollToElementId = (targetId: string, behavior: ScrollBehavior = 'smooth') => {
+    if (targetId === 'inicio') {
+      window.scrollTo({ top: 0, behavior });
+      return;
+    }
+    const element = document.getElementById(targetId);
+    if (element) {
+      const navOffset = 84;
+      const elementTop = element.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: Math.max(0, elementTop - navOffset),
+        behavior,
+      });
+    }
+  };
+
   const scrollToSection = (sectionId: string) => {
     if (sectionId === 'calculadora') {
       setActiveToolTab('calculadora');
@@ -172,7 +248,6 @@ function AppContent() {
     const targetId = resolveSectionTargetId(sectionId);
     setActiveSection(targetId);
 
-    // Lock scrollspy during programmatic scroll so header active underline stays on clicked target
     isProgrammaticScrollRef.current = true;
     if (scrollLockTimeoutRef.current) {
       window.clearTimeout(scrollLockTimeoutRef.current);
@@ -181,59 +256,59 @@ function AppContent() {
       isProgrammaticScrollRef.current = false;
     }, 900);
 
-    const scrollElementIntoPosition = (behavior: ScrollBehavior = 'smooth') => {
-      if (targetId === 'inicio') {
-        window.scrollTo({ top: 0, behavior });
-        return;
-      }
-      const element = document.getElementById(targetId);
-      if (element) {
-        const navOffset = 78;
-        const elementTop = element.getBoundingClientRect().top + window.scrollY;
-        const offsetPosition = Math.max(0, elementTop - navOffset);
-        window.scrollTo({
-          top: offsetPosition,
-          behavior,
-        });
-      }
-    };
-
-    const executeNavigation = () => {
-      window.dispatchEvent(new CustomEvent('navigate-section', { detail: targetId }));
-      if (!window.location.hash.startsWith('#servicio/')) {
-        history.replaceState(null, '', targetId === 'inicio' ? window.location.pathname : `#${sectionId}`);
-      }
-      scrollElementIntoPosition('smooth');
-
-      // Follow-up alignment pass in case images/tabs expanded layout height
-      window.setTimeout(() => {
-        if (targetId === 'inicio') return;
-        const element = document.getElementById(targetId);
-        if (!element) return;
-        const navOffset = 78;
-        const delta = element.getBoundingClientRect().top - navOffset;
-        if (Math.abs(delta) > 16) {
-          window.scrollTo({
-            top: Math.max(0, window.scrollY + delta),
-            behavior: 'smooth',
-          });
-        }
-      }, 240);
-    };
-
-    // If user is inside a category subpage and clicks a landing section (other than #cotizar/#contacto which exist on both)
-    if (activeCategorySlug && targetId !== 'cotizar' && targetId !== 'contacto') {
-      closeCategoryPage();
-      window.setTimeout(() => {
-        history.replaceState(null, '', targetId === 'inicio' ? window.location.pathname : `#${sectionId}`);
-        scrollElementIntoPosition('smooth');
-      }, 60);
-      window.setTimeout(() => {
-        scrollElementIntoPosition('auto');
-      }, 220);
-    } else {
-      executeNavigation();
+    // Quote section exists across every view & subpage -> scroll directly without switching pages
+    if (targetId === 'cotizar') {
+      scrollToElementId('cotizar', 'smooth');
+      return;
     }
+
+    const subpageTarget = mapTargetIdToSubpage(targetId);
+
+    // Top-level navbar category -> dedicated clean subpage
+    if (subpageTarget) {
+      if (activeCategorySlug) {
+        setActiveCategorySlug(null);
+      }
+      setActivePage(subpageTarget);
+      history.replaceState(null, '', `#${sectionId}`);
+
+      // Scroll subpage to top, unless targeting a lower section inside a multi-block subpage (e.g. #faq inside contacto or #promociones inside nosotros)
+      const internalAnchor =
+        targetId === 'faq' ||
+        targetId === 'sectores' ||
+        targetId === 'garantias' ||
+        targetId === 'promociones'
+          ? targetId
+          : null;
+
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      if (internalAnchor) {
+        window.setTimeout(() => scrollToElementId(internalAnchor, 'smooth'), 180);
+      }
+      return;
+    }
+
+    // Home Services View (#inicio, #soluciones, #proceso)
+    if (activeCategorySlug || activePage !== 'inicio') {
+      setActiveCategorySlug(null);
+      setActivePage('inicio');
+      history.replaceState(
+        null,
+        '',
+        targetId === 'inicio' ? window.location.pathname : `#${sectionId}`
+      );
+      window.setTimeout(() => {
+        scrollToElementId(targetId, 'smooth');
+      }, 140);
+      return;
+    }
+
+    history.replaceState(
+      null,
+      '',
+      targetId === 'inicio' ? window.location.pathname : `#${sectionId}`
+    );
+    scrollToElementId(targetId, 'smooth');
   };
 
   const handleSelectSolution = (solutionTitle: string, customMsg?: string) => {
@@ -274,26 +349,18 @@ function AppContent() {
     scrollToSection('cotizar');
   };
 
-  // Zero-layout-thrashing IntersectionObserver Scrollspy
+  // Scrollspy only for Home sections (#inicio, #soluciones, #proceso, #cotizar)
   useEffect(() => {
-    if (typeof window === 'undefined' || !('IntersectionObserver' in window) || activeCategorySlug)
+    if (
+      typeof window === 'undefined' ||
+      !('IntersectionObserver' in window) ||
+      activeCategorySlug ||
+      activePage !== 'inicio'
+    ) {
       return;
+    }
 
-    const sectionIds = [
-      'inicio',
-      'confianza',
-      'soluciones',
-      'sectores',
-      'herramientas',
-      'proyectos',
-      'proceso',
-      'garantias',
-      'promociones',
-      'faq',
-      'cotizar',
-      'contacto',
-    ];
-
+    const sectionIds = ['inicio', 'soluciones', 'proceso', 'cotizar'];
     const observer = new IntersectionObserver(
       (entries) => {
         if (isProgrammaticScrollRef.current) return;
@@ -305,7 +372,7 @@ function AppContent() {
         }
       },
       {
-        rootMargin: '-20% 0px -65% 0px',
+        rootMargin: '-20% 0px -60% 0px',
         threshold: 0,
       }
     );
@@ -315,10 +382,8 @@ function AppContent() {
       if (el) observer.observe(el);
     }
 
-    return () => {
-      observer.disconnect();
-    };
-  }, [activeCategorySlug]);
+    return () => observer.disconnect();
+  }, [activeCategorySlug, activePage]);
 
   if (isAdminView) {
     return (
@@ -337,119 +402,202 @@ function AppContent() {
     );
   }
 
+  const currentViewKey = activeCategorySlug ? `servicio-${activeCategorySlug}` : `page-${activePage}`;
+
   return (
     <div
-      className="min-h-screen text-slate-900 flex flex-col antialiased relative overflow-x-hidden selection:bg-blue-600 selection:text-white"
+      className="min-h-screen bg-white text-[#090E19] flex flex-col antialiased relative overflow-x-hidden selection:bg-[#0059FF] selection:text-white"
       style={{ '--mood-color': currentMood.color } as React.CSSProperties}
     >
-      {/* Fluid Dynamic Ambient Canvas */}
-      <DynamicBackground />
-
-      {/* Streamlined Sticky Header with Subpages Menu */}
+      {/* Streamlined Sticky Category Bar Header */}
       <Header
         activeSection={activeSection}
+        activePage={activePage}
         activeCategorySlug={activeCategorySlug}
         onNavigate={scrollToSection}
         onOpenCategoryPage={openCategoryPage}
       />
 
-      {/* Main Content Area: Either Dedicated Service Subpage OR Streamlined Hub Landing */}
+      {/* Main Content Area: Animated Transitions Between Services Home, Category Pages, and Navbar Subpages */}
       <main id="main-content" className="flex-1 relative z-10">
-        {activeCategorySlug ? (
-          <>
-            <Suspense fallback={<SectionSkeleton id="subpage-loading" minHeight="600px" />}>
-              <ServiceCategoryPage
-                categoryId={activeCategorySlug}
-                onBackToHome={() => {
-                  closeCategoryPage();
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                onSelectCategory={openCategoryPage}
-                onQuoteCategory={(catTitle, msg) => handleSelectSolution(catTitle, msg)}
-                onOpenTool={(tool) => {
-                  closeCategoryPage();
-                  setActiveToolTab(tool);
-                  window.setTimeout(() => scrollToSection('herramientas'), 60);
-                }}
-              />
-            </Suspense>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentViewKey}
+            initial={prefersReduced ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={prefersReduced ? undefined : { opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {activeCategorySlug ? (
+              <>
+                <Suspense fallback={<SectionSkeleton id="subpage-loading" minHeight="600px" />}>
+                  <ServiceCategoryPage
+                    categoryId={activeCategorySlug}
+                    onBackToHome={() => {
+                      closeCategoryPage();
+                      setActivePage('inicio');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    onSelectCategory={openCategoryPage}
+                    onQuoteCategory={(catTitle, msg) => handleSelectSolution(catTitle, msg)}
+                    onOpenTool={(tool) => {
+                      closeCategoryPage();
+                      setActiveToolTab(tool);
+                      setActivePage('herramientas');
+                      history.replaceState(null, '', '#herramientas');
+                      window.scrollTo({ top: 0, behavior: 'auto' });
+                    }}
+                  />
+                </Suspense>
 
-            {/* Pre-configured Quote Form & Contact right inside the Subpage for instant conversion */}
-            <QuoteForm
-              initialProjectType={selectedProjectForQuote || 'Residencial'}
-              initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
-              initialMessage={customQuoteMessage}
-              onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
-            />
+                <QuoteForm
+                  initialProjectType={selectedProjectForQuote || 'Residencial'}
+                  initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
+                  initialMessage={customQuoteMessage}
+                  onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+                />
+              </>
+            ) : activePage === 'proyectos' ? (
+              <>
+                <SubpageHero
+                  eyebrow="Portafolio de Obras"
+                  title="Proyectos Realizados"
+                  subtitle="Resultados documentados en residencias de Carretera a El Salvador, condominios, oficinas corporativas, comercios e industria."
+                  breadcrumbLabel="Proyectos"
+                  accent={NAV_PAGE_ACCENTS.proyectos}
+                  activeNavId="proyectos"
+                  onBackToHome={() => scrollToSection('inicio')}
+                  onNavigateSubpage={scrollToSection}
+                  onQuoteClick={() => scrollToSection('cotizar')}
+                />
+                <Suspense fallback={<SectionSkeleton id="proyectos" minHeight="650px" />}>
+                  <ProjectsGallery onRequestSimilar={handleRequestSimilarProject} />
+                </Suspense>
+                <QuoteForm
+                  initialProjectType={selectedProjectForQuote || 'Residencial'}
+                  initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
+                  initialMessage={customQuoteMessage}
+                  onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+                />
+              </>
+            ) : activePage === 'herramientas' ? (
+              <>
+                <SubpageHero
+                  eyebrow="Herramientas Técnicas Interactivas"
+                  title="Estudio de Color & Calculadora m²"
+                  subtitle="Visualiza paletas arquitectónicas con iluminación real y calcula cuántos cubetas o galones necesita tu proyecto antes de cotizar."
+                  breadcrumbLabel="Color & Calculadora"
+                  accent={NAV_PAGE_ACCENTS.herramientas}
+                  activeNavId="herramientas"
+                  onBackToHome={() => scrollToSection('inicio')}
+                  onNavigateSubpage={scrollToSection}
+                  onQuoteClick={() => scrollToSection('cotizar')}
+                />
+                <Suspense fallback={<SectionSkeleton id="herramientas" minHeight="650px" />}>
+                  <InteractiveToolsHub
+                    activeToolTab={activeToolTab}
+                    onTabChange={setActiveToolTab}
+                    onSelectColorForQuote={handleColorSelectedForQuote}
+                    onTransferCalculatorToQuote={handleTransferCalculatorToQuote}
+                  />
+                </Suspense>
+                <QuoteForm
+                  initialProjectType={selectedProjectForQuote || 'Residencial'}
+                  initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
+                  initialMessage={customQuoteMessage}
+                  onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+                />
+              </>
+            ) : activePage === 'nosotros' ? (
+              <>
+                <SubpageHero
+                  eyebrow="Nuestra Empresa • Desde 2014"
+                  title="Nosotros, Sectores & Garantías"
+                  subtitle="Más de 10 años ejecutando obras limpias, garantizadas por escrito y facturadas bajo régimen FEL SAT en Guatemala."
+                  breadcrumbLabel="Nosotros"
+                  accent={NAV_PAGE_ACCENTS.nosotros}
+                  activeNavId="confianza"
+                  onBackToHome={() => scrollToSection('inicio')}
+                  onNavigateSubpage={scrollToSection}
+                  onQuoteClick={() => scrollToSection('cotizar')}
+                />
+                <Suspense fallback={<SectionSkeleton id="confianza" minHeight="650px" />}>
+                  <BentoTrustGrid onQuoteClick={() => scrollToSection('cotizar')} />
+                  <SectorsSection
+                    onQuoteSector={(sectorTitle) => {
+                      setSelectedProjectForQuote(sectorTitle);
+                      scrollToSection('cotizar');
+                    }}
+                  />
+                  <TestimonialsGuaranteesSection />
+                  <PromoSection onQuoteClick={() => scrollToSection('cotizar')} />
+                </Suspense>
+                <QuoteForm
+                  initialProjectType={selectedProjectForQuote || 'Residencial'}
+                  initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
+                  initialMessage={customQuoteMessage}
+                  onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+                />
+              </>
+            ) : activePage === 'contacto' ? (
+              <>
+                <SubpageHero
+                  eyebrow="Atención Directa & Cobertura"
+                  title="Contacto, Mapa Km 21.5 y FAQs"
+                  subtitle="Visítanos en Carretera a El Salvador Km 21.5, Fraijanes, o agenda una visita técnica sin costo por WhatsApp."
+                  breadcrumbLabel="Contacto"
+                  accent={NAV_PAGE_ACCENTS.contacto}
+                  activeNavId="contacto"
+                  onBackToHome={() => scrollToSection('inicio')}
+                  onNavigateSubpage={scrollToSection}
+                  onQuoteClick={() => scrollToSection('cotizar')}
+                />
+                <Suspense fallback={<SectionSkeleton id="contacto" minHeight="650px" />}>
+                  <ContactSection />
+                  <FAQSection onOpenPrivacy={() => setIsPrivacyModalOpen(true)} />
+                </Suspense>
+                <QuoteForm
+                  initialProjectType={selectedProjectForQuote || 'Residencial'}
+                  initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
+                  initialMessage={customQuoteMessage}
+                  onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+                />
+              </>
+            ) : (
+              /* HOME / INICIO — 100% enfocada en los Servicios + Marquee + Proceso + Cotizador */
+              <>
+                <Hero
+                  onQuoteClick={() => scrollToSection('cotizar')}
+                  onExploreColorsClick={() => {
+                    setActiveToolTab('color');
+                    scrollToSection('herramientas');
+                  }}
+                  onExploreServicesClick={() => scrollToSection('soluciones')}
+                  onOpenCategoryPage={openCategoryPage}
+                />
 
-            <ContactSection />
-          </>
-        ) : (
-          <>
-            {/* 1. Hero con CTAs priorizados sobre el fold */}
-            <Hero
-              onQuoteClick={() => scrollToSection('cotizar')}
-              onExploreColorsClick={() => {
-                setActiveToolTab('color');
-                scrollToSection('herramientas');
-              }}
-            />
+                <ServicesMarquee onOpenCategoryPage={openCategoryPage} />
 
-            {/* 2. Bento Unificado de Confianza, 4 Pilares, Marcas e Identidad Guatemalteca */}
-            <BentoTrustGrid onQuoteClick={() => scrollToSection('cotizar')} />
+                <SolutionsSection
+                  onSelectSolution={(title) => handleSelectSolution(title)}
+                  onOpenCategoryPage={openCategoryPage}
+                  onNavigate={scrollToSection}
+                />
 
-            {/* 3. Multi-Servicios con acceso directo a las 6 Subpáginas Especializadas */}
-            <SolutionsSection
-              onSelectSolution={(title) => handleSelectSolution(title)}
-              onOpenCategoryPage={openCategoryPage}
-            />
+                <ProcessSection onQuoteClick={() => scrollToSection('cotizar')} />
 
-            {/* 4. Sectores que atendemos en Guatemala */}
-            <SectorsSection
-              onQuoteSector={(sectorTitle) => {
-                setSelectedProjectForQuote(sectorTitle);
-                scrollToSection('cotizar');
-              }}
-            />
+                <QuoteForm
+                  initialProjectType={selectedProjectForQuote || 'Residencial'}
+                  initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
+                  initialMessage={customQuoteMessage}
+                  onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+                />
 
-            {/* 5. Hub Unificado de Herramientas en Pestañas (Estudio de Color + Calculadora m²) */}
-            <InteractiveToolsHub
-              activeToolTab={activeToolTab}
-              onTabChange={setActiveToolTab}
-              onSelectColorForQuote={handleColorSelectedForQuote}
-              onTransferCalculatorToQuote={handleTransferCalculatorToQuote}
-            />
-
-            {/* 6. Galería de Proyectos y Comparativa Antes/Después */}
-            <ProjectsGallery onRequestSimilar={handleRequestSimilarProject} />
-
-            {/* 7. Proceso de Transformación en 4 Pasos */}
-            <ProcessSection onQuoteClick={() => scrollToSection('cotizar')} />
-
-            {/* 8. Reseñas Verificadas Google 5.0 ★ y Trayectoria Corporativa (Sin duplicados) */}
-            <TestimonialsGuaranteesSection />
-
-            {/* 9. Promoción Oficial (-20%) */}
-            <PromoSection onQuoteClick={() => scrollToSection('cotizar')} />
-
-            {/* 10. Preguntas Frecuentes (Resolución de Objeciones) */}
-            <FAQSection onOpenPrivacy={() => setIsPrivacyModalOpen(true)} />
-
-            {/* 11. Formulario Único de Cotización de 3 Pasos */}
-            <QuoteForm
-              initialProjectType={selectedProjectForQuote || 'Residencial'}
-              initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
-              initialMessage={customQuoteMessage}
-              onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
-            />
-
-            {/* 12. Canales Verificados y Mapa Carretera a El Salvador Km 21.5, Fraijanes */}
-            <ContactSection />
-
-            {/* 13. Cierre Visual FinalCTA */}
-            <FinalCTA onQuoteClick={() => scrollToSection('cotizar')} />
-          </>
-        )}
+                <FinalCTA onQuoteClick={() => scrollToSection('cotizar')} />
+              </>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Footer */}

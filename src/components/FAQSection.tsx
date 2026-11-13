@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
-import {
-  HelpCircle,
-  ChevronDown,
-  MessageCircle,
-  ShieldCheck,
-  CheckCircle2,
-  Phone,
-  Sparkles,
-} from 'lucide-react';
+import { ChevronDown, MessageCircle, ShieldCheck } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
 import { AnimatedTabs } from './ui/AnimatedTabs';
 import { motion, AnimatePresence } from 'motion/react';
+import { buildSafeWhatsAppUrl } from '../utils/security';
 
 interface FAQSectionProps {
   onOpenPrivacy?: () => void;
@@ -57,8 +50,7 @@ const FAQ_ITEMS: FAQItem[] = [
     id: 'privacidad-fotografias-contacto',
     category: 'privacidad',
     question: '¿Para qué se utilizan mis datos de contacto y fotografías de espacios?',
-    answer:
-      `Tu nombre, número de WhatsApp/teléfono y fotografías de referencia se emplean exclusivamente por nuestro equipo técnico para calcular metrajes, evaluar el sustrato y redactar tu presupuesto formal desglosado. Los datos se transmiten bajo conexión segura HTTPS y están protegidos por políticas criptográficas y de aislamiento en base de datos (Row Level Security). Puedes solicitar la eliminación definitiva de tus datos en cualquier momento escribiendo a ${BUSINESS_INFO.email} o a nuestro WhatsApp oficial.`,
+    answer: `Tu nombre, número de WhatsApp/teléfono y fotografías de referencia se emplean exclusivamente por nuestro equipo técnico para calcular metrajes, evaluar el sustrato y redactar tu presupuesto formal desglosado. Los datos se transmiten bajo conexión segura HTTPS y están protegidos por políticas criptográficas y de aislamiento en base de datos (Row Level Security). Puedes solicitar la eliminación definitiva de tus datos en cualquier momento escribiendo a ${BUSINESS_INFO.email} o a nuestro WhatsApp oficial.`,
   },
   {
     id: 'tiempo-cotizacion',
@@ -105,152 +97,165 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ onOpenPrivacy }) => {
       : FAQ_ITEMS.filter((item) => item.category === activeCategory);
 
   return (
-    <section id="faq" className="py-20 bg-transparent border-b border-slate-200/50">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-800 shadow-2xs mb-3">
-            <HelpCircle className="w-3.5 h-3.5" style={{ color: currentMood.color }} />
-            <span>Preguntas Frecuentes</span>
-          </div>
-
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight font-display">
-            Resolvemos tus dudas antes de iniciar.
-          </h2>
-
-          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
-            Transparencia total sobre nuestras visitas en Carretera a El Salvador, tiempos de
-            entrega, garantía por escrito y formas de trabajo.
-          </p>
-        </div>
-
-        {/* Filter Categories using AnimatedTabs */}
-        <div className="flex items-center justify-center mb-10 overflow-x-auto pb-2">
-          <AnimatedTabs
-            tabs={[
-              { id: 'todos', label: 'Todas las preguntas' },
-              { id: 'visitas', label: 'Visitas y presupuestos' },
-              { id: 'garantias', label: 'Garantía y facturación' },
-              { id: 'privacidad', label: '🛡️ Privacidad de Datos (GT)' },
-              { id: 'materiales', label: 'Materiales y protección' },
-              { id: 'servicios', label: 'Multi-Servicios' },
-            ]}
-            activeId={activeCategory}
-            onChange={setActiveCategory}
-            layoutId="faq-category-indicator"
-          />
-        </div>
-
-        {/* Accordion List */}
-        <div className="space-y-3">
-          {filteredItems.map((item) => {
-            const isOpen = openId === item.id;
-            return (
-              <div
-                key={item.id}
-                className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
-                  isOpen
-                    ? 'bg-white border-slate-300 shadow-md ring-1 ring-slate-900/5'
-                    : 'bg-white/80 border-slate-200/90 hover:bg-white hover:border-slate-300'
-                }`}
-              >
-                <button
-                  type="button"
-                  onClick={() => toggleFAQ(item.id)}
-                  className="w-full py-5 px-6 text-left flex items-center justify-between gap-4 focus:outline-none"
-                  aria-expanded={isOpen}
-                >
-                  <span className="text-base sm:text-lg font-bold text-slate-950 font-display">
-                    {item.question}
-                  </span>
-                  <div
-                    className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 ${
-                      isOpen ? 'rotate-180 bg-slate-100 text-slate-900' : 'bg-slate-50 text-slate-500'
-                    }`}
-                  >
-                    <ChevronDown className="w-4 h-4" />
-                  </div>
-                </button>
-
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      key="faq-content"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-6 pb-6 pt-1 text-sm sm:text-base text-slate-600 leading-relaxed border-t border-slate-100">
-                        <p>{item.answer}</p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+    <section id="faq" className="py-20 sm:py-28 bg-white border-b border-[#E8E9EE]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+          {/* Left Sticky Header Column (Roofera 2-col FAQ structure) */}
+          <div className="lg:col-span-5 lg:sticky lg:top-24 text-left space-y-6">
+            <div>
+              <div className="inline-flex items-center gap-2.5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#80828C] mb-3">
+                <span
+                  className="w-2.5 h-2.5 rounded-xs shrink-0"
+                  style={{ backgroundColor: currentMood.color }}
+                />
+                <span>Preguntas Frecuentes</span>
               </div>
-            );
-          })}
-        </div>
 
-        {/* Guatemala Data Privacy Banner Card */}
-        <div className="mt-10 rounded-3xl bg-slate-50 border border-slate-200/90 p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-5 shadow-2xs">
-          <div className="flex items-start gap-4">
-            <div className="w-11 h-11 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 shadow-2xs">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <div className="space-y-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
-                  Marco Legal Guatemala
-                </span>
-                <span className="text-xs font-semibold text-slate-500">
-                  Decreto No. 57-2008 & Art. 24/31 CPRG
-                </span>
-              </div>
-              <h3 className="text-base font-bold text-slate-950 font-display">
-                Tratamiento Ético y Protección Estricta de Datos Personales
-              </h3>
-              <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">
-                Tus datos de cotización (nombre, WhatsApp, fotos de referencia y ubicación) se custodian bajo estándares de confidencialidad mercantil y técnica. Cero venta o cesión a terceros, con derecho de cancelación en cualquier momento.
+              <h2 className="text-3xl sm:text-5xl font-black text-[#090E19] tracking-[-0.04em] leading-[1.06] font-display">
+                Resolvemos tus Dudas
+                <span style={{ color: currentMood.color }}>.</span>
+              </h2>
+
+              <p className="mt-4 text-sm sm:text-base text-[#525663] leading-relaxed">
+                Transparencia total sobre visitas en Carretera a El Salvador, tiempos de entrega,
+                garantía por escrito y cumplimiento legal en Guatemala.
               </p>
             </div>
+
+            {/* Legal Privacy Summary Box */}
+            <div className="rounded-xl bg-[#F4F5F7] border border-[#E8E9EE] p-5 space-y-3">
+              <div className="flex items-center gap-2.5">
+                <div
+                  className="w-9 h-9 rounded-md text-white flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: currentMood.color }}
+                >
+                  <ShieldCheck className="w-5 h-5" aria-hidden="true" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#80828C] block">
+                    Decreto No. 57-2008 &amp; Art. 24/31 CPRG
+                  </span>
+                  <h3 className="text-sm font-black text-[#090E19] font-display">
+                    Protección de Datos Personales
+                  </h3>
+                </div>
+              </div>
+              <p className="text-xs text-[#525663] leading-relaxed">
+                Tus datos y fotografías se custodian bajo confidencialidad estricta. Cero venta o
+                cesión a terceros.
+              </p>
+              {onOpenPrivacy && (
+                <button
+                  type="button"
+                  onClick={onOpenPrivacy}
+                  className="w-full py-2.5 px-4 min-h-[44px] rounded-md bg-white hover:bg-[#090E19] hover:text-white text-[#090E19] border border-[#E8E9EE] font-bold text-xs transition-colors cursor-pointer"
+                >
+                  Ver Aviso Legal Completo →
+                </button>
+              )}
+            </div>
+
+            {/* Direct WhatsApp Prompt */}
+            <div className="rounded-xl bg-[#090E19] text-white p-6 border border-[#27324D] space-y-3">
+              <span
+                className="text-[11px] font-extrabold uppercase tracking-[0.16em] block"
+                style={{ color: currentMood.color }}
+              >
+                ¿Otra consulta técnica?
+              </span>
+              <h3 className="text-lg font-black font-display text-white">
+                Habla directo con un asesor técnico.
+              </h3>
+              <p className="text-xs text-[#B8BCC6] leading-relaxed">
+                Respondemos tus dudas en minutos por WhatsApp con soporte personalizado.
+              </p>
+              <a
+                href={buildSafeWhatsAppUrl(
+                  BUSINESS_INFO.whatsappNumber,
+                  'Hola Ideas & Colores, tengo una consulta sobre sus servicios.'
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 w-full px-5 py-3 min-h-[46px] rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm transition-all"
+              >
+                <MessageCircle className="w-4 h-4" aria-hidden="true" />
+                <span>Consultar por WhatsApp</span>
+              </a>
+            </div>
           </div>
 
-          {onOpenPrivacy && (
-            <button
-              type="button"
-              onClick={onOpenPrivacy}
-              className="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-900 border border-slate-300 font-bold text-xs transition-colors shrink-0 shadow-2xs cursor-pointer"
-            >
-              Ver Aviso Legal Completo →
-            </button>
-          )}
-        </div>
+          {/* Right Column: Filter Tabs + Clean Accordion */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="overflow-x-auto pb-1">
+              <AnimatedTabs
+                tabs={[
+                  { id: 'todos', label: 'Todas' },
+                  { id: 'visitas', label: 'Visitas y cotización' },
+                  { id: 'garantias', label: 'Garantía y FEL' },
+                  { id: 'privacidad', label: 'Privacidad (GT)' },
+                  { id: 'materiales', label: 'Materiales' },
+                  { id: 'servicios', label: 'Multi-Servicios' },
+                ]}
+                activeId={activeCategory}
+                onChange={setActiveCategory}
+                layoutId="faq-category-indicator"
+              />
+            </div>
 
-        {/* WhatsApp Fast Consultation Card */}
-        <div className="mt-8 rounded-3xl bg-gradient-to-br from-slate-950 to-slate-900 text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-slate-800">
-          <div className="space-y-1 text-center sm:text-left">
-            <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
-              ¿Tienes otra pregunta sobre tu proyecto?
-            </span>
-            <h3 className="text-lg sm:text-xl font-bold font-display text-white">
-              Habla directamente con un asesor técnico ahora.
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-300">
-              Respondemos tus dudas en minutos por WhatsApp con amabilidad y soporte técnico.
-            </p>
+            <div className="space-y-3">
+              {filteredItems.map((item) => {
+                const isOpen = openId === item.id;
+                return (
+                  <div
+                    key={item.id}
+                    className={`rounded-xl border transition-all duration-200 overflow-hidden ${
+                      isOpen
+                        ? 'bg-[#F4F5F7] border-[#090E19] shadow-sm'
+                        : 'bg-white border-[#E8E9EE] hover:border-[#090E19]/40'
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => toggleFAQ(item.id)}
+                      className="w-full py-5 px-6 min-h-[64px] text-left flex items-center justify-between gap-4 focus:outline-none cursor-pointer"
+                      aria-expanded={isOpen}
+                    >
+                      <span className="text-sm sm:text-base font-extrabold text-[#090E19] font-display">
+                        {item.question}
+                      </span>
+                      <div
+                        className={`w-8 h-8 rounded-md flex items-center justify-center shrink-0 transition-all duration-200 ${
+                          isOpen
+                            ? 'rotate-180 text-white'
+                            : 'bg-[#F4F5F7] text-[#090E19] border border-[#E8E9EE]'
+                        }`}
+                        style={isOpen ? { backgroundColor: currentMood.color } : undefined}
+                      >
+                        <ChevronDown className="w-4 h-4" aria-hidden="true" />
+                      </div>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          key="faq-content"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-6 pb-6 pt-2 text-xs sm:text-sm text-[#525663] leading-relaxed border-t border-[#E8E9EE]">
+                            <p>{item.answer}</p>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-
-          <a
-            href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=Hola%20Ideas%20%26%20Colores%2C%20tengo%20una%20consulta%20sobre%20sus%20servicios.`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs sm:text-sm flex items-center gap-2 transition-all shrink-0 shadow-md"
-          >
-            <MessageCircle className="w-4 h-4 text-slate-950" />
-            <span>Consultar por WhatsApp</span>
-          </a>
         </div>
       </div>
     </section>

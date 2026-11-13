@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import {
   Paintbrush,
   Printer,
@@ -8,30 +9,39 @@ import {
   Wrench,
   ArrowRight,
   MessageCircle,
-  Layers,
-  ChevronRight,
-  ShieldCheck,
+  CheckCircle2,
   ExternalLink,
+  ShieldCheck,
+  FolderOpen,
+  Palette,
+  Award,
+  MapPin,
 } from 'lucide-react';
 import { MULTI_SERVICES_CATEGORIES, BUSINESS_INFO } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
-import { SpotlightCard } from './ui/SpotlightCard';
 import { StaggeredText } from './ui/StaggeredText';
-import { BlurHighlight } from './ui/BlurHighlight';
 import FadeIn from './ui/FadeIn';
-import { motion, AnimatePresence } from 'motion/react';
+import { buildSafeWhatsAppUrl } from '../utils/security';
+import {
+  getCategoryLogoTheme,
+  LOGO_SPECTRUM_LIST,
+  NAV_PAGE_ACCENTS,
+} from '../utils/logoPalette';
 
 interface SolutionsSectionProps {
   onSelectSolution: (solutionTitle: string) => void;
   onOpenCategoryPage?: (categoryId: string) => void;
+  onNavigate?: (sectionId: string) => void;
 }
 
 export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
   onSelectSolution,
   onOpenCategoryPage,
+  onNavigate,
 }) => {
   const { currentMood } = useColorMood();
-  const [activeServiceId, setActiveServiceId] = useState<string>('pintura');
+  const [selectedFilter, setSelectedFilter] = useState<string>('todos');
+  const prefersReduced = useReducedMotion();
 
   const iconMap: Record<string, React.ReactNode> = {
     pintura: <Paintbrush className="w-5 h-5" aria-hidden="true" />,
@@ -42,301 +52,372 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
     instalaciones: <Wrench className="w-5 h-5" aria-hidden="true" />,
   };
 
-  const activeService =
-    MULTI_SERVICES_CATEGORIES.find((c) => c.id === activeServiceId) ||
-    MULTI_SERVICES_CATEGORIES[0];
+  const visibleCategories =
+    selectedFilter === 'todos'
+      ? MULTI_SERVICES_CATEGORIES
+      : MULTI_SERVICES_CATEGORIES.filter((c) => c.id === selectedFilter);
+
+  const subpageLinks = [
+    {
+      id: 'proyectos',
+      title: 'Proyectos Realizados',
+      subtitle: 'Galería de casos reales en Guatemala',
+      accent: NAV_PAGE_ACCENTS.proyectos,
+      icon: <FolderOpen className="w-4 h-4" aria-hidden="true" />,
+    },
+    {
+      id: 'herramientas',
+      title: 'Color & Calculadora m²',
+      subtitle: 'Simulador cromático y cubetas',
+      accent: NAV_PAGE_ACCENTS.herramientas,
+      icon: <Palette className="w-4 h-4" aria-hidden="true" />,
+    },
+    {
+      id: 'confianza',
+      title: 'Nosotros & Garantías',
+      subtitle: 'Proceso, marcas e historia',
+      accent: NAV_PAGE_ACCENTS.nosotros,
+      icon: <Award className="w-4 h-4" aria-hidden="true" />,
+    },
+    {
+      id: 'contacto',
+      title: 'Contacto y Mapa Km 21.5',
+      subtitle: 'Sede Fraijanes y cobertura',
+      accent: NAV_PAGE_ACCENTS.contacto,
+      icon: <MapPin className="w-4 h-4" aria-hidden="true" />,
+    },
+  ];
 
   return (
-    <section id="soluciones" className="py-20 sm:py-24 bg-transparent border-b border-slate-200/50 relative overflow-hidden">
+    <section
+      id="soluciones"
+      className="py-20 sm:py-28 bg-white border-b border-[#E8E9EE] relative overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
-        <FadeIn direction="up" distance={24}>
-          <div className="text-center max-w-3xl mx-auto mb-14">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-800 shadow-2xs mb-3">
-              <Layers className="w-3.5 h-3.5" style={{ color: currentMood.color }} aria-hidden="true" />
-              <span>6 Divisiones Especializadas • Páginas Dedicadas</span>
+        {/* Roofera-Style Architectural Services Header */}
+        <FadeIn direction="up" distance={20}>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 pb-8 border-b border-[#E8E9EE]">
+            <div className="max-w-3xl text-left">
+              <div className="inline-flex items-center gap-2.5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#80828C] mb-3">
+                <span className="inline-flex items-center gap-1" aria-hidden="true">
+                  {LOGO_SPECTRUM_LIST.map((hex) => (
+                    <span
+                      key={hex}
+                      className="w-2 h-2 rounded-xs"
+                      style={{ backgroundColor: hex }}
+                    />
+                  ))}
+                </span>
+                <span>Nuestros Servicios • 6 Páginas Especializadas</span>
+              </div>
+
+              <div className="flex items-baseline">
+                <StaggeredText
+                  text="Divisiones de Servicio"
+                  as="h2"
+                  className="text-3xl sm:text-5xl lg:text-[54px] font-black text-[#090E19] tracking-[-0.04em] leading-[1.04] font-display inline"
+                />
+                <span
+                  className="text-4xl sm:text-5xl lg:text-[58px] font-black leading-none select-none"
+                  style={{ color: currentMood.color }}
+                >
+                  .
+                </span>
+              </div>
             </div>
 
-            <StaggeredText
-              text="Soluciones técnicas integrales para tus espacios."
-              as="h2"
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight font-display"
-            />
-
-            <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-              Ideas &amp; Colores transforma, protege y mantiene espacios con{' '}
-              <BlurHighlight color={currentMood.color}>
-                un solo interlocutor de confianza con garantía por escrito
-              </BlurHighlight>. Explora cada categoría o abre su ficha técnica completa.
-            </p>
+            <div className="max-w-md text-left space-y-2">
+              <p className="text-sm sm:text-base text-[#525663] leading-relaxed">
+                Selecciona cualquier categoría para abrir su subpágina dedicada con ficha técnica,
+                alcances, preguntas frecuentes y cotización directa.
+              </p>
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" aria-hidden="true" />
+                <span>Garantía por escrito y factura FEL SAT en las 6 divisiones</span>
+              </div>
+            </div>
           </div>
         </FadeIn>
 
-        {/* Interactive List + Sticky Architectural Visual Preview */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* Left Column (7 cols): Interactive Services Master List */}
-          <div className="lg:col-span-7 space-y-3.5">
-            {MULTI_SERVICES_CATEGORIES.map((cat) => {
-              const isSelected = activeServiceId === cat.id;
-              const icon = iconMap[cat.id];
+        {/* Zero-Jump Quick Category Filter Bar with Per-Division Logo Colors */}
+        <div
+          className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 touch-pan-x"
+          role="group"
+          aria-label="Filtrar categorías de servicio"
+        >
+          <button
+            type="button"
+            onClick={() => setSelectedFilter('todos')}
+            className={`px-4 py-2.5 min-h-[44px] rounded-md text-xs font-extrabold whitespace-nowrap transition-all border cursor-pointer ${
+              selectedFilter === 'todos'
+                ? 'bg-[#090E19] text-white border-[#090E19] shadow-sm'
+                : 'bg-[#F4F5F7] text-[#090E19] border-[#E8E9EE] hover:border-[#090E19]/40'
+            }`}
+          >
+            Todas las categorías (6)
+          </button>
 
-              return (
+          {MULTI_SERVICES_CATEGORIES.map((cat) => {
+            const isSelected = selectedFilter === cat.id;
+            const catTheme = getCategoryLogoTheme(cat.id, cat.accentColor);
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setSelectedFilter(cat.id)}
+                className={`px-4 py-2.5 min-h-[44px] rounded-md text-xs font-bold whitespace-nowrap transition-all border inline-flex items-center gap-2 cursor-pointer ${
+                  isSelected
+                    ? 'shadow-sm'
+                    : 'bg-[#F4F5F7] text-[#090E19] border-[#E8E9EE] hover:border-[#090E19]/40'
+                }`}
+                style={
+                  isSelected
+                    ? {
+                        backgroundColor: catTheme.accent,
+                        borderColor: catTheme.accent,
+                        color: catTheme.textOnAccent,
+                      }
+                    : undefined
+                }
+              >
+                <span
+                  className="w-2 h-2 rounded-full shrink-0"
+                  style={{
+                    backgroundColor: isSelected ? catTheme.textOnAccent : catTheme.accent,
+                  }}
+                />
+                <span className="font-mono text-[10px] opacity-80">{cat.number}</span>
+                <span>{cat.shortTitle}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Animated, Staggered 6-Card Architectural Service Grid */}
+        <div
+          className={`grid gap-6 ${
+            visibleCategories.length === 1
+              ? 'grid-cols-1 max-w-2xl mx-auto'
+              : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+          }`}
+        >
+          {visibleCategories.map((cat, idx) => {
+            const icon = iconMap[cat.id];
+            const catTheme = getCategoryLogoTheme(cat.id, cat.accentColor);
+
+            return (
+              <motion.article
+                key={cat.id}
+                initial={prefersReduced ? false : { opacity: 0, y: 22 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.12 }}
+                transition={{
+                  duration: 0.45,
+                  delay: prefersReduced ? 0 : idx * 0.06,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                whileHover={prefersReduced ? undefined : { y: -4 }}
+                className="rounded-xl bg-[#F4F5F7] border border-[#E8E9EE] hover:border-[#090E19]/45 shadow-xs hover:shadow-xl transition-shadow duration-200 overflow-hidden flex flex-col justify-between group text-left relative"
+              >
+                {/* Logo-color top accent hairline */}
                 <div
-                  key={cat.id}
-                  onClick={() => setActiveServiceId(cat.id)}
-                  onMouseEnter={() => setActiveServiceId(cat.id)}
-                  className={`rounded-3xl border p-5 sm:p-6 transition-all duration-300 cursor-pointer relative overflow-hidden text-left ${
-                    isSelected
-                      ? 'bg-white border-slate-300 shadow-lg ring-1 ring-slate-200'
-                      : 'bg-white/60 hover:bg-white border-slate-200/80 hover:border-slate-300 shadow-2xs'
-                  }`}
-                >
-                  {/* Active indicator border strip */}
-                  {isSelected && (
-                    <motion.div
-                      layoutId="active-service-strip"
-                      className="absolute left-0 top-0 bottom-0 w-1.5"
-                      style={{ backgroundColor: cat.accentColor }}
-                      transition={{ duration: 0.25 }}
-                    />
-                  )}
+                  className="h-1 w-full"
+                  style={{ backgroundColor: catTheme.accent }}
+                  aria-hidden="true"
+                />
 
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-center gap-3.5">
-                      <div
-                        className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-transform shrink-0 ${
-                          isSelected ? 'scale-105 shadow-sm text-white' : 'bg-slate-100 text-slate-700'
-                        }`}
+                <div>
+                  {/* Clickable Hero Image -> Opens Dedicated Category Page */}
+                  <a
+                    href={`#servicio/${cat.id}`}
+                    onClick={(e) => {
+                      if (onOpenCategoryPage) {
+                        e.preventDefault();
+                        onOpenCategoryPage(cat.id);
+                      }
+                    }}
+                    className="block relative aspect-[16/10] w-full overflow-hidden bg-[#090E19] focus:outline-none"
+                    aria-label={`Abrir página de categoría: ${cat.title}`}
+                  >
+                    <img
+                      src={cat.image}
+                      alt={cat.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+                      loading="lazy"
+                      decoding="async"
+                      width="480"
+                      height="300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#090E19] via-[#090E19]/30 to-transparent" />
+
+                    {/* Top badges */}
+                    <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between">
+                      <span
+                        className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-md shadow-sm"
                         style={{
-                          backgroundColor: isSelected ? cat.accentColor : undefined,
+                          backgroundColor: catTheme.accent,
+                          color: catTheme.textOnAccent,
                         }}
                       >
-                        {icon}
-                      </div>
+                        <span>División {cat.number}</span>
+                      </span>
 
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-mono font-bold text-slate-400">
-                            {cat.number}
-                          </span>
-                          <h3 className="text-base sm:text-lg font-bold text-slate-950 font-display">
-                            {cat.title}
-                          </h3>
-                        </div>
-                        <p className="text-xs sm:text-sm text-slate-500 line-clamp-1 mt-0.5">
-                          {cat.tagline}
-                        </p>
-                      </div>
+                      <span className="w-9 h-9 rounded-md bg-[#090E19]/85 backdrop-blur-md text-white border border-white/15 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                        {icon}
+                      </span>
                     </div>
 
-                    <ChevronRight
-                      className={`w-5 h-5 shrink-0 transition-transform duration-200 ${
-                        isSelected ? 'rotate-90 text-slate-900' : 'text-slate-300'
-                      }`}
-                      aria-hidden="true"
-                    />
-                  </div>
+                    {/* Title over dark bottom gradient */}
+                    <div className="absolute bottom-3.5 left-4 right-4">
+                      <h3 className="text-xl font-black text-white font-display tracking-tight leading-snug">
+                        {cat.title}
+                      </h3>
+                    </div>
+                  </a>
 
-                  {/* Expanded Content when active */}
-                  <AnimatePresence>
-                    {isSelected && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.25 }}
-                        className="pt-4 mt-4 border-t border-slate-100 overflow-hidden"
-                      >
-                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
-                          {cat.description}
-                        </p>
+                  {/* Stable Body Content */}
+                  <div className="p-6 space-y-4">
+                    <p className="text-xs sm:text-sm font-semibold text-[#090E19] leading-snug">
+                      {cat.tagline}
+                    </p>
 
-                        {/* Mobile only inline image */}
-                        <div className="lg:hidden rounded-2xl overflow-hidden aspect-[16/10] mb-4 bg-slate-900">
-                          <img
-                            src={cat.image}
-                            alt={cat.title}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                            decoding="async"
-                            width="480"
-                            height="300"
-                          />
-                        </div>
+                    <p className="text-xs text-[#525663] leading-relaxed line-clamp-3">
+                      {cat.description}
+                    </p>
 
-                        {/* Surface / Speciality pills */}
-                        <div className="mb-4">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 block mb-2">
-                            Superficies y aplicaciones principales:
-                          </span>
-                          <div className="flex flex-wrap gap-1.5">
-                            {cat.surfacesOrApps.map((s) => (
-                              <span
-                                key={s}
-                                className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 border border-slate-200/60"
-                              >
-                                {s}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* CTA Buttons */}
-                        <div className="flex flex-wrap items-center gap-2.5 pt-2">
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onSelectSolution(cat.title);
-                            }}
-                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white shadow-sm hover:opacity-95 transition-all"
-                            style={{ backgroundColor: cat.accentColor }}
-                          >
-                            <span>{cat.ctaText}</span>
-                            <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                          </button>
-
-                          {onOpenCategoryPage && (
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onOpenCategoryPage(cat.id);
-                              }}
-                              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs text-slate-900 bg-slate-100 hover:bg-slate-200 border border-slate-300/80 transition-colors"
-                            >
-                              <span>Ver subpágina y ficha técnica</span>
-                              <ExternalLink className="w-3.5 h-3.5 text-slate-600" aria-hidden="true" />
-                            </button>
-                          )}
-
-                          <a
-                            href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=Hola%20Ideas%20%26%20Colores%2C%20quiero%20cotizar%20el%20servicio%20de%20${encodeURIComponent(
-                              cat.title
-                            )}.`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl font-bold text-xs text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 transition-colors"
-                          >
-                            <MessageCircle className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
-                            <span>WhatsApp</span>
-                          </a>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Right Column (5 cols): Sticky Architectural Live Preview */}
-          <div className="hidden lg:block lg:col-span-5 sticky top-24">
-            <SpotlightCard
-              spotlightColor={`${activeService.accentColor}25`}
-              className="rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl relative text-left"
-            >
-              {/* Photo preview with smooth crossfade */}
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-950">
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={activeService.id}
-                    src={activeService.image}
-                    alt={activeService.title}
-                    initial={{ opacity: 0, scale: 1.05 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.35 }}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    width="520"
-                    height="390"
-                  />
-                </AnimatePresence>
-
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent pointer-events-none" />
-
-                {/* Top service number badge */}
-                <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-                  <span
-                    className="text-xs font-black px-3.5 py-1.5 rounded-full text-white shadow-md backdrop-blur-md"
-                    style={{ backgroundColor: activeService.accentColor }}
-                  >
-                    Línea {activeService.number}
-                  </span>
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-white border border-white/20">
-                    Ideas &amp; Colores GT
-                  </span>
-                </div>
-
-                {/* Bottom photo overlay caption */}
-                <div className="absolute bottom-4 left-4 right-4">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-amber-300 block mb-1">
-                    Especialidad Activa
-                  </span>
-                  <h4 className="text-xl font-bold font-display text-white">
-                    {activeService.title}
-                  </h4>
-                </div>
-              </div>
-
-              {/* Card Body Information */}
-              <div className="p-6 space-y-4 text-white bg-slate-950">
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                  {activeService.tagline}
-                </p>
-
-                {/* Lines / Subservices */}
-                <div className="pt-2 border-t border-slate-800">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
-                    Líneas disponibles:
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {activeService.linesOrServices.map((l) => (
-                      <span
-                        key={l}
-                        className="text-[11px] font-medium px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-200 border border-slate-700"
-                      >
-                        {l}
+                    {/* Key Specialized Lines */}
+                    <div className="pt-3 border-t border-[#E8E9EE] space-y-1.5">
+                      <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#80828C] block">
+                        Especialidades incluidas
                       </span>
-                    ))}
+                      <ul className="space-y-1.5">
+                        {cat.linesOrServices.slice(0, 3).map((line) => (
+                          <li
+                            key={line}
+                            className="flex items-start gap-2 text-xs font-medium text-[#2B2F3A]"
+                          >
+                            <CheckCircle2
+                              className="w-3.5 h-3.5 shrink-0 mt-0.5"
+                              style={{ color: catTheme.accent === '#FAB82A' ? '#D97706' : catTheme.accent }}
+                              aria-hidden="true"
+                            />
+                            <span>{line}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
 
-                {/* Guarantee assurance */}
-                <div className="pt-3 border-t border-slate-800/80 flex items-center gap-2 text-xs text-slate-400">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden="true" />
-                  <span>Personal calificado con garantía por escrito.</span>
-                </div>
-
-                {/* Direct Action Buttons */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => onSelectSolution(activeService.title)}
-                    className="py-3 px-4 rounded-xl font-bold text-xs text-white shadow-md hover:opacity-95 transition-all flex items-center justify-center gap-1.5"
-                    style={{ backgroundColor: activeService.accentColor }}
+                {/* Clear Card Footer Actions */}
+                <div className="p-6 pt-0 space-y-2.5">
+                  {/* Primary: Open Separate Category Page */}
+                  <a
+                    href={`#servicio/${cat.id}`}
+                    onClick={(e) => {
+                      if (onOpenCategoryPage) {
+                        e.preventDefault();
+                        onOpenCategoryPage(cat.id);
+                      }
+                    }}
+                    className="group/btn w-full inline-flex items-center justify-between gap-2 pl-2 pr-4 py-2 min-h-[46px] rounded-md font-bold text-xs sm:text-sm shadow-sm hover:opacity-95 active:scale-[0.99] transition-all"
+                    style={{
+                      backgroundColor: catTheme.accent,
+                      color: catTheme.textOnAccent,
+                    }}
                   >
-                    <span>Cotizar {activeService.shortTitle}</span>
-                    <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-                  </button>
+                    <span className="inline-flex items-center gap-2.5">
+                      <span className="w-7 h-7 rounded-sm bg-white flex items-center justify-center shrink-0 transition-transform duration-200 group-hover/btn:scale-95">
+                        <ArrowRight
+                          className="w-3.5 h-3.5 transition-transform duration-200 group-hover/btn:translate-x-0.5"
+                          style={{ color: catTheme.accent === '#FAB82A' ? '#B45309' : catTheme.accent }}
+                          aria-hidden="true"
+                        />
+                      </span>
+                      <span>Abrir página de {cat.shortTitle}</span>
+                    </span>
+                    <ExternalLink className="w-3.5 h-3.5 opacity-90 shrink-0" aria-hidden="true" />
+                  </a>
 
-                  {onOpenCategoryPage && (
+                  {/* Secondary Actions: Pre-fill Quote or WhatsApp */}
+                  <div className="grid grid-cols-2 gap-2">
                     <button
                       type="button"
-                      onClick={() => onOpenCategoryPage(activeService.id)}
-                      className="py-3 px-4 rounded-xl font-bold text-xs text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-700 transition-all flex items-center justify-center gap-1.5"
+                      onClick={() => onSelectSolution(cat.title)}
+                      className="min-h-[42px] px-3 py-2 rounded-md bg-white hover:bg-[#090E19] hover:text-white text-[#090E19] border border-[#E8E9EE] text-xs font-bold transition-colors cursor-pointer"
                     >
-                      <span>Abrir página dedicada</span>
-                      <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+                      Cotizar rápido
                     </button>
-                  )}
+
+                    <a
+                      href={buildSafeWhatsAppUrl(
+                        BUSINESS_INFO.whatsappNumber,
+                        `Hola Ideas & Colores, quiero cotizar el servicio de ${cat.title}.`
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="min-h-[42px] px-3 py-2 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
+                      <span>WhatsApp</span>
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </SpotlightCard>
-          </div>
+              </motion.article>
+            );
+          })}
         </div>
+
+        {/* Quick Subpage Directory Strip so Home stays 100% focused on Services */}
+        {onNavigate && (
+          <FadeIn direction="up" distance={16} delay={0.1}>
+            <div className="mt-14 pt-10 border-t border-[#E8E9EE]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5 text-left">
+                <span className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#80828C]">
+                  Explorar secciones en su propia página:
+                </span>
+                <span className="text-xs text-[#525663]">
+                  También accesibles desde el menú superior
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                {subpageLinks.map((sp) => (
+                  <button
+                    key={sp.id}
+                    type="button"
+                    onClick={() => onNavigate(sp.id)}
+                    className="group p-4 rounded-xl bg-[#F4F5F7] hover:bg-[#090E19] border border-[#E8E9EE] hover:border-[#090E19] text-left transition-all duration-200 flex items-center justify-between gap-3 cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span
+                        className="w-9 h-9 rounded-md flex items-center justify-center shrink-0 text-white"
+                        style={{
+                          backgroundColor: sp.accent,
+                          color: sp.accent === '#FAB82A' || sp.accent === '#00A3FF' || sp.accent === '#10B981' ? '#090E19' : '#FFFFFF',
+                        }}
+                      >
+                        {sp.icon}
+                      </span>
+                      <div className="min-w-0">
+                        <strong className="text-xs sm:text-sm font-black text-[#090E19] group-hover:text-white block truncate transition-colors">
+                          {sp.title}
+                        </strong>
+                        <span className="text-[11px] text-[#525663] group-hover:text-slate-300 block truncate transition-colors">
+                          {sp.subtitle}
+                        </span>
+                      </div>
+                    </div>
+                    <ArrowRight
+                      className="w-4 h-4 text-[#80828C] group-hover:text-white group-hover:translate-x-0.5 shrink-0 transition-all"
+                      aria-hidden="true"
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </FadeIn>
+        )}
       </div>
     </section>
   );

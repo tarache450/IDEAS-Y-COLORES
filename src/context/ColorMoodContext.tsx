@@ -36,18 +36,18 @@ export const MOODS: Record<ColorMood, MoodData> = {
   },
   naranja: {
     id: 'naranja',
-    name: 'Naranja Energía',
-    concept: 'Transformación, dinamismo y acabado cálido',
-    color: '#FF5738',
-    hoverColor: '#E64324',
-    glow: 'rgba(255, 87, 56, 0.35)',
-    lightBg: 'rgba(255, 87, 56, 0.08)',
-    borderColor: 'rgba(255, 87, 56, 0.3)',
+    name: 'Naranja Roofera',
+    concept: 'Energía arquitectónica, precisión técnica y alto impacto visual',
+    color: '#FF5C00',
+    hoverColor: '#CC4A00',
+    glow: 'rgba(255, 92, 0, 0.32)',
+    lightBg: 'rgba(255, 92, 0, 0.08)',
+    borderColor: 'rgba(255, 92, 0, 0.35)',
     textColorOnAccent: '#FFFFFF',
-    tailwindBg: 'bg-[#FF5738]',
-    tailwindText: 'text-[#FF5738]',
-    tailwindBorder: 'border-[#FF5738]',
-    badgeBg: 'bg-orange-50 text-[#FF5738] border-orange-200',
+    tailwindBg: 'bg-[#FF5C00]',
+    tailwindText: 'text-[#FF5C00]',
+    tailwindBorder: 'border-[#FF5C00]',
+    badgeBg: 'bg-[#FFF0E6] text-[#CC4A00] border-[#FF5C00]/30',
   },
   amarillo: {
     id: 'amarillo',
@@ -91,12 +91,12 @@ interface ColorMoodContextType {
 const ColorMoodContext = createContext<ColorMoodContextType | undefined>(undefined);
 
 export const ColorMoodProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [activeMood, setActiveMood] = useState<ColorMood>('azul');
+  const [activeMood, setActiveMood] = useState<ColorMood>('naranja');
 
   // Load persisted mood from localStorage
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('ideas_colores_active_mood') as ColorMood;
+      const saved = localStorage.getItem('ideas_colores_roofera_mood') as ColorMood;
       if (saved && MOODS[saved]) {
         setActiveMood(saved);
       }
@@ -115,9 +115,10 @@ export const ColorMoodProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     root.style.setProperty('--mood-light', mood.lightBg);
     root.style.setProperty('--mood-border', mood.borderColor);
     root.style.setProperty('--mood-text-contrast', mood.textColorOnAccent);
+    root.style.setProperty('--mood-color', mood.color);
 
     try {
-      localStorage.setItem('ideas_colores_active_mood', activeMood);
+      localStorage.setItem('ideas_colores_roofera_mood', activeMood);
     } catch {
       // ignore
     }

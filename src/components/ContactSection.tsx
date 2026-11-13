@@ -11,7 +11,7 @@ import {
   Star,
 } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/content';
-import { SpotlightCard } from './ui/SpotlightCard';
+import { useColorMood } from '../context/ColorMoodContext';
 import { StaggeredText } from './ui/StaggeredText';
 import { GoogleIcon } from './ui/GoogleIcon';
 import {
@@ -21,144 +21,167 @@ import {
 } from '../utils/security';
 
 export const ContactSection: React.FC = () => {
+  const { currentMood } = useColorMood();
   const directWhatsAppUrl = buildSafeWhatsAppUrl(
     BUSINESS_INFO.whatsappNumber,
     'Hola Ideas & Colores, quiero cotizar mi proyecto.'
   );
 
   return (
-    <section id="contacto" className="py-20 sm:py-24 bg-transparent border-b border-slate-200/50 relative overflow-hidden">
+    <section
+      id="contacto"
+      className="py-20 sm:py-28 bg-[#F4F5F7] border-b border-[#E8E9EE] relative overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-900 bg-amber-50 px-3.5 py-1 rounded-full border border-amber-300">
-            Canales Verificados y Ubicación
-          </span>
-          <div className="mt-3">
-            <StaggeredText
-              text="Atención directa en Carretera a El Salvador y toda Guatemala."
-              as="h2"
-              className="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight font-display"
-            />
+        {/* Roofera Section Header */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-14 pb-8 border-b border-[#E8E9EE]">
+          <div className="max-w-3xl text-left">
+            <div className="inline-flex items-center gap-2.5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#80828C] mb-3">
+              <span
+                className="w-2.5 h-2.5 rounded-xs shrink-0"
+                style={{ backgroundColor: currentMood.color }}
+              />
+              <span>Canales Verificados y Sede Central</span>
+            </div>
+
+            <div className="flex items-baseline">
+              <StaggeredText
+                text="Atención en Carretera a El Salvador y toda Guatemala"
+                as="h2"
+                className="text-3xl sm:text-5xl font-black text-[#090E19] tracking-[-0.04em] leading-[1.06] font-display inline"
+              />
+              <span
+                className="text-4xl sm:text-5xl font-black leading-none select-none"
+                style={{ color: currentMood.color }}
+              >
+                .
+              </span>
+            </div>
           </div>
-          <p className="mt-3 text-base sm:text-lg text-slate-600">
-            Comunícate directamente con nuestra gerencia técnica por teléfono, WhatsApp o correo electrónico para coordinar tu visita sin costo.
+
+          <p className="text-sm sm:text-base text-[#525663] leading-relaxed max-w-md text-left">
+            Comunícate con nuestra gerencia técnica por teléfono, WhatsApp o correo para coordinar
+            tu visita sin costo.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left: 4 Direct Information Cards + Social & WhatsApp Banner */}
+          {/* Left: 4 Direct Contact Cards + Social Channels */}
           <div className="lg:col-span-6 space-y-5 text-left">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Phone Card */}
-              <SpotlightCard
-                className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 shadow-2xs hover:shadow-md transition-all"
-                spotlightColor="rgba(251, 191, 36, 0.15)"
-              >
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center mb-3">
+              <div className="p-6 rounded-xl bg-white border border-[#E8E9EE] hover:border-[#090E19]/30 transition-all">
+                <div
+                  className="w-10 h-10 rounded-md text-white flex items-center justify-center mb-3"
+                  style={{ backgroundColor: currentMood.color }}
+                >
                   <Phone className="w-5 h-5" aria-hidden="true" />
                 </div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#80828C]">
                   Teléfono directo
                 </h3>
                 <a
                   href={`tel:${BUSINESS_INFO.phoneClean}`}
-                  className="text-lg font-bold text-slate-950 hover:text-amber-600 transition-colors block mt-1"
+                  className="text-lg font-black text-[#090E19] hover:opacity-80 transition-opacity block mt-1"
                 >
                   {BUSINESS_INFO.phone}
                 </a>
-                <p className="text-xs text-slate-500 mt-1">{BUSINESS_INFO.scheduleWeekdays}</p>
-              </SpotlightCard>
+                <p className="text-xs text-[#525663] mt-1">{BUSINESS_INFO.scheduleWeekdays}</p>
+              </div>
 
               {/* WhatsApp Card */}
-              <SpotlightCard
-                className="p-6 rounded-3xl bg-emerald-50/70 border border-emerald-200 shadow-2xs hover:shadow-md transition-all"
-                spotlightColor="rgba(16, 185, 129, 0.18)"
-              >
-                <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-3">
+              <div className="p-6 rounded-xl bg-white border border-emerald-200 hover:border-emerald-400 transition-all">
+                <div className="w-10 h-10 rounded-md bg-emerald-600 text-white flex items-center justify-center mb-3">
                   <MessageCircle className="w-5 h-5" aria-hidden="true" />
                 </div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-emerald-700">
                   WhatsApp Oficial
                 </h3>
                 <a
                   href={directWhatsAppUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-lg font-bold text-emerald-950 hover:text-emerald-700 transition-colors block mt-1"
+                  className="text-lg font-black text-[#090E19] hover:text-emerald-700 transition-colors block mt-1"
                 >
                   {BUSINESS_INFO.phone}
                 </a>
-                <p className="text-xs text-emerald-700 mt-1">Asesoría inmediata y cotizaciones</p>
-              </SpotlightCard>
+                <p className="text-xs text-[#525663] mt-1">Asesoría inmediata y cotizaciones</p>
+              </div>
 
               {/* Email Card */}
-              <SpotlightCard
-                className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 shadow-2xs hover:shadow-md transition-all"
-                spotlightColor="rgba(0, 89, 255, 0.12)"
-              >
-                <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-900 flex items-center justify-center mb-3">
+              <div className="p-6 rounded-xl bg-white border border-[#E8E9EE] hover:border-[#090E19]/30 transition-all">
+                <div className="w-10 h-10 rounded-md bg-[#090E19] text-white flex items-center justify-center mb-3">
                   <Mail className="w-5 h-5" aria-hidden="true" />
                 </div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#80828C]">
                   Correo Corporativo
                 </h3>
                 <a
                   href={buildSafeMailtoUrl('Consulta de Proyecto - Ideas & Colores')}
-                  className="text-sm font-bold text-slate-950 hover:text-sky-600 transition-colors block mt-1 truncate"
+                  className="text-sm font-black text-[#090E19] hover:opacity-80 transition-opacity block mt-1 truncate"
                 >
                   {getObfuscatedEmailDisplay()}
                 </a>
-                <p className="text-xs text-slate-500 mt-1">Gerencia y presupuestos formales</p>
-              </SpotlightCard>
+                <p className="text-xs text-[#525663] mt-1">Gerencia y presupuestos formales</p>
+              </div>
 
               {/* Location Card */}
-              <SpotlightCard
-                className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 shadow-2xs hover:shadow-md transition-all"
-                spotlightColor="rgba(168, 85, 247, 0.12)"
-              >
-                <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-900 flex items-center justify-center mb-3">
-                  <MapPin className="w-5 h-5" aria-hidden="true" />
+              <div className="p-6 rounded-xl bg-white border border-[#E8E9EE] hover:border-[#090E19]/30 transition-all">
+                <div className="w-10 h-10 rounded-md bg-[#090E19] text-white flex items-center justify-center mb-3">
+                  <MapPin
+                    className="w-5 h-5"
+                    style={{ color: currentMood.color }}
+                    aria-hidden="true"
+                  />
                 </div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#80828C]">
                   Ubicación Principal
                 </h3>
-                <p className="text-sm font-bold text-slate-950 mt-1">
+                <p className="text-sm font-black text-[#090E19] mt-1">
                   {BUSINESS_INFO.addressFull}
                 </p>
-                <p className="text-xs text-slate-500 mt-1">{BUSINESS_INFO.scheduleSaturdays}</p>
-              </SpotlightCard>
+                <p className="text-xs text-[#525663] mt-1">{BUSINESS_INFO.scheduleSaturdays}</p>
+              </div>
             </div>
 
-            {/* Social Media & Google Business Review Channels Grid */}
+            {/* Social Media & Google Business Review Channels */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <a
                 href={BUSINESS_INFO.googleReviewUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 id="contact-btn-google-reviews"
-                className="sm:col-span-2 p-3.5 sm:p-4 rounded-2xl bg-white hover:bg-amber-50/40 border border-slate-200/90 hover:border-amber-300 shadow-2xs hover:shadow-md flex items-center justify-between gap-3 transition-all group"
+                className="sm:col-span-2 p-4 rounded-xl bg-white border border-[#E8E9EE] hover:border-[#090E19]/40 flex items-center justify-between gap-3 transition-all group"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center shrink-0 shadow-2xs">
+                  <div className="w-10 h-10 rounded-md bg-[#F4F5F7] border border-[#E8E9EE] flex items-center justify-center shrink-0">
                     <GoogleIcon className="w-5 h-5" />
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700">
+                      <span
+                        className="text-[11px] font-extrabold uppercase tracking-wider"
+                        style={{ color: currentMood.color }}
+                      >
                         Perfil de Google
                       </span>
                       <span className="inline-flex items-center text-amber-400 text-xs">
                         <Star className="w-3 h-3 fill-amber-400 text-amber-400" aria-hidden="true" />
-                        <span className="font-bold text-slate-800 ml-1 text-xs">{BUSINESS_INFO.googleRating}</span>
+                        <span className="font-bold text-[#090E19] ml-1 text-xs">
+                          {BUSINESS_INFO.googleRating}
+                        </span>
                       </span>
                     </div>
-                    <p className="text-xs sm:text-sm font-bold text-slate-950 group-hover:text-amber-700 transition-colors truncate">
+                    <p className="text-xs sm:text-sm font-bold text-[#090E19] truncate">
                       Deja tu reseña o comentario en Google
                     </p>
                   </div>
                 </div>
-                <span className="text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 px-3 py-1.5 rounded-xl shadow-2xs transition-all shrink-0">
+
+                <span
+                  className="text-xs font-bold text-white px-3.5 py-2 rounded-md shrink-0"
+                  style={{ backgroundColor: currentMood.color }}
+                >
                   Calificar ★
                 </span>
               </a>
@@ -168,22 +191,22 @@ export const ContactSection: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 id="contact-btn-instagram"
-                className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md flex items-center justify-between gap-3 transition-all hover:border-pink-300 group"
+                className="p-3.5 rounded-xl bg-white border border-[#E8E9EE] hover:border-pink-400 flex items-center justify-between gap-3 transition-all group"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                  <div className="w-9 h-9 rounded-md bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shrink-0">
                     <Instagram className="w-4 h-4" aria-hidden="true" />
                   </div>
                   <div className="min-w-0">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-pink-600 block">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-pink-600 block">
                       Instagram
                     </span>
-                    <p className="text-xs font-bold text-slate-950 group-hover:text-pink-600 transition-colors truncate">
+                    <p className="text-xs font-bold text-[#090E19] truncate">
                       {BUSINESS_INFO.instagram}
                     </p>
                   </div>
                 </div>
-                <span className="text-[11px] font-semibold text-slate-600 bg-slate-50 group-hover:bg-pink-600 group-hover:text-white px-2.5 py-1 rounded-lg border border-slate-200 transition-all shrink-0">
+                <span className="text-[11px] font-bold text-[#090E19] bg-[#F4F5F7] px-2.5 py-1 rounded-md shrink-0">
                   Ver →
                 </span>
               </a>
@@ -193,37 +216,35 @@ export const ContactSection: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 id="contact-btn-facebook"
-                className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md flex items-center justify-between gap-3 transition-all hover:border-blue-300 group"
+                className="p-3.5 rounded-xl bg-white border border-[#E8E9EE] hover:border-blue-400 flex items-center justify-between gap-3 transition-all group"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                  <div className="w-9 h-9 rounded-md bg-blue-600 text-white flex items-center justify-center shrink-0">
                     <Facebook className="w-4 h-4" aria-hidden="true" />
                   </div>
                   <div className="min-w-0">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 block">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-600 block">
                       Facebook
                     </span>
-                    <p className="text-xs font-bold text-slate-950 group-hover:text-blue-600 transition-colors truncate">
-                      Ideas &amp; Colores
-                    </p>
+                    <p className="text-xs font-bold text-[#090E19] truncate">Ideas &amp; Colores</p>
                   </div>
                 </div>
-                <span className="text-[11px] font-semibold text-slate-600 bg-slate-50 group-hover:bg-blue-600 group-hover:text-white px-2.5 py-1 rounded-lg border border-slate-200 transition-all shrink-0">
+                <span className="text-[11px] font-bold text-[#090E19] bg-[#F4F5F7] px-2.5 py-1 rounded-md shrink-0">
                   Ver →
                 </span>
               </a>
             </div>
 
-            {/* Large WhatsApp CTA Button */}
-            <div className="p-7 rounded-3xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
+            {/* Large WhatsApp Dark Banner */}
+            <div className="p-6 sm:p-7 rounded-xl bg-[#090E19] text-white border border-[#27324D] shadow-xl flex flex-col sm:flex-row items-center justify-between gap-5">
               <div className="space-y-1 text-center sm:text-left">
-                <span className="text-[11px] font-bold uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-full">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-emerald-400">
                   Atención Inmediata
                 </span>
-                <h3 className="text-xl sm:text-2xl font-bold font-display text-white">
+                <h3 className="text-xl font-black font-display text-white">
                   ¿Prefieres enviar fotos por WhatsApp?
                 </h3>
-                <p className="text-xs sm:text-sm text-emerald-100">
+                <p className="text-xs text-[#B8BCC6]">
                   Envíanos fotos de tus ambientes o medidas aproximadas y te asesoramos al instante.
                 </p>
               </div>
@@ -233,18 +254,18 @@ export const ContactSection: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 id="btn-large-whatsapp-contact"
-                className="w-full sm:w-auto px-6 py-4 rounded-xl bg-white hover:bg-slate-100 text-emerald-950 font-extrabold text-sm sm:text-base shadow-md transition-all flex items-center justify-center gap-2.5 shrink-0"
+                className="w-full sm:w-auto px-5 py-3.5 min-h-[48px] rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all flex items-center justify-center gap-2 shrink-0"
               >
-                <MessageCircle className="w-6 h-6 text-emerald-600" aria-hidden="true" />
+                <MessageCircle className="w-5 h-5" aria-hidden="true" />
                 <span>Hablar por WhatsApp</span>
               </a>
             </div>
           </div>
 
-          {/* Right: Map & Location Pin Representation */}
+          {/* Right: Map Carretera a El Salvador Km 21.5, Fraijanes */}
           <div className="lg:col-span-6 space-y-4 text-left">
-            <div className="rounded-3xl overflow-hidden border border-slate-200 shadow-md bg-slate-100 relative">
-              <div className="aspect-[4/3] sm:aspect-[16/11] w-full relative">
+            <div className="rounded-xl overflow-hidden border border-[#E8E9EE] shadow-md bg-white relative">
+              <div className="aspect-[4/3] sm:aspect-[16/11] w-full relative bg-[#E8E9EE]">
                 <iframe
                   title="Ubicación Ideas & Colores Carretera a El Salvador Km 21.5, Fraijanes, Guatemala"
                   src="https://maps.google.com/maps?q=Carretera%20a%20El%20Salvador%20Km%2021.5%2C%20Fraijanes%2C%20Guatemala&t=&z=15&ie=UTF8&iwloc=&output=embed"
@@ -254,32 +275,35 @@ export const ContactSection: React.FC = () => {
                 />
               </div>
 
-              <div className="p-5 bg-white border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+              <div className="p-5 bg-white border-t border-[#E8E9EE] flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h4 className="text-sm font-bold text-slate-950">
+                  <h4 className="text-sm font-black text-[#090E19] font-display">
                     Sede Carretera a El Salvador Km 21.5, Fraijanes
                   </h4>
-                  <p className="text-xs text-slate-500">
-                    Carretera a El Salvador Km 21.5, Fraijanes, Guatemala · Atención residencial, comercial e industrial
+                  <p className="text-xs text-[#525663]">
+                    Carretera a El Salvador Km 21.5, Fraijanes, Guatemala · Atención residencial,
+                    comercial e industrial
                   </p>
                 </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <a
-                    href="https://www.google.com/maps/search/?api=1&query=Carretera+a+El+Salvador+Km+21.5+Fraijanes+Guatemala"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition-colors"
-                  >
-                    <Navigation className="w-3.5 h-3.5 text-sky-600" aria-hidden="true" />
-                    <span>Abrir en Google Maps</span>
-                  </a>
-                </div>
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=Carretera+a+El+Salvador+Km+21.5+Fraijanes+Guatemala"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[40px] rounded-md bg-[#090E19] hover:bg-[#151D30] text-white text-xs font-bold transition-colors"
+                >
+                  <Navigation
+                    className="w-3.5 h-3.5"
+                    style={{ color: currentMood.color }}
+                    aria-hidden="true"
+                  />
+                  <span>Abrir en Google Maps</span>
+                </a>
               </div>
             </div>
 
-            {/* Regional coverage list */}
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-600 space-y-2">
-              <div className="flex items-center gap-2 text-slate-900 font-bold">
+            {/* Regional coverage */}
+            <div className="p-5 rounded-xl bg-white border border-[#E8E9EE] text-xs text-[#525663] space-y-2">
+              <div className="flex items-center gap-2 text-[#090E19] font-extrabold">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" aria-hidden="true" />
                 <span>Cobertura en toda la República de Guatemala:</span>
               </div>
