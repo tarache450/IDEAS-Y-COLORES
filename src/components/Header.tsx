@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import {
   Menu,
   X,
@@ -39,9 +40,19 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileServicesExpanded, setMobileServicesExpanded] = useState(false);
   const [servicesMenuOpen, setServicesMenuOpen] = useState(false);
   const { currentMood } = useColorMood();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const prefersReduced = useReducedMotion();
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -387,125 +398,213 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Mobile Drawer Navigation */}
-      {mobileMenuOpen && (
-        <div
-          id="mobile-drawer-menu"
-          className="lg:hidden bg-[#090E19]/98 backdrop-blur-lg border-b border-[#27324D] shadow-2xl px-4 pt-3 pb-6 space-y-4 max-h-[calc(100dvh-72px)] overflow-y-auto text-white"
-        >
-          <nav className="grid grid-cols-2 gap-2" aria-label="Móvil">
-            {[
-              { id: 'soluciones', label: 'Servicios (6 Páginas)', pageKey: 'inicio', accentKey: 'servicios' },
-              { id: 'proyectos', label: 'Proyectos', pageKey: 'proyectos', accentKey: 'proyectos' },
-              { id: 'herramientas', label: 'Color & Calculadora', pageKey: 'herramientas', accentKey: 'herramientas' },
-              { id: 'confianza', label: 'Sobre Nosotros', pageKey: 'nosotros', accentKey: 'nosotros' },
-              { id: 'contacto', label: 'Contacto y Mapa', pageKey: 'contacto', accentKey: 'contacto' },
-              { id: 'cotizar', label: 'Cotizar Proyecto', pageKey: 'cotizar', accentKey: 'proyectos' },
-            ].map((item) => {
-              const isMobileActive =
-                (item.id === 'soluciones' && (activePage === 'inicio' || Boolean(activeCategorySlug))) ||
-                activePage === item.pageKey;
-              const mobAccent = NAV_PAGE_ACCENTS[item.accentKey] || currentMood.color;
-              return (
-                <a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(item.id);
-                  }}
-                  className={`w-full min-h-11 text-left px-3 py-2 rounded-md text-xs font-semibold transition-colors flex items-center gap-2 border ${
-                    isMobileActive
-                      ? 'text-white font-bold shadow-sm'
-                      : 'text-slate-200 bg-[#151D30] border-[#27324D] hover:bg-white/10'
-                  }`}
-                  style={
-                    isMobileActive
-                      ? { backgroundColor: mobAccent, borderColor: mobAccent, color: mobAccent === '#FAB82A' || mobAccent === '#00A3FF' || mobAccent === '#10B981' ? '#090E19' : '#FFFFFF' }
-                      : undefined
-                  }
-                >
-                  <span
-                    className="w-2 h-2 rounded-full shrink-0"
-                    style={{ backgroundColor: isMobileActive ? 'currentColor' : mobAccent }}
-                  />
-                  <span>{item.label}</span>
-                </a>
-              );
-            })}
-          </nav>
+      {/* Mobile Right Slide-Over Navigation Drawer */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: prefersReduced ? 0.01 : 0.22 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-[#090E19]/70 backdrop-blur-xs"
+              aria-hidden="true"
+            />
 
-          {onOpenCategoryPage && (
-            <div className="pt-2 border-t border-[#27324D]">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
-                Páginas por Categoría:
-              </span>
-              <div className="grid grid-cols-2 gap-1.5">
-                {MULTI_SERVICES_CATEGORIES.map((cat) => {
-                  const catTheme = getCategoryLogoTheme(cat.id, cat.accentColor);
-                  return (
+            {/* Full-Height Editorial Right Panel */}
+            <motion.aside
+              id="mobile-drawer-menu"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menú de navegación móvil"
+              initial={prefersReduced ? false : { x: '100%' }}
+              animate={{ x: 0 }}
+              exit={prefersReduced ? undefined : { x: '100%' }}
+              transition={{ type: 'spring', stiffness: 360, damping: 36 }}
+              className="relative z-10 w-[85vw] max-w-[340px] h-[100dvh] bg-[#090E19] border-l border-[#27324D] shadow-2xl flex flex-col justify-between text-white overflow-y-auto"
+            >
+              <div
+                className="h-[3px] w-full shrink-0"
+                style={{ background: LOGO_SPECTRUM_GRADIENT }}
+                aria-hidden="true"
+              />
+
+              <div className="flex flex-col justify-between flex-1 px-7 pt-5 pb-7 gap-6">
+                {/* Drawer Header with Top-Right Close Button */}
+                <div className="flex items-center justify-between">
+                  <BrandLogo size="sm" variant="light" showSlogan={false} />
+                  <button
+                    type="button"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="size-11 inline-flex items-center justify-center rounded-md text-white hover:bg-white/10 border border-white/15 transition-colors cursor-pointer"
+                    aria-label="Cerrar menú"
+                  >
+                    <X className="w-5 h-5" aria-hidden="true" />
+                  </button>
+                </div>
+
+                {/* Vertically Centered Large Editorial Links */}
+                <nav className="my-auto space-y-2.5 py-2" aria-label="Móvil">
+                  {[
+                    {
+                      id: 'soluciones',
+                      label: 'Servicios',
+                      pageKey: 'inicio',
+                      accentKey: 'servicios',
+                      hasChildren: true,
+                    },
+                    { id: 'proyectos', label: 'Proyectos', pageKey: 'proyectos', accentKey: 'proyectos' },
+                    {
+                      id: 'herramientas',
+                      label: 'Color & Calculadora',
+                      pageKey: 'herramientas',
+                      accentKey: 'herramientas',
+                    },
+                    { id: 'confianza', label: 'Nosotros', pageKey: 'nosotros', accentKey: 'nosotros' },
+                    { id: 'contacto', label: 'Contacto', pageKey: 'contacto', accentKey: 'contacto' },
+                  ].map((item) => {
+                    const isMobileActive =
+                      (item.id === 'soluciones' &&
+                        (activePage === 'inicio' || Boolean(activeCategorySlug))) ||
+                      activePage === item.pageKey;
+                    const mobAccent = NAV_PAGE_ACCENTS[item.accentKey] || currentMood.color;
+
+                    if (item.hasChildren && onOpenCategoryPage) {
+                      return (
+                        <div key={item.id} className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <a
+                              href="#soluciones"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleNavClick('soluciones');
+                              }}
+                              className="inline-flex items-center gap-3 py-1.5 text-[26px] leading-tight font-black font-display tracking-tight transition-colors"
+                              style={{ color: isMobileActive ? '#FFFFFF' : '#CBD5E1' }}
+                            >
+                              <span
+                                className="w-2.5 h-2.5 rounded-full shrink-0"
+                                style={{ backgroundColor: mobAccent }}
+                              />
+                              <span>{item.label}</span>
+                            </a>
+                            <button
+                              type="button"
+                              onClick={() => setMobileServicesExpanded((prev) => !prev)}
+                              aria-expanded={mobileServicesExpanded}
+                              aria-label="Mostrar subpáginas de servicios"
+                              className="size-10 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-slate-300 cursor-pointer"
+                            >
+                              <ChevronDown
+                                className={`w-4 h-4 transition-transform duration-200 ${
+                                  mobileServicesExpanded ? 'rotate-180' : ''
+                                }`}
+                                aria-hidden="true"
+                              />
+                            </button>
+                          </div>
+
+                          {mobileServicesExpanded && (
+                            <div className="pl-5 space-y-1 border-l border-[#27324D] ml-1 py-1">
+                              {MULTI_SERVICES_CATEGORIES.map((cat) => {
+                                const catTheme = getCategoryLogoTheme(cat.id, cat.accentColor);
+                                const isCatCurrent = activeCategorySlug === cat.id;
+                                return (
+                                  <a
+                                    key={cat.id}
+                                    href={`#servicio/${cat.id}`}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      handleCategoryClick(cat.id);
+                                    }}
+                                    className={`flex items-center justify-between py-2 px-3 rounded-md text-xs font-bold transition-colors ${
+                                      isCatCurrent
+                                        ? 'bg-white/10 text-white'
+                                        : 'text-slate-300 hover:text-white hover:bg-white/5'
+                                    }`}
+                                  >
+                                    <span className="truncate">{cat.shortTitle}</span>
+                                    <span
+                                      className="w-2 h-2 rounded-full shrink-0 ml-2"
+                                      style={{ backgroundColor: catTheme.accent }}
+                                    />
+                                  </a>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <a
+                        key={item.id}
+                        href={`#${item.id}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleNavClick(item.id);
+                        }}
+                        className="flex items-center gap-3 py-1.5 text-[26px] leading-tight font-black font-display tracking-tight transition-colors"
+                        style={{ color: isMobileActive ? '#FFFFFF' : '#CBD5E1' }}
+                      >
+                        <span
+                          className="w-2.5 h-2.5 rounded-full shrink-0"
+                          style={{ backgroundColor: mobAccent }}
+                        />
+                        <span>{item.label}</span>
+                      </a>
+                    );
+                  })}
+                </nav>
+
+                {/* Bottom Phone, Mood Picker & Thumb-Friendly Actions */}
+                <div className="space-y-4 pt-5 border-t border-[#27324D]">
+                  <div className="flex items-center justify-between gap-3">
                     <a
-                      key={cat.id}
-                      href={`#servicio/${cat.id}`}
+                      href={`tel:${BUSINESS_INFO.phoneClean}`}
+                      className="text-sm font-bold tracking-wide text-slate-200 hover:text-white transition-colors"
+                    >
+                      (502) 6661-7592
+                    </a>
+                    <MoodColorPicker variant="compact" className="mobile-mood-picker" />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <a
+                      href="#cotizar"
                       onClick={(e) => {
                         e.preventDefault();
-                        handleCategoryClick(cat.id);
+                        handleNavClick('cotizar');
                       }}
-                      className={`text-left px-3 py-2.5 rounded-md text-xs font-semibold border flex items-center justify-between transition-colors ${
-                        activeCategorySlug === cat.id
-                          ? 'text-white border-white/40 bg-white/15'
-                          : 'bg-[#151D30] border-[#27324D] text-slate-100 hover:border-slate-500'
-                      }`}
+                      className="min-h-11 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-md font-extrabold text-xs shadow-md transition-all"
+                      style={{
+                        backgroundColor: currentMood.color,
+                        color: currentMood.textColorOnAccent,
+                      }}
                     >
-                      <span className="truncate">{cat.shortTitle}</span>
-                      <span
-                        className="w-2.5 h-2.5 rounded-full shrink-0 ml-1"
-                        style={{ backgroundColor: catTheme.accent }}
-                      />
+                      <span>Cotizar</span>
+                      <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
                     </a>
-                  );
-                })}
+
+                    <a
+                      href={BUSINESS_INFO.whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="min-h-11 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-colors"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span>WhatsApp</span>
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
-
-          <div className="p-3 bg-[#151D30] rounded-lg border border-[#27324D]">
-            <div className="text-[11px] font-bold text-slate-200 mb-2 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5" style={{ color: currentMood.color }} aria-hidden="true" />
-              <span>Color de acento: {currentMood.name}</span>
-            </div>
-            <MoodColorPicker variant="compact" className="mobile-mood-picker" />
+            </motion.aside>
           </div>
-
-          <div className="pt-2 border-t border-[#27324D] space-y-2">
-            <a
-              href="#cotizar"
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavClick('cotizar');
-              }}
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-md font-extrabold uppercase tracking-wider text-xs shadow-md transition-all"
-              style={{
-                backgroundColor: currentMood.color,
-                color: currentMood.textColorOnAccent,
-              }}
-            >
-              <span>Solicitar Visita y Cotización Gratis</span>
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </a>
-
-            <a
-              href={BUSINESS_INFO.whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs"
-            >
-              <MessageCircle className="w-4 h-4" aria-hidden="true" />
-              <span>WhatsApp Directo ({BUSINESS_INFO.phone})</span>
-            </a>
-          </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </header>
   );
 };

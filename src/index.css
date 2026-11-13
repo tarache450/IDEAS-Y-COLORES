@@ -249,8 +249,16 @@ main > section.bg-transparent {
   transform: translateY(-3px);
 }
 
-/* ─── Section separator with gradient ───────────────────────── */
+/* ─── Section separator & scrollbar utilities ───────────────── */
 .section-divider {
   height: 1px;
   background: linear-gradient(to right, transparent, rgba(232, 233, 238, 0.9), transparent);
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

@@ -348,7 +348,7 @@ export const ServiceCategoryPage: React.FC<ServiceCategoryPageProps> = ({
 
             <nav
               aria-label="Cambiar de categoría de servicio"
-              className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 touch-pan-x"
+              className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 touch-pan-x -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar"
             >
               {MULTI_SERVICES_CATEGORIES.map((cat) => {
                 const isCurrent = cat.id === category.id;

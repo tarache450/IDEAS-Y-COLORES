@@ -141,7 +141,7 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
 
         {/* Zero-Jump Quick Category Filter Bar with Per-Division Logo Colors */}
         <div
-          className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 touch-pan-x"
+          className="flex items-center gap-2 overflow-x-auto pb-4 mb-6 sm:mb-8 touch-pan-x -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar"
           role="group"
           aria-label="Filtrar categorías de servicio"
         >

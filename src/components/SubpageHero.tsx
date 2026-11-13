@@ -65,7 +65,10 @@ export const SubpageHero: React.FC<SubpageHeroProps> = ({
             </nav>
           </div>
 
-          <nav aria-label="Subpáginas del sitio" className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 touch-pan-x">
+          <nav
+            aria-label="Subpáginas del sitio"
+            className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 touch-pan-x -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar"
+          >
             {SUBPAGE_TABS.map((tab) => {
               const isCurrent = activeNavId === tab.id;
               const tabLight =
