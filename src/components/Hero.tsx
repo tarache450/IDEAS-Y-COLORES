@@ -122,10 +122,7 @@ export const Hero: React.FC<HeroProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-3xl space-y-5 sm:space-y-6 text-left">
           {/* Multicolor Logo Spectrum Eyebrow Badge */}
-          <motion.div
-            initial={prefersReduced ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          <div
             className="inline-flex items-center gap-2.5 sm:gap-3 px-3 py-1.5 rounded-md backdrop-blur-md border border-white/20 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-100 max-w-full"
             style={{ backgroundColor: 'rgba(15, 23, 42, 0.82)' }}
           >
@@ -139,13 +136,10 @@ export const Hero: React.FC<HeroProps> = ({
               ))}
             </span>
             <span className="truncate">6 Divisiones • Garantía Escrita</span>
-          </motion.div>
+          </div>
 
           {/* Primary Display H1 */}
-          <motion.h1
-            initial={prefersReduced ? false : { opacity: 1, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          <h1
             className="text-[34px] sm:text-5xl lg:text-[62px] font-black text-white tracking-[-0.04em] leading-[1.06] sm:leading-[1.03] font-display text-balance"
           >
             Color que transforma espacios
@@ -156,36 +150,27 @@ export const Hero: React.FC<HeroProps> = ({
               Presión, Resinas Epóxicas y Entrega de Pintura a Domicilio en Ciudad de Guatemala y
               Carretera a El Salvador | Ideas &amp; Colores Guatemala
             </span>
-          </motion.h1>
+          </h1>
 
           {/* Animated Logo Spectrum Accent Rule */}
-          <motion.div
-            initial={prefersReduced ? false : { scaleX: 0, opacity: 0 }}
-            animate={{ scaleX: 1, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
+          <div
             style={{ background: LOGO_SPECTRUM_GRADIENT, transformOrigin: 'left' }}
             className="h-1 w-24 sm:w-32 rounded-full"
             aria-hidden="true"
           />
 
           {/* Focused Services Lead Copy */}
-          <motion.p
-            initial={prefersReduced ? false : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+          <p
             className="text-[15px] sm:text-xl text-slate-200 max-w-2xl font-normal leading-relaxed"
           >
             Pintura con <strong className="text-white font-semibold">sistema Airless</strong>,
             impresión digital, carpintería a medida, plomería técnica, pisos epóxicos e
             instalaciones generales en{' '}
             <strong className="text-white font-semibold">Carretera a El Salvador y toda Guatemala</strong>.
-          </motion.p>
+          </p>
 
           {/* Primary Roofera CTA Row — Zero awkward text wrap on phones */}
-          <motion.div
-            initial={prefersReduced ? false : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.26, ease: [0.22, 1, 0.36, 1] }}
+          <div
             className="pt-1 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3.5"
           >
             {onExploreServicesClick ? (
@@ -271,16 +256,11 @@ export const Hero: React.FC<HeroProps> = ({
                 <span>Simulador de color</span>
               </button>
             </div>
-          </motion.div>
+          </div>
 
           {/* Direct Category Page Quick-Jump Chips: Horizontal swipe rail on mobile, wrap on desktop */}
           {onOpenCategoryPage && (
-            <motion.div
-              initial={prefersReduced ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 0.34, ease: [0.22, 1, 0.36, 1] }}
-              className="pt-1 sm:pt-2"
-            >
+            <div className="pt-1 sm:pt-2">
               <span className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-300 block mb-2.5">
                 Categorías de servicio:
               </span>
@@ -316,14 +296,11 @@ export const Hero: React.FC<HeroProps> = ({
                   );
                 })}
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Metrics & Mood Switcher — Clean 2-column alignment on mobile */}
-          <motion.div
-            initial={prefersReduced ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          <div
             className="pt-4 sm:pt-5 border-t border-white/15 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6"
           >
             <div className="grid grid-cols-2 sm:flex sm:items-center gap-4 sm:gap-8">
@@ -360,7 +337,7 @@ export const Hero: React.FC<HeroProps> = ({
               </span>
               <MoodColorPicker variant="compact" className="mobile-mood-picker" />
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 

@@ -43,7 +43,7 @@ export const MOODS: Record<ColorMood, MoodData> = {
     glow: 'rgba(255, 92, 0, 0.32)',
     lightBg: 'rgba(255, 92, 0, 0.08)',
     borderColor: 'rgba(255, 92, 0, 0.35)',
-    textColorOnAccent: '#FFFFFF',
+    textColorOnAccent: '#090E19',
     tailwindBg: 'bg-[#FF5C00]',
     tailwindText: 'text-[#FF5C00]',
     tailwindBorder: 'border-[#FF5C00]',

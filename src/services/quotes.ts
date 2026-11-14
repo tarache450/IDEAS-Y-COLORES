@@ -1,4 +1,3 @@
-import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import type { LeadSource, QuoteRequestInsert } from '../types/database.types';
 import {
   sanitizePlainText,
@@ -182,34 +181,36 @@ export async function submitQuoteRequest(
     const data = await response.json().catch(() => null);
 
     if (response.ok && data?.ok) {
-      // Sincronización secundaria opcional con Supabase si está disponible
-      if (isSupabaseConfigured) {
-        Promise.resolve(
-          supabase
-            .from('quote_requests')
-            .insert([
-              {
-                name: apiPayload.nombre,
-                phone: apiPayload.telefono,
-                email: apiPayload.email,
-                service: apiPayload.servicio,
-                space_type: input.spaceType ? sanitizeString(input.spaceType, 100) : null,
-                estimated_area: input.estimatedArea ? sanitizeString(input.estimatedArea, 100) : null,
-                desired_timeline: input.desiredTimeline ? sanitizeString(input.desiredTimeline, 100) : null,
-                location: apiPayload.ubicacion,
-                message: apiPayload.mensaje,
-                status: 'new',
-                source: input.source || 'website_quote_wizard',
-              } as QuoteRequestInsert,
-            ])
-        )
-          .then(() => {
-            if (isDev) console.info('[Supabase Sync] Cotización sincronizada:', data.leadId);
-          })
-          .catch((sbErr) => {
-            if (isDev) console.warn('[Supabase Sync Warning] Fallo secundario no crítico:', sbErr);
-          });
-      }
+      // Sincronización secundaria opcional con Supabase (carga diferida bajo demanda)
+      import('../lib/supabase')
+        .then(({ supabase, isSupabaseConfigured }) => {
+          if (!isSupabaseConfigured) return;
+          return Promise.resolve(
+            supabase
+              .from('quote_requests')
+              .insert([
+                {
+                  name: apiPayload.nombre,
+                  phone: apiPayload.telefono,
+                  email: apiPayload.email,
+                  service: apiPayload.servicio,
+                  space_type: input.spaceType ? sanitizeString(input.spaceType, 100) : null,
+                  estimated_area: input.estimatedArea ? sanitizeString(input.estimatedArea, 100) : null,
+                  desired_timeline: input.desiredTimeline ? sanitizeString(input.desiredTimeline, 100) : null,
+                  location: apiPayload.ubicacion,
+                  message: apiPayload.mensaje,
+                  status: 'new',
+                  source: input.source || 'website_quote_wizard',
+                } as QuoteRequestInsert,
+              ])
+          );
+        })
+        .then(() => {
+          if (isDev) console.info('[Supabase Sync] Cotización sincronizada:', data.leadId);
+        })
+        .catch((sbErr) => {
+          if (isDev) console.warn('[Supabase Sync Warning] Fallo secundario no crítico:', sbErr);
+        });
 
       return {
         success: true,
@@ -239,9 +240,10 @@ export async function submitQuoteRequest(
     }
   }
 
-  // 5. Fallback secundario si la API HTTP no responde (e.g. Supabase directo)
-  if (isSupabaseConfigured) {
-    try {
+  // 5. Fallback secundario si la API HTTP no responde (e.g. Supabase directo bajo demanda)
+  try {
+    const { supabase, isSupabaseConfigured } = await import('../lib/supabase');
+    if (isSupabaseConfigured) {
       const { error } = await supabase.from('quote_requests').insert([
         {
           name: apiPayload.nombre,
@@ -267,9 +269,9 @@ export async function submitQuoteRequest(
           whatsappRedirectUrl: `https://wa.me/50266617592?text=${encodeURIComponent(`Cotización [${fallbackId}] - ${apiPayload.nombre}`)}`,
         };
       }
-    } catch {
-      // Ignorar excepción de fallback
     }
+  } catch {
+    // Ignorar excepción de fallback
   }
 
   return {

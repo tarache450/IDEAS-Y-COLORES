@@ -21,7 +21,7 @@ export const LOGO_SPECTRUM_GRADIENT =
 
 const CATEGORY_LOGO_MAP: Record<string, { accent: string; textOnAccent: string; name: string }> = {
   pintura: { accent: LOGO_COLORS.blue, textOnAccent: '#FFFFFF', name: 'Azul Real' },
-  impresion: { accent: LOGO_COLORS.coral, textOnAccent: '#FFFFFF', name: 'Coral Vivo' },
+  impresion: { accent: LOGO_COLORS.coral, textOnAccent: '#090E19', name: 'Coral Vivo' },
   carpinteria: { accent: LOGO_COLORS.gold, textOnAccent: '#090E19', name: 'Dorado' },
   plomeria: { accent: LOGO_COLORS.sky, textOnAccent: '#090E19', name: 'Celeste' },
   resinas: { accent: LOGO_COLORS.indigo, textOnAccent: '#FFFFFF', name: 'Índigo' },
@@ -33,7 +33,12 @@ export function getCategoryLogoTheme(categoryId?: string | null, fallbackAccent?
     return CATEGORY_LOGO_MAP[categoryId];
   }
   const color = fallbackAccent || LOGO_COLORS.orange;
-  const isLight = color === LOGO_COLORS.gold || color === LOGO_COLORS.sky || color === LOGO_COLORS.emerald;
+  const isLight =
+    color === LOGO_COLORS.gold ||
+    color === LOGO_COLORS.sky ||
+    color === LOGO_COLORS.emerald ||
+    color === LOGO_COLORS.orange ||
+    color === LOGO_COLORS.coral;
   return {
     accent: color,
     textOnAccent: isLight ? '#090E19' : '#FFFFFF',

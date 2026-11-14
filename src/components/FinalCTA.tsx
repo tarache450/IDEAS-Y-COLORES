@@ -107,8 +107,11 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ onQuoteClick }) => {
             type="button"
             id="final-cta-quote"
             onClick={onQuoteClick}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 pl-2 pr-7 py-2.5 min-h-[54px] rounded-md text-white font-bold text-base shadow-xl hover:opacity-95 transition-all cursor-pointer"
-            style={{ backgroundColor: currentMood.color }}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 pl-2 pr-7 py-2.5 min-h-[54px] rounded-md font-bold text-base shadow-xl hover:opacity-95 transition-all cursor-pointer"
+            style={{
+              backgroundColor: currentMood.color,
+              color: currentMood.textColorOnAccent,
+            }}
           >
             <span className="w-9 h-9 rounded-sm bg-white flex items-center justify-center shrink-0">
               <ArrowRight

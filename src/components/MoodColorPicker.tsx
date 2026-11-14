@@ -19,7 +19,7 @@ export const MoodColorPicker: React.FC<MoodColorPickerProps> = ({
         className={`surface-1 inline-flex items-center gap-1.5 p-1 rounded-full ${className}`}
         id="mood-selector-compact"
       >
-        <span className="text-[10px] font-bold text-slate-500 pl-2 pr-1 uppercase tracking-wider hidden sm:inline">
+        <span className="text-[10px] font-bold text-slate-300 pl-2 pr-1 uppercase tracking-wider hidden sm:inline">
           Mood:
         </span>
         {allMoods.map((mood) => {

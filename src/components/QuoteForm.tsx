@@ -239,7 +239,11 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
     SERVICE_OPTIONS.find((s) => s.title === selectedService)?.accent || currentMood.color || '#FF5C00';
   const formAccentColor = activeOptionAccent;
   const formTextOnAccent =
-    formAccentColor === '#FAB82A' || formAccentColor === '#00A3FF' || formAccentColor === '#10B981'
+    formAccentColor === '#FAB82A' ||
+    formAccentColor === '#00A3FF' ||
+    formAccentColor === '#10B981' ||
+    formAccentColor === '#FF5C00' ||
+    formAccentColor === '#FF5738'
       ? '#090E19'
       : '#FFFFFF';
 
@@ -388,7 +392,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
           {/* Left Column (5 cols): Visual Architectural Context + Direct Trust & Summary */}
           <div className="lg:col-span-5 flex flex-col justify-between gap-6 text-left">
             <div className="space-y-5">
-              <div className="inline-flex items-center gap-2.5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#80828C]">
+              <div className="inline-flex items-center gap-2.5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#B8BCC6]">
                 <span
                   className="w-2.5 h-2.5 rounded-xs shrink-0"
                   style={{ backgroundColor: formAccentColor }}
@@ -425,8 +429,8 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                     <span>Garantía por escrito + Factura FEL</span>
                   </span>
                   <span
-                    className="px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider text-white"
-                    style={{ backgroundColor: formAccentColor }}
+                    className="px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider"
+                    style={{ backgroundColor: formAccentColor, color: formTextOnAccent }}
                   >
                     Visita Gratis
                   </span>
@@ -447,8 +451,8 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                     <span>Resumen de tu solicitud</span>
                   </span>
                   <span
-                    className="text-[10px] font-extrabold px-2 py-0.5 rounded-md text-white"
-                    style={{ backgroundColor: formAccentColor }}
+                    className="text-[10px] font-extrabold px-2 py-0.5 rounded-md"
+                    style={{ backgroundColor: formAccentColor, color: formTextOnAccent }}
                   >
                     Paso {currentStep}/3
                   </span>
@@ -456,25 +460,25 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
 
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 pt-1">
                   <div>
-                    <span className="text-[#80828C] block text-[10px] uppercase tracking-wider">
+                    <span className="text-[#B8BCC6] block text-[10px] uppercase tracking-wider">
                       Servicio
                     </span>
                     <span className="font-bold text-white truncate block">{selectedService}</span>
                   </div>
                   <div>
-                    <span className="text-[#80828C] block text-[10px] uppercase tracking-wider">
+                    <span className="text-[#B8BCC6] block text-[10px] uppercase tracking-wider">
                       Espacio
                     </span>
                     <span className="font-bold text-white truncate block">{selectedSpace}</span>
                   </div>
                   <div>
-                    <span className="text-[#80828C] block text-[10px] uppercase tracking-wider">
+                    <span className="text-[#B8BCC6] block text-[10px] uppercase tracking-wider">
                       Área
                     </span>
                     <span className="font-bold text-white truncate block">{estimatedArea}</span>
                   </div>
                   <div>
-                    <span className="text-[#80828C] block text-[10px] uppercase tracking-wider">
+                    <span className="text-[#B8BCC6] block text-[10px] uppercase tracking-wider">
                       Plazo
                     </span>
                     <span className="font-bold text-white truncate block">{desiredTimeline}</span>
@@ -494,7 +498,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                     aria-hidden="true"
                   />
                   <div className="min-w-0">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#80828C] block">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#B8BCC6] block">
                       Llámanos hoy
                     </span>
                     <span className="font-bold text-white truncate block">
@@ -513,7 +517,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                     aria-hidden="true"
                   />
                   <div className="min-w-0">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#80828C] block">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#B8BCC6] block">
                       Correo Gerencia
                     </span>
                     <span className="font-bold text-white truncate block">
@@ -523,7 +527,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                 </a>
               </div>
 
-              <div className="flex items-center gap-2 text-[11px] text-[#80828C]">
+              <div className="flex items-center gap-2 text-[11px] text-[#B8BCC6]">
                 <Clock className="w-3.5 h-3.5 shrink-0" style={{ color: formAccentColor }} aria-hidden="true" />
                 <span>Horario: {BUSINESS_INFO.scheduleWeekdays}</span>
               </div>
@@ -548,7 +552,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                   </h3>
                   {submittedLeadId && (
                     <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-[#090E19] border border-[#27324D] text-white text-xs font-mono font-bold">
-                      <span className="text-[#80828C] font-sans">No. de Seguimiento:</span>
+                      <span className="text-[#B8BCC6] font-sans">No. de Seguimiento:</span>
                       <span style={{ color: formAccentColor }}>[{submittedLeadId}]</span>
                     </div>
                   )}
@@ -593,7 +597,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                     setErrorMsg('');
                     setHoneypot('');
                   }}
-                  className="text-xs font-bold text-[#80828C] hover:text-white underline cursor-pointer min-h-[44px] px-3"
+                  className="text-xs font-bold text-[#B8BCC6] hover:text-white underline cursor-pointer min-h-[44px] px-3"
                 >
                   Realizar otra cotización
                 </button>
@@ -775,7 +779,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                                     />
                                   )}
                                 </div>
-                                <p className="text-[11px] mt-0.5 leading-tight text-[#80828C]">
+                                <p className="text-[11px] mt-0.5 leading-tight text-[#B8BCC6]">
                                   {item.subtitle}
                                 </p>
                               </div>
@@ -852,7 +856,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                                 <span className="text-xs sm:text-sm font-bold block mb-0.5">
                                   {sp.title}
                                 </span>
-                                <span className="text-[10px] leading-tight block text-[#80828C]">
+                                <span className="text-[10px] leading-tight block text-[#B8BCC6]">
                                   {sp.desc}
                                 </span>
                               </div>
@@ -995,7 +999,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                             onChange={(e) => setFullName(e.target.value)}
                             placeholder="Tu nombre y apellido"
                             autoComplete="name"
-                            className="w-full px-3.5 py-2.5 min-h-[44px] rounded-lg border border-[#27324D] text-base sm:text-sm font-medium text-white placeholder:text-[#80828C] bg-[#090E19] focus:outline-none"
+                            className="w-full px-3.5 py-2.5 min-h-[44px] rounded-lg border border-[#27324D] text-base sm:text-sm font-medium text-white placeholder:text-[#B8BCC6] bg-[#090E19] focus:outline-none"
                             {...({
                               toolparamdescription: 'Nombre y apellido del cliente o solicitante.',
                             } as React.InputHTMLAttributes<HTMLInputElement>)}
@@ -1020,7 +1024,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                             onChange={(e) => setPhone(e.target.value)}
                             placeholder="Ej: +502 6661-7592"
                             autoComplete="tel"
-                            className="w-full px-3.5 py-2.5 min-h-[44px] rounded-lg border border-[#27324D] text-base sm:text-sm font-medium text-white placeholder:text-[#80828C] bg-[#090E19] focus:outline-none"
+                            className="w-full px-3.5 py-2.5 min-h-[44px] rounded-lg border border-[#27324D] text-base sm:text-sm font-medium text-white placeholder:text-[#B8BCC6] bg-[#090E19] focus:outline-none"
                             {...({
                               toolparamdescription:
                                 'Número de teléfono o WhatsApp en Guatemala (ej. +502 6661-7592).',
@@ -1045,7 +1049,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="tu-correo@ejemplo.com"
                             autoComplete="email"
-                            className="w-full px-3.5 py-2.5 min-h-[44px] rounded-lg border border-[#27324D] text-base sm:text-sm font-medium text-white placeholder:text-[#80828C] bg-[#090E19] focus:outline-none"
+                            className="w-full px-3.5 py-2.5 min-h-[44px] rounded-lg border border-[#27324D] text-base sm:text-sm font-medium text-white placeholder:text-[#B8BCC6] bg-[#090E19] focus:outline-none"
                             {...({
                               toolparamdescription:
                                 'Dirección de correo electrónico para recibir la cotización formal.',
@@ -1070,7 +1074,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
                             placeholder="Ej: Carretera a El Salvador Km 21.5, Fraijanes..."
-                            className="w-full px-3.5 py-2.5 min-h-[44px] rounded-lg border border-[#27324D] text-base sm:text-sm font-medium text-white placeholder:text-[#80828C] bg-[#090E19] focus:outline-none"
+                            className="w-full px-3.5 py-2.5 min-h-[44px] rounded-lg border border-[#27324D] text-base sm:text-sm font-medium text-white placeholder:text-[#B8BCC6] bg-[#090E19] focus:outline-none"
                             {...({
                               toolparamdescription:
                                 'Zona o municipio en Guatemala donde se realizará el proyecto.',
@@ -1095,7 +1099,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           value={description}
                           onChange={(e) => setDescription(e.target.value)}
                           placeholder="Detalla dimensiones, estado de la superficie, requerimientos de color o fecha de inicio..."
-                          className="w-full px-3.5 py-2.5 rounded-lg border border-[#27324D] text-base sm:text-sm text-white placeholder:text-[#80828C] bg-[#090E19] focus:outline-none"
+                          className="w-full px-3.5 py-2.5 rounded-lg border border-[#27324D] text-base sm:text-sm text-white placeholder:text-[#B8BCC6] bg-[#090E19] focus:outline-none"
                           {...({
                             toolparamdescription:
                               'Detalles adicionales, dimensiones, estado de paredes o losas y requerimientos técnicos.',
@@ -1122,7 +1126,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           <p className="text-xs font-semibold text-white">
                             Arrastra fotografías aquí o haz clic para seleccionarlas
                           </p>
-                          <p className="text-[10px] text-[#80828C] mt-0.5">
+                          <p className="text-[10px] text-[#B8BCC6] mt-0.5">
                             PNG, JPG o HEIC de tus paredes, techos, pisos o muebles
                           </p>
                           <input
