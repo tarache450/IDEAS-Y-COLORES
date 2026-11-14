@@ -164,7 +164,9 @@ async function main() {
   const hasMojibake = /Ã[\u0080-\u00BF]/.test(srcIndexHtml) || /Ã[\u0080-\u00BF]/.test(sitemapXml);
   const hasKm215 = srcIndexHtml.includes('Km 21.5') && srcIndexHtml.includes('Fraijanes');
   const subpageSlugs = ['pintura', 'impresion', 'carpinteria', 'plomeria', 'resinas', 'instalaciones'];
-  const allSubpagesInSitemap = subpageSlugs.every((s) => sitemapXml.includes(`#servicio/${s}`));
+  const allSubpagesInSitemap = subpageSlugs.every(
+  (s) => sitemapXml.includes(`/servicios/${s}`) || sitemapXml.includes(`#servicio/${s}`)
+);
 
   rows.push({
     id: 'OPT-06',

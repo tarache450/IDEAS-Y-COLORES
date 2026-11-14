@@ -3,66 +3,68 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://ideasycoloresgt.site/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://ideasycoloresgt.site/og-image.jpg</image:loc>
-      <image:title>Ideas &amp; Colores Guatemala | Pintura Airless e Impermeabilización de Losas</image:title>
-      <image:caption>Color que transforma espacios. Pintura Airless, impermeabilización, hidrolavado y pisos epóxicos en Ciudad de Guatemala y Carretera a El Salvador.</image:caption>
+      <image:title>Ideas &amp; Colores Guatemala | Pintura Airless e Impermeabilización</image:title>
+      <image:caption>Pintura profesional con tecnología Airless, impermeabilización de losas, hidrolavado a presión y entrega de pintura a domicilio en Ciudad de Guatemala y Carretera a El Salvador.</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://ideasycoloresgt.site/hero-interior-sala.webp</image:loc>
-      <image:title>Ideas y Colores Multi-Servicios Guatemala - Pintura con Sistema Airless e Impermeabilización</image:title>
-      <image:caption>Servicios profesionales de pintura arquitectónica con sistema Airless, impermeabilización de losas y mantenimiento integral en Carretera a El Salvador y Guatemala</image:caption>
+      <image:loc>https://ideasycoloresgt.site/images/real/hero-ideas-y-colores-2026.webp</image:loc>
+      <image:title>Técnicos de Ideas &amp; Colores aplicando recubrimiento en Ciudad de Guatemala</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://ideasycoloresgt.site/logo.webp</image:loc>
-      <image:title>Logotipo Oficial Ideas y Colores Multi-Servicios Guatemala</image:title>
+      <image:loc>https://ideasycoloresgt.site/images/real/services/servicio-pintura-interiores.webp</image:loc>
+      <image:title>Pintura profesional residencial y comercial Airless en Ciudad de Guatemala</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://ideasycoloresgt.site/projects/futeca-concepcion-despues.webp</image:loc>
-      <image:title>Proyecto Renovación Futeca Concepción - Ideas y Colores</image:title>
-      <image:caption>Mantenimiento perimetral, pintura y recubrimientos en Carretera a El Salvador</image:caption>
+      <image:loc>https://ideasycoloresgt.site/images/real/projects/impermeabilizacion-losa-despues.webp</image:loc>
+      <image:title>Impermeabilización técnica de losas y terrazas en Carretera a El Salvador</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://ideasycoloresgt.site/sectors/sector-institucional-colegio-discovery.webp</image:loc>
-      <image:title>Proyecto Colegio Discovery Campus - Ideas y Colores</image:title>
+      <image:loc>https://ideasycoloresgt.site/images/real/services/servicio-piso-epoxico.webp</image:loc>
+      <image:title>Aplicación de recubrimientos y pisos de resina epóxica en Guatemala</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ideasycoloresgt.site/images/real/services/servicio-carpinteria-medida.webp</image:loc>
+      <image:title>Carpintería a medida y remodelación integral en Guatemala</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ideasycoloresgt.site/#servicio/pintura</loc>
-    <lastmod>2026-11-13</lastmod>
+    <loc>https://ideasycoloresgt.site/servicios/pintura</loc>
+    <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://ideasycoloresgt.site/#servicio/resinas</loc>
-    <lastmod>2026-11-13</lastmod>
+    <loc>https://ideasycoloresgt.site/servicios/resinas</loc>
+    <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://ideasycoloresgt.site/#servicio/carpinteria</loc>
-    <lastmod>2026-11-13</lastmod>
+    <loc>https://ideasycoloresgt.site/servicios/carpinteria</loc>
+    <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://ideasycoloresgt.site/#servicio/impresion</loc>
-    <lastmod>2026-11-13</lastmod>
+    <loc>https://ideasycoloresgt.site/servicios/impresion</loc>
+    <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ideasycoloresgt.site/#servicio/plomeria</loc>
-    <lastmod>2026-11-13</lastmod>
+    <loc>https://ideasycoloresgt.site/servicios/plomeria</loc>
+    <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ideasycoloresgt.site/#servicio/instalaciones</loc>
-    <lastmod>2026-11-13</lastmod>
+    <loc>https://ideasycoloresgt.site/servicios/instalaciones</loc>
+    <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

@@ -13,6 +13,8 @@ import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { PrivacyPolicyModal } from './components/PrivacyPolicyModal';
 import { SubpageHero } from './components/SubpageHero';
 import { NAV_PAGE_ACCENTS } from './utils/logoPalette';
+import { MULTI_SERVICES_CATEGORIES } from './data/content';
+import { trackGaPageView } from './utils/analytics';
 
 // Separate views and navbar subpages remain code-split to keep initial Home JS lean
 const ServiceCategoryPage = lazy(() =>
@@ -211,16 +213,67 @@ function AppContent() {
 
   const openCategoryPage = (categoryId: string) => {
     setActiveCategorySlug(categoryId);
-    window.location.hash = `#servicio/${categoryId}`;
+    history.pushState(null, '', `/servicios/${categoryId}`);
     window.scrollTo({ top: 0, behavior: 'auto' });
   };
 
   const closeCategoryPage = () => {
     setActiveCategorySlug(null);
-    if (window.location.hash.startsWith('#servicio/')) {
-      history.pushState('', document.title, window.location.pathname + window.location.search);
+    if (
+      window.location.hash.startsWith('#servicio/') ||
+      window.location.pathname.startsWith('/servicios/')
+    ) {
+      history.pushState(null, document.title, '/' + window.location.search);
     }
   };
+
+  useEffect(() => {
+    const defaultTitle = 'Ideas & Colores Guatemala | Pintura e Impermeabilización';
+    const defaultDesc =
+      'Expertos en pintura Airless, impermeabilización de losas, hidrolavado a presión y pintura a domicilio en Ciudad de Guatemala y Carretera a El Salvador.';
+    let nextTitle = defaultTitle;
+    let nextDesc = defaultDesc;
+    let nextCanonical = 'https://ideasycoloresgt.site/';
+    let nextPath = '/';
+
+    if (activeCategorySlug) {
+      const cat = MULTI_SERVICES_CATEGORIES.find((c) => c.id === activeCategorySlug);
+      if (cat) {
+        nextTitle = `${cat.title} en Guatemala | Ideas & Colores`;
+        nextDesc = `${cat.description} Atención en Ciudad de Guatemala, Carretera a El Salvador, Fraijanes, Mixco y Villa Nueva con garantía escrita.`;
+        nextCanonical = `https://ideasycoloresgt.site/servicios/${cat.id}`;
+        nextPath = `/servicios/${cat.id}`;
+      }
+    } else if (activePage === 'proyectos') {
+      nextTitle = 'Proyectos Realizados Antes y Después | Ideas & Colores Guatemala';
+      nextDesc =
+        'Portafolio de obras verificadas en pintura Airless, impermeabilización de losas, pisos epóxicos y carpintería en Carretera a El Salvador y Guatemala.';
+      nextPath = '/#proyectos';
+    } else if (activePage === 'herramientas') {
+      nextTitle = 'Simulador de Color y Calculadora de Pintura m² | Ideas & Colores';
+      nextDesc =
+        'Visualiza paletas arquitectónicas y calcula cubetas o galones para tu proyecto en Guatemala antes de cotizar.';
+      nextPath = '/#herramientas';
+    } else if (activePage === 'nosotros') {
+      nextTitle = 'Nosotros, Sectores y Garantía por Escrito | Ideas & Colores Guatemala';
+      nextDesc =
+        'Más de 10 años transformando residencias, colegios, comercios e industria en Guatemala con personal certificado y factura FEL.';
+      nextPath = '/#nosotros';
+    } else if (activePage === 'contacto') {
+      nextTitle = 'Contacto, Cobertura Km 21.5 y Preguntas Frecuentes | Ideas & Colores';
+      nextDesc =
+        'Sede en Carretera a El Salvador Km 21.5, Fraijanes y cobertura en Zonas 10, 14, 15, 16, Mixco y Villa Nueva. Visita técnica sin costo.';
+      nextPath = '/#contacto';
+    }
+
+    document.title = nextTitle;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', nextDesc);
+    const canonicalEl = document.querySelector('link[rel="canonical"]');
+    if (canonicalEl) canonicalEl.setAttribute('href', nextCanonical);
+
+    trackGaPageView(nextPath, nextTitle);
+  }, [activeCategorySlug, activePage]);
 
   const scrollToElementId = (targetId: string, behavior: ScrollBehavior = 'smooth') => {
     if (targetId === 'inicio') {
@@ -270,7 +323,7 @@ function AppContent() {
         setActiveCategorySlug(null);
       }
       setActivePage(subpageTarget);
-      history.replaceState(null, '', `#${sectionId}`);
+      history.replaceState(null, '', `/#${sectionId}`);
 
       // Scroll subpage to top, unless targeting a lower section inside a multi-block subpage (e.g. #faq inside contacto or #promociones inside nosotros)
       const internalAnchor =
@@ -295,7 +348,7 @@ function AppContent() {
       history.replaceState(
         null,
         '',
-        targetId === 'inicio' ? window.location.pathname : `#${sectionId}`
+        targetId === 'inicio' ? '/' : `/#${sectionId}`
       );
       window.setTimeout(() => {
         scrollToElementId(targetId, 'smooth');
@@ -306,7 +359,7 @@ function AppContent() {
     history.replaceState(
       null,
       '',
-      targetId === 'inicio' ? window.location.pathname : `#${sectionId}`
+      targetId === 'inicio' ? '/' : `/#${sectionId}`
     );
     scrollToElementId(targetId, 'smooth');
   };

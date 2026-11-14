@@ -21,6 +21,15 @@ export function trackGaEvent(eventName: string, params?: Record<string, unknown>
   window.gtag('event', eventName, params);
 }
 
+export function trackGaPageView(pagePath: string, pageTitle: string): void {
+  if (typeof window === 'undefined' || typeof window.gtag !== 'function') return;
+  window.gtag('event', 'page_view', {
+    page_path: pagePath,
+    page_title: pageTitle,
+    page_location: window.location.href,
+  });
+}
+
 export function initGoogleAnalytics(): void {
   if (typeof window === 'undefined' || !isGoogleAnalyticsConfigured()) return;
 

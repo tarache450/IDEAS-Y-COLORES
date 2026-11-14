@@ -136,7 +136,7 @@ export const Footer: React.FC<FooterProps> = ({
               {MULTI_SERVICES_CATEGORIES.map((cat) => (
                 <li key={cat.id}>
                   <a
-                    href={`#servicio/${cat.id}`}
+                    href={`/servicios/${cat.id}`}
                     onClick={(e) => {
                       e.preventDefault();
                       if (onOpenCategoryPage) {
@@ -179,6 +179,19 @@ export const Footer: React.FC<FooterProps> = ({
                 />
                 <a href={`tel:${BUSINESS_INFO.phoneClean}`} className="hover:text-white transition-colors">
                   {BUSINESS_INFO.phone}
+                </a>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <ShieldCheck
+                  className="w-4 h-4 shrink-0"
+                  style={{ color: currentMood.color }}
+                  aria-hidden="true"
+                />
+                <a
+                  href="https://ideasycoloresgt.site/"
+                  className="hover:text-white transition-colors"
+                >
+                  Web: {BUSINESS_INFO.website}
                 </a>
               </li>
               <li className="flex items-center gap-2.5">

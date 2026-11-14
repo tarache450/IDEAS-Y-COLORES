@@ -232,7 +232,7 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
                 <div>
                   {/* Clickable Hero Image -> Opens Dedicated Category Page */}
                   <a
-                    href={`#servicio/${cat.id}`}
+                    href={`/servicios/${cat.id}`}
                     onClick={(e) => {
                       if (onOpenCategoryPage) {
                         e.preventDefault();
@@ -316,7 +316,7 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
                 <div className="p-6 pt-0 space-y-2.5">
                   {/* Primary: Open Separate Category Page */}
                   <a
-                    href={`#servicio/${cat.id}`}
+                    href={`/servicios/${cat.id}`}
                     onClick={(e) => {
                       if (onOpenCategoryPage) {
                         e.preventDefault();

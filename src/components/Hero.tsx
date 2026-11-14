@@ -290,7 +290,7 @@ export const Hero: React.FC<HeroProps> = ({
                   return (
                     <a
                       key={cat.id}
-                      href={`#servicio/${cat.id}`}
+                      href={`/servicios/${cat.id}`}
                       onClick={(e) => {
                         e.preventDefault();
                         onOpenCategoryPage(cat.id);

@@ -228,7 +228,7 @@ export const Header: React.FC<HeaderProps> = ({
                             return (
                               <a
                                 key={cat.id}
-                                href={`#servicio/${cat.id}`}
+                                href={`/servicios/${cat.id}`}
                                 role="menuitem"
                                 onClick={(e) => {
                                   e.preventDefault();
@@ -517,7 +517,7 @@ export const Header: React.FC<HeaderProps> = ({
                                 return (
                                   <a
                                     key={cat.id}
-                                    href={`#servicio/${cat.id}`}
+                                    href={`/servicios/${cat.id}`}
                                     onClick={(e) => {
                                       e.preventDefault();
                                       handleCategoryClick(cat.id);
