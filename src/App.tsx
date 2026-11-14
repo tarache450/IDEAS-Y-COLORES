@@ -15,6 +15,7 @@ import { SubpageHero } from './components/SubpageHero';
 import { NAV_PAGE_ACCENTS } from './utils/logoPalette';
 import { MULTI_SERVICES_CATEGORIES } from './data/content';
 import { trackGaPageView } from './utils/analytics';
+import { registerWebMcpTools } from './utils/webmcp';
 
 // Separate views and navbar subpages remain code-split to keep initial Home JS lean
 const ServiceCategoryPage = lazy(() =>
@@ -226,6 +227,10 @@ function AppContent() {
       history.pushState(null, document.title, '/' + window.location.search);
     }
   };
+
+  useEffect(() => {
+    registerWebMcpTools();
+  }, []);
 
   useEffect(() => {
     const defaultTitle = 'Ideas & Colores Guatemala | Pintura e Impermeabilización';

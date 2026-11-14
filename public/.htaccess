@@ -42,6 +42,11 @@
   RewriteRule ^api/leads/?$ api/leads.php [QSA,L]
   RewriteRule ^api/health/?$ api/health.php [QSA,L]
 
+  # 3b. Agentic Resource Discovery (ARD / ai-catalog.json / agent-card.json)
+  RewriteRule ^\.well-known/ai-catalog\.json$ ai-catalog.json [L]
+  RewriteRule ^\.well-known/ard\.json$ ard.json [L]
+  RewriteRule ^\.well-known/agent-card\.json$ agent-card.json [L]
+
   # 4. SPA Fallback: Direct non-file/directory requests to index.html
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

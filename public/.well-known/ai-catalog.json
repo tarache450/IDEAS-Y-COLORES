@@ -1,0 +1,73 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Ideas & Colores Guatemala",
+    "identifier": "did:web:ideasycoloresgt.site",
+    "documentationUrl": "https://ideasycoloresgt.site/llms.txt",
+    "logoUrl": "https://ideasycoloresgt.site/logo.png"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:ideasycoloresgt.site:services:agent-card",
+      "displayName": "Agente de Cotizaciones y Servicios Ideas & Colores Guatemala",
+      "type": "application/agent-card+json",
+      "url": "https://ideasycoloresgt.site/.well-known/agent-card.json",
+      "description": "Tarjeta de agente oficial de Ideas & Colores Guatemala para consultar servicios de pintura Airless, impermeabilización de losas, hidrolavado a presión, resinas epóxicas, carpintería a medida y entrega de pintura a domicilio en Ciudad de Guatemala y Carretera a El Salvador.",
+      "capabilities": [
+        "QuoteRequest",
+        "PaintCalculator",
+        "ServiceCatalog",
+        "LocalCoverageCheck"
+      ],
+      "tags": [
+        "pintura-airless",
+        "impermeabilizacion-losas",
+        "pisos-epoxicos",
+        "carpinteria",
+        "guatemala"
+      ],
+      "representativeQueries": [
+        "cotizar pintura profesional Airless en Ciudad de Guatemala y Carretera a El Salvador",
+        "empresa de impermeabilización de losas y terrazas con garantía escrita en Guatemala",
+        "calcular cuántos galones o cubetas de pintura necesito por metro cuadrado",
+        "aplicación de pisos de resina epóxica e hidrolavado industrial en Guatemala"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-11-14T20:00:00Z",
+      "trustManifest": {
+        "identity": "https://ideasycoloresgt.site",
+        "identityType": "https"
+      }
+    },
+    {
+      "identifier": "urn:air:ideasycoloresgt.site:services:skills-documentation",
+      "displayName": "Guía de Servicios y Cobertura para LLMs (llms.txt)",
+      "type": "text/markdown; profile=\"urn:air:agent-skills\"",
+      "url": "https://ideasycoloresgt.site/llms.txt",
+      "description": "Documentación estructurada en Markdown con el catálogo de las 6 divisiones técnicas de Ideas & Colores Multi-Servicios, preguntas frecuentes, garantías y zonas de cobertura en Guatemala.",
+      "capabilities": [
+        "ServiceDocumentation",
+        "FAQKnowledgeBase",
+        "NAPDirectory"
+      ],
+      "tags": [
+        "llms-txt",
+        "multiservicios",
+        "mantenimiento",
+        "remodelacion",
+        "fraijanes"
+      ],
+      "representativeQueries": [
+        "qué servicios de mantenimiento y remodelación ofrece Ideas y Colores en Guatemala",
+        "zonas de cobertura y teléfono de WhatsApp de Ideas y Colores Multi-Servicios",
+        "visita técnica sin costo para pintura e impermeabilización en Zona 10, 14, 15 y 16"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-11-14T20:00:00Z",
+      "trustManifest": {
+        "identity": "https://ideasycoloresgt.site",
+        "identityType": "https"
+      }
+    }
+  ]
+}

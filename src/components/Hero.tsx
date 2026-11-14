@@ -37,8 +37,8 @@ export const Hero: React.FC<HeroProps> = ({
 
   const moodShowcases = {
     naranja: {
-      image: assetUrl('hero-interior-sala.webp'),
-      srcSet: `${assetUrl('hero-interior-sala-mobile.webp')} 640w, ${assetUrl('hero-interior-sala.webp')} 1200w`,
+      image: assetUrl('hero-interior-sala-mobile.webp'),
+      srcSet: `${assetUrl('hero-interior-sala-mobile.webp')} 800w, ${assetUrl('hero-interior-sala.webp')} 1200w`,
       title: 'Residencia Carretera a El Salvador Km 21.5',
       caption: 'Pintura Airless + Acabados Arquitectónicos',
     },
@@ -143,9 +143,9 @@ export const Hero: React.FC<HeroProps> = ({
 
           {/* Primary Display H1 */}
           <motion.h1
-            initial={prefersReduced ? false : { opacity: 0, y: 18 }}
+            initial={prefersReduced ? false : { opacity: 1, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             className="text-[34px] sm:text-5xl lg:text-[62px] font-black text-white tracking-[-0.04em] leading-[1.06] sm:leading-[1.03] font-display text-balance"
           >
             Color que transforma espacios

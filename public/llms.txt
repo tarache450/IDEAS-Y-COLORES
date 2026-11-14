@@ -1,0 +1,33 @@
+# Ideas & Colores Guatemala — Multi-Servicios
+
+> Empresa líder en pintura profesional con tecnología Airless, impermeabilización técnica de losas y terrazas con garantía escrita, hidrolavado industrial a alta presión, pisos de resina epóxica, carpintería a medida, remodelación y entrega de pintura a domicilio en Ciudad de Guatemala (Zonas 10, 14, 15 y 16), Carretera a El Salvador (Km 21.5, Fraijanes, Santa Catarina Pinula), Mixco y Villa Nueva. Visita técnica y diagnóstico en sitio sin costo (+502 6661-7592).
+
+Ideas & Colores Multi-Servicios transforma, protege y mantiene espacios residenciales, comerciales, corporativos, educativos e industriales en Guatemala. Operamos bajo la modalidad llave en mano (suministro de marcas líderes como Sherwin-Williams, Corona, Lanco y Sika + mano de obra certificada) o solo aplicación técnica, respaldados por garantía escrita y facturación electrónica FEL autorizada por la SAT.
+
+## Servicios Principales
+
+- [Pintura Profesional Airless e Impermeabilización de Losas](https://ideasycoloresgt.site/servicios/pintura): Aplicación de pintura arquitectónica e industrial con sistema Airless, impermeabilización elastomérica y poliuretánica de techos, losas y terrazas, tratamiento de humedad y salitre, e hidrolavado industrial a alta presión.
+- [Resinas Epóxicas y Pisos Industriales](https://ideasycoloresgt.site/servicios/resinas): Recubrimientos epóxicos autonivelantes, pisos de poliuretano de alto tráfico, señalización industrial para bodegas y parqueos, y acabados en porcelanato líquido.
+- [Carpintería a Medida y Estructuras en Madera](https://ideasycoloresgt.site/servicios/carpinteria): Diseño, fabricación, restauración y barnizado UV de pérgolas, decks exteriores, puertas, zócalos, closets y cocinas modulares.
+- [Impresión Digital y Rotulación Corporativa](https://ideasycoloresgt.site/servicios/impresion): Vinil adhesivo arquitectónico, microperforado, esmerilado (sandblast) para oficinas, murales decorativos y rotulación comercial de gran formato.
+- [Plomería Técnica y Detección de Fugas](https://ideasycoloresgt.site/servicios/plomeria): Reparación de filtraciones, mantenimiento de redes hidrosanitarias, bombas hidroneumáticas, cisternas e instalación de grifería y loza sanitaria.
+- [Instalaciones Generales y Remodelación Locativa](https://ideasycoloresgt.site/servicios/instalaciones): Tablayeso (drywall), cielo falso, mantenimiento eléctrico e iluminación LED, herrería e impermeabilización integral para empresas, colegios y condominios.
+
+## Herramientas Interactivas y Catálogos para Agentes IA
+
+- [Sitio Web Principal y Portafolio](https://ideasycoloresgt.site/): Página principal con galería de proyectos antes/después, preguntas frecuentes y testimonios verificados.
+- [Cotizador Inteligente Multi-Servicios](https://ideasycoloresgt.site/#cotizar): Formulario interactivo en 3 pasos para solicitar visita técnica gratuita y presupuesto formal en menos de 24 horas.
+- [Calculadora de Pintura y Presupuesto por m²](https://ideasycoloresgt.site/#calculadora): Estimador técnico de rendimiento en galones y cubetas de pintura según área en metros cuadrados y estado de superficie.
+- [Simulador Visual Color Studio](https://ideasycoloresgt.site/#color-studio): Visualizador interactivo de paletas arquitectónicas aplicadas en ambientes reales.
+- [Catálogo de Recursos Agénticos (ARD)](https://ideasycoloresgt.site/.well-known/ard.json): Manifiesto estándar Agentic Resource Discovery (ARD v1.0) para descubrimiento automatizado por agentes de IA.
+- [Catálogo AI (ai-catalog.json)](https://ideasycoloresgt.site/.well-known/ai-catalog.json): Manifiesto de capacidades y servicios estructurados para agentes autónomos.
+- [Tarjeta de Agente (Agent Card)](https://ideasycoloresgt.site/.well-known/agent-card.json): Metadatos de identidad, capacidades y puntos de contacto del agente de Ideas & Colores Guatemala.
+- [Mapa del Sitio XML](https://ideasycoloresgt.site/sitemap.xml): Índice estructurado de URLs canónicas e imágenes de proyectos reales.
+
+## Cobertura Geográfica y Contacto Directo (NAP)
+
+- **Nombre Comercial**: Ideas & Colores Multi-Servicios (Ideas & Colores Guatemala)
+- **Ubicación Base**: Carretera a El Salvador Km 21.5, Fraijanes, Departamento de Guatemala, Guatemala (01062)
+- **Áreas de Cobertura**: Ciudad de Guatemala (Zonas 10, 14, 15, 16, 9, 11, 13), Carretera a El Salvador, Fraijanes, Santa Catarina Pinula, San José Pinula, Mixco y Villa Nueva
+- **Teléfono y WhatsApp**: [+502 6661-7592](https://wa.me/50266617592)
+- **Horario de Atención**: Lunes a Sábado de 07:00 a 19:00 CST (GMT-6)

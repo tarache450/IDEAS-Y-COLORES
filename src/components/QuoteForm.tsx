@@ -600,11 +600,19 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
               </div>
             ) : (
               /* Wizard Steps */
-              <form onSubmit={handleSubmitWeb}>
+              <form
+                onSubmit={handleSubmitWeb}
+                {...({
+                  toolname: 'solicitar_cotizacion_ideas_y_colores',
+                  tooldescription:
+                    'Solicita una cotización formal o visita técnica sin costo en Guatemala para pintura Airless, impermeabilización de losas, hidrolavado a presión, resinas epóxicas, carpintería o remodelación.',
+                } as React.FormHTMLAttributes<HTMLFormElement>)}
+              >
                 {/* Honeypot Anti-Spam (Invisible for humans) */}
                 <input
                   type="text"
                   name="website_hp"
+                  title="No completar este campo anti-spam"
                   value={honeypot}
                   onChange={(e) => setHoneypot(e.target.value)}
                   tabIndex={-1}
@@ -612,6 +620,9 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                   autoComplete="off"
                   style={{ display: 'none' }}
                   className="hidden absolute -left-[9999px]"
+                  {...({
+                    toolparamdescription: 'Campo de verificación anti-spam (dejar vacío).',
+                  } as React.InputHTMLAttributes<HTMLInputElement>)}
                 />
 
                 {/* Imported Configuration Alert */}
@@ -860,9 +871,15 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           </label>
                           <select
                             id="quote-estimated-area"
+                            name="estimatedArea"
+                            title="Área estimada del espacio en metros cuadrados"
                             value={estimatedArea}
                             onChange={(e) => setEstimatedArea(e.target.value)}
                             className="w-full px-3.5 py-2.5 min-h-[44px] rounded-lg border border-[#27324D] text-base sm:text-sm font-medium text-white bg-[#090E19] focus:outline-none"
+                            {...({
+                              toolparamdescription:
+                                'Rango de área estimada del espacio a intervenir en metros cuadrados.',
+                            } as React.SelectHTMLAttributes<HTMLSelectElement>)}
                           >
                             <option value="Menos de 50 m² (Puntual o habitación)">
                               Menos de 50 m² (Puntual o habitación)
@@ -891,9 +908,14 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           </label>
                           <select
                             id="quote-timeline"
+                            name="desiredTimeline"
+                            title="Plazo deseado de inicio del proyecto"
                             value={desiredTimeline}
                             onChange={(e) => setDesiredTimeline(e.target.value)}
                             className="w-full px-3.5 py-2.5 min-h-[44px] rounded-lg border border-[#27324D] text-base sm:text-sm font-medium text-white bg-[#090E19] focus:outline-none"
+                            {...({
+                              toolparamdescription: 'Plazo deseado para iniciar el trabajo.',
+                            } as React.SelectHTMLAttributes<HTMLSelectElement>)}
                           >
                             <option value="Urgente (1-3 días)">Urgente (1-3 días)</option>
                             <option value="Próximos 7 días">Próximos 7 días</option>
@@ -966,6 +988,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                             type="text"
                             id="quote-fullname"
                             name="fullName"
+                            title="Nombre completo del cliente"
                             required
                             maxLength={150}
                             value={fullName}
@@ -973,6 +996,9 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                             placeholder="Tu nombre y apellido"
                             autoComplete="name"
                             className="w-full px-3.5 py-2.5 min-h-[44px] rounded-lg border border-[#27324D] text-base sm:text-sm font-medium text-white placeholder:text-[#80828C] bg-[#090E19] focus:outline-none"
+                            {...({
+                              toolparamdescription: 'Nombre y apellido del cliente o solicitante.',
+                            } as React.InputHTMLAttributes<HTMLInputElement>)}
                           />
                         </div>
 
@@ -987,6 +1013,7 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                             type="tel"
                             id="quote-phone"
                             name="phone"
+                            title="Teléfono o WhatsApp en Guatemala"
                             required
                             maxLength={25}
                             value={phone}
@@ -994,6 +1021,10 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                             placeholder="Ej: +502 6661-7592"
                             autoComplete="tel"
                             className="w-full px-3.5 py-2.5 min-h-[44px] rounded-lg border border-[#27324D] text-base sm:text-sm font-medium text-white placeholder:text-[#80828C] bg-[#090E19] focus:outline-none"
+                            {...({
+                              toolparamdescription:
+                                'Número de teléfono o WhatsApp en Guatemala (ej. +502 6661-7592).',
+                            } as React.InputHTMLAttributes<HTMLInputElement>)}
                           />
                         </div>
 
@@ -1008,12 +1039,17 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                             type="email"
                             id="quote-email"
                             name="email"
+                            title="Correo electrónico opcional"
                             maxLength={254}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="tu-correo@ejemplo.com"
                             autoComplete="email"
                             className="w-full px-3.5 py-2.5 min-h-[44px] rounded-lg border border-[#27324D] text-base sm:text-sm font-medium text-white placeholder:text-[#80828C] bg-[#090E19] focus:outline-none"
+                            {...({
+                              toolparamdescription:
+                                'Dirección de correo electrónico para recibir la cotización formal.',
+                            } as React.InputHTMLAttributes<HTMLInputElement>)}
                           />
                         </div>
 
@@ -1028,12 +1064,17 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                             type="text"
                             id="quote-location"
                             name="location"
+                            title="Ubicación o zona del proyecto en Guatemala"
                             required
                             maxLength={200}
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
                             placeholder="Ej: Carretera a El Salvador Km 21.5, Fraijanes..."
                             className="w-full px-3.5 py-2.5 min-h-[44px] rounded-lg border border-[#27324D] text-base sm:text-sm font-medium text-white placeholder:text-[#80828C] bg-[#090E19] focus:outline-none"
+                            {...({
+                              toolparamdescription:
+                                'Zona o municipio en Guatemala donde se realizará el proyecto.',
+                            } as React.InputHTMLAttributes<HTMLInputElement>)}
                           />
                         </div>
                       </div>
@@ -1049,11 +1090,16 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           rows={3}
                           id="quote-description"
                           name="description"
+                          title="Descripción detallada de tu necesidad o proyecto"
                           maxLength={3000}
                           value={description}
                           onChange={(e) => setDescription(e.target.value)}
                           placeholder="Detalla dimensiones, estado de la superficie, requerimientos de color o fecha de inicio..."
                           className="w-full px-3.5 py-2.5 rounded-lg border border-[#27324D] text-base sm:text-sm text-white placeholder:text-[#80828C] bg-[#090E19] focus:outline-none"
+                          {...({
+                            toolparamdescription:
+                              'Detalles adicionales, dimensiones, estado de paredes o losas y requerimientos técnicos.',
+                          } as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
                         />
                       </div>
 
@@ -1082,10 +1128,16 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           <input
                             ref={fileInputRef}
                             type="file"
+                            name="photos"
+                            title="Fotografías opcionales de referencia"
                             multiple
                             accept="image/*"
                             className="hidden"
                             onChange={(e) => handlePhotoUpload(e.target.files)}
+                            {...({
+                              toolparamdescription:
+                                'Fotografías opcionales del espacio o superficie a intervenir.',
+                            } as React.InputHTMLAttributes<HTMLInputElement>)}
                           />
                         </div>
 

@@ -19,6 +19,10 @@
     <link rel="alternate" hreflang="es-GT" href="https://ideasycoloresgt.site/" />
     <link rel="alternate" hreflang="x-default" href="https://ideasycoloresgt.site/" />
 
+    <!-- Agentic Resource Discovery (ARD / AI Catalog / LLMs.txt) -->
+    <link rel="ard" href="https://ideasycoloresgt.site/.well-known/ard.json" type="application/json" />
+    <link rel="ai-catalog" href="https://ideasycoloresgt.site/.well-known/ai-catalog.json" type="application/json" />
+
     <!-- Open Graph (WhatsApp, Facebook, Instagram, LinkedIn) -->
     <meta property="og:locale" content="es_GT" />
     <meta property="og:type" content="website" />
@@ -61,16 +65,9 @@
       rel="preload"
       as="image"
       href="/hero-interior-sala-mobile.webp"
+      imagesrcset="/hero-interior-sala-mobile.webp 800w, /hero-interior-sala.webp 1200w"
+      imagesizes="100vw"
       type="image/webp"
-      media="(max-width: 1023px)"
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="image"
-      href="/hero-interior-sala.webp"
-      type="image/webp"
-      media="(min-width: 1024px)"
       fetchpriority="high"
     />
     <!-- Non-render-blocking Typography: preload variable fonts to minimize swap CLS -->

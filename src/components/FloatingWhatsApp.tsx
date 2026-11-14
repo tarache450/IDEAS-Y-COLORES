@@ -86,16 +86,30 @@ export const FloatingWhatsApp: React.FC = () => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSend} className="p-3.5 bg-white">
+          <form
+            onSubmit={handleSend}
+            className="p-3.5 bg-white"
+            {...({
+              toolname: 'enviar_consulta_whatsapp_ideas_y_colores',
+              tooldescription:
+                'Envía una consulta rápida por WhatsApp (+502 6661-7592) a un asesor técnico de Ideas & Colores Guatemala.',
+            } as React.FormHTMLAttributes<HTMLFormElement>)}
+          >
             <div className="relative">
               <input
                 type="text"
                 id="whatsapp-custom-input"
+                name="customNote"
+                title="Escribe tu consulta o proyecto para WhatsApp"
                 maxLength={500}
                 value={customNote}
                 onChange={(e) => setCustomNote(e.target.value)}
                 placeholder="Escribe tu consulta o proyecto..." aria-label="Escribe tu consulta o proyecto para WhatsApp"
                 className="w-full text-base sm:text-sm pl-3 pr-10 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+                {...({
+                  toolparamdescription:
+                    'Mensaje o consulta sobre pintura, impermeabilización o remodelación para enviar por WhatsApp.',
+                } as React.InputHTMLAttributes<HTMLInputElement>)}
               />
               <button
                 type="submit"

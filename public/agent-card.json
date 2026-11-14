@@ -1,0 +1,39 @@
+{
+  "name": "Ideas & Colores Guatemala — Multi-Servicios",
+  "description": "Agente y portal oficial de servicios de pintura profesional Airless, impermeabilización técnica de losas, hidrolavado a alta presión, pisos de resina epóxica, carpintería a medida y remodelación en Ciudad de Guatemala y Carretera a El Salvador.",
+  "url": "https://ideasycoloresgt.site/",
+  "version": "1.0.0",
+  "provider": {
+    "organization": "Ideas & Colores Multi-Servicios",
+    "url": "https://ideasycoloresgt.site/",
+    "telephone": "+50266617592",
+    "location": "Carretera a El Salvador Km 21.5, Fraijanes, Guatemala"
+  },
+  "documentationUrl": "https://ideasycoloresgt.site/llms.txt",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "skills": [
+    {
+      "id": "cotizar-proyecto",
+      "name": "Solicitar Cotización Técnica y Visita Sin Costo",
+      "description": "Registra una solicitud de cotización formal o visita técnica diagnóstica sin costo en Ciudad de Guatemala, Carretera a El Salvador, Fraijanes, Mixco y Villa Nueva.",
+      "tags": ["cotizacion", "pintura", "impermeabilizacion", "remodelacion"],
+      "examples": [
+        "Quiero cotizar la impermeabilización de una losa de 120 m² en Carretera a El Salvador",
+        "Necesito pintar un apartamento en Zona 14 con pintura lavable"
+      ]
+    },
+    {
+      "id": "calcular-pintura",
+      "name": "Calculadora de Rendimiento de Pintura por m²",
+      "description": "Calcula la cantidad estimada de galones y cubetas de pintura requeridos según el área en metros cuadrados y número de manos.",
+      "tags": ["calculadora", "rendimiento", "galones", "cubetas"],
+      "examples": [
+        "¿Cuántos galones de pintura necesito para 180 metros cuadrados a 2 manos?"
+      ]
+    }
+  ]
+}
