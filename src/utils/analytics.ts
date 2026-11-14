@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-const GA_MEASUREMENT_ID = (import.meta.env.VITE_GA_MEASUREMENT_ID || '').trim();
+const GA_MEASUREMENT_ID = (import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-NBKE5WJMDH').trim();
 const VALID_GA4_PATTERN = /^G-[A-Z0-9]{6,}$/i;
 
 export function isGoogleAnalyticsConfigured(): boolean {
@@ -24,16 +24,18 @@ export function trackGaEvent(eventName: string, params?: Record<string, unknown>
 export function initGoogleAnalytics(): void {
   if (typeof window === 'undefined' || !isGoogleAnalyticsConfigured()) return;
 
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function gtag(...args: unknown[]) {
-    window.dataLayer?.push(args);
-  };
+  if (typeof window.gtag !== 'function') {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function gtag(...args: unknown[]) {
+      window.dataLayer?.push(args);
+    };
 
-  window.gtag('js', new Date());
-  window.gtag('config', GA_MEASUREMENT_ID, {
-    send_page_view: true,
-    anonymize_ip: true,
-  });
+    window.gtag('js', new Date());
+    window.gtag('config', GA_MEASUREMENT_ID, {
+      send_page_view: true,
+      anonymize_ip: true,
+    });
+  }
 
   const existing = document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}"]`);
   if (!existing) {
