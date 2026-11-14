@@ -99,7 +99,7 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
         <FadeIn direction="up" distance={20}>
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 pb-8 border-b border-[#E8E9EE]">
             <div className="max-w-3xl text-left">
-              <div className="inline-flex items-center gap-2.5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#80828C] mb-3">
+              <div className="inline-flex items-center gap-2.5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#475569] mb-3">
                 <span className="inline-flex items-center gap-1" aria-hidden="true">
                   {LOGO_SPECTRUM_LIST.map((hex) => (
                     <span
@@ -279,7 +279,7 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
 
                     {/* Key Specialized Lines */}
                     <div className="pt-3 border-t border-[#E8E9EE] space-y-1.5">
-                      <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#80828C] block">
+                      <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#475569] block">
                         Especialidades incluidas
                       </span>
                       <ul className="space-y-1.5">
@@ -365,7 +365,7 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
           <FadeIn direction="up" distance={16} delay={0.1}>
             <div className="mt-14 pt-10 border-t border-[#E8E9EE]">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5 text-left">
-                <span className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#80828C]">
+                <span className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#475569]">
                   Explorar secciones en su propia página:
                 </span>
                 <span className="text-xs text-[#525663]">
@@ -401,7 +401,7 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
                       </div>
                     </div>
                     <ArrowRight
-                      className="w-4 h-4 text-[#80828C] group-hover:text-white group-hover:translate-x-0.5 shrink-0 transition-all"
+                      className="w-4 h-4 text-[#475569] group-hover:text-white group-hover:translate-x-0.5 shrink-0 transition-all"
                       aria-hidden="true"
                     />
                   </button>

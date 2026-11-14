@@ -20,7 +20,7 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({ onQuoteClick }) 
         <FadeIn direction="up" distance={20}>
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-14 pb-8 border-b border-[#E8E9EE]">
             <div className="max-w-3xl text-left">
-              <div className="inline-flex items-center gap-2.5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#80828C] mb-3">
+              <div className="inline-flex items-center gap-2.5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#475569] mb-3">
                 <span className="inline-flex items-center gap-1" aria-hidden="true">
                   {LOGO_SPECTRUM_LIST.map((hex) => (
                     <span
@@ -67,7 +67,7 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({ onQuoteClick }) 
                   <div className="flex items-center justify-between mb-6">
                     <span
                       className="text-3xl sm:text-4xl font-black font-display tracking-tight transition-colors"
-                      style={{ color: isActive ? stepAccent : '#80828C' }}
+                      style={{ color: isActive ? (stepAccent === '#0059FF' ? '#60A5FA' : stepAccent) : '#475569' }}
                     >
                       {item.step}
                     </span>
@@ -75,7 +75,7 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({ onQuoteClick }) 
                       className={`w-8 h-8 rounded-md flex items-center justify-center transition-all ${
                         isActive
                           ? 'shadow-sm'
-                          : 'bg-white text-[#80828C] border border-[#E8E9EE]'
+                          : 'bg-white text-[#475569] border border-[#E8E9EE]'
                       }`}
                       style={
                         isActive
@@ -92,7 +92,7 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({ onQuoteClick }) 
 
                   <span
                     className="text-[10px] font-extrabold uppercase tracking-[0.16em] block mb-1.5"
-                    style={{ color: isActive ? stepAccent : '#80828C' }}
+                    style={{ color: isActive ? (stepAccent === '#0059FF' ? '#60A5FA' : stepAccent) : '#475569' }}
                   >
                     Paso {idx + 1}
                   </span>

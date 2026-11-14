@@ -46,7 +46,7 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Brand Info & Mission */}
           <div className="lg:col-span-2 space-y-4 text-left">
             <BrandLogo variant="light" size="md" showSlogan={true} />
-            <p className="text-xs sm:text-sm text-[#80828C] leading-relaxed max-w-sm pt-2">
+            <p className="text-xs sm:text-sm text-[#CBD5E1] leading-relaxed max-w-sm pt-2">
               {BUSINESS_INFO.positioning}
             </p>
             <div className="pt-1 flex items-center gap-2 text-xs text-[#B8BCC6]">
@@ -118,7 +118,7 @@ export const Footer: React.FC<FooterProps> = ({
                       e.preventDefault();
                       onNavigate(item.id);
                     }}
-                    className="text-[#80828C] hover:text-white transition-colors inline-block"
+                    className="text-[#CBD5E1] hover:text-white transition-colors inline-block"
                   >
                     {item.label}
                   </a>
@@ -132,7 +132,7 @@ export const Footer: React.FC<FooterProps> = ({
             <h2 className="text-xs font-extrabold uppercase tracking-[0.14em] text-white font-display">
               Especialidades
             </h2>
-            <ul className="space-y-2 text-xs sm:text-sm text-[#80828C]">
+            <ul className="space-y-2 text-xs sm:text-sm text-[#CBD5E1]">
               {MULTI_SERVICES_CATEGORIES.map((cat) => (
                 <li key={cat.id}>
                   <a
@@ -254,11 +254,11 @@ export const Footer: React.FC<FooterProps> = ({
                   <span>Google: Reseñas ({BUSINESS_INFO.googleRating} ★)</span>
                 </a>
               </li>
-              <li className="flex items-start gap-2.5 text-[#80828C]">
-                <Clock className="w-4 h-4 text-[#80828C] shrink-0 mt-0.5" aria-hidden="true" />
+              <li className="flex items-start gap-2.5 text-[#CBD5E1]">
+                <Clock className="w-4 h-4 text-[#CBD5E1] shrink-0 mt-0.5" aria-hidden="true" />
                 <div>
                   <p>{BUSINESS_INFO.scheduleWeekdays}</p>
-                  <p className="text-[11px] text-[#80828C]">{BUSINESS_INFO.scheduleSaturdays}</p>
+                  <p className="text-[11px] text-[#CBD5E1]">{BUSINESS_INFO.scheduleSaturdays}</p>
                 </div>
               </li>
             </ul>
@@ -266,7 +266,7 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#80828C]">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#CBD5E1]">
           <p>
             © {new Date().getFullYear()} Ideas &amp; Colores Multi-Servicios Guatemala. Fundada en{' '}
             {BUSINESS_INFO.foundationYear}. Todos los derechos reservados.

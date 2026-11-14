@@ -54,12 +54,12 @@
     "status": "HEALTHY",
     "updatedAt": "2026-11-05T20:04:07+01:00"
   },
-  "last_synced_at": "2026-11-14T20:41:52.601Z",
+  "last_synced_at": "2026-11-14T20:47:39.409Z",
   "audit": {
-    "timestamp": "2026-11-14T20:41:52.601Z",
+    "timestamp": "2026-11-14T20:47:39.409Z",
     "branch": "fix/security-hardening",
     "working_tree_clean": false,
-    "uncommitted_files": 36,
+    "uncommitted_files": 5,
     "failed_checks": [],
     "checks_summary": {
       "total": 12,

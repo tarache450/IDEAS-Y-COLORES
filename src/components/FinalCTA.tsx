@@ -135,7 +135,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ onQuoteClick }) => {
           </a>
         </div>
 
-        <div className="mt-8 flex items-center justify-center gap-2 text-xs text-[#80828C]">
+        <div className="mt-8 flex items-center justify-center gap-2 text-xs text-[#CBD5E1]">
           <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden="true" />
           <span>
             Atención técnica • Personal calificado • Garantía por escrito en productos y mano de
