@@ -59,32 +59,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- Preload Critical LCP Assets (Hero Responsive WebP) -->
+    <!-- Preload Critical LCP Assets (Logo + Hero Responsive WebP) -->
     <link
       rel="preload"
       as="image"
-      href="/hero-interior-sala-mobile.webp"
-      imagesrcset="/hero-interior-sala-mobile.webp 800w, /hero-interior-sala.webp 1200w"
+      href="/logo-white-v2.webp"
+      type="image/webp"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/hero-interior-sala-mobile-v2.webp"
+      imagesrcset="/hero-interior-sala-mobile-v2.webp 800w, /hero-interior-sala-v2.webp 1200w"
       imagesizes="100vw"
       type="image/webp"
       fetchpriority="high"
     />
-    <!-- Non-render-blocking Typography: preload variable fonts to minimize swap CLS -->
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="https://fonts.gstatic.com/s/outfit/v15/QGYvz_MVcBeNP4NJtEtq.woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2"
-      crossorigin
-    />
-    <!-- Typography: non-blocking stylesheet + preloaded fonts + display=optional (no swap CLS) -->
+    <!-- Typography: non-blocking stylesheet + display=optional (no swap CLS, zero critical-path font contention) -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=optional"
@@ -336,7 +328,7 @@
     <div id="root">
       <div style="min-height: 100vh; background-color: #090E19; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column;">
         <header style="height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid rgba(255,255,255,0.12); max-width: 1280px; margin: 0 auto; width: 100%; box-sizing: border-box;">
-          <img src="/logo-white.webp" alt="Ideas &amp; Colores Multi-Servicios Guatemala - Logotipo Oficial" width="96" height="48" style="height: 44px; width: auto; aspect-ratio: 2 / 1; object-fit: contain;" />
+          <img src="/logo-white-v2.webp" alt="Ideas &amp; Colores Multi-Servicios Guatemala - Logotipo Oficial" width="96" height="48" fetchpriority="high" decoding="sync" style="height: 44px; width: auto; aspect-ratio: 2 / 1; object-fit: contain;" />
           <div style="height: 36px; width: 110px; background-color: #FF5C00; border-radius: 6px;"></div>
         </header>
         <main style="padding: 40px 16px; max-width: 1280px; margin: 0 auto; width: 100%; box-sizing: border-box;">

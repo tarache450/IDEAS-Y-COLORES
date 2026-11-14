@@ -10,10 +10,16 @@
     }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', activateAsyncStyles, { once: true });
+  if (document.readyState === 'complete') {
+    setTimeout(activateAsyncStyles, 120);
   } else {
-    activateAsyncStyles();
+    window.addEventListener(
+      'load',
+      function () {
+        setTimeout(activateAsyncStyles, 120);
+      },
+      { once: true }
+    );
   }
 
   var gaLoaded = false;
@@ -26,16 +32,8 @@
     document.head.appendChild(s);
   }
 
-  var interactionEvents = ['pointerdown', 'keydown', 'touchstart', 'scroll'];
+  var interactionEvents = ['pointerdown', 'keydown', 'touchstart', 'scroll', 'mousemove'];
   interactionEvents.forEach(function (ev) {
     window.addEventListener(ev, loadGaScript, { once: true, passive: true });
   });
-
-  window.addEventListener(
-    'load',
-    function () {
-      setTimeout(loadGaScript, 5500);
-    },
-    { once: true }
-  );
 })();

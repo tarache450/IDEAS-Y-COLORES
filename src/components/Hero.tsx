@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion, useReducedMotion } from 'motion/react';
 import {
   ArrowRight,
   MessageCircle,
@@ -11,7 +10,6 @@ import {
 import { BUSINESS_INFO, MULTI_SERVICES_CATEGORIES } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
 import { MoodColorPicker } from './MoodColorPicker';
-import { NumberTicker } from './ui/NumberTicker';
 import { assetUrl } from '../utils/asset';
 import {
   LOGO_SPECTRUM_GRADIENT,
@@ -33,7 +31,6 @@ export const Hero: React.FC<HeroProps> = ({
   onOpenCategoryPage,
 }) => {
   const { currentMood, activeMood } = useColorMood();
-  const prefersReduced = useReducedMotion();
 
   const moodShowcases = {
     naranja: {
@@ -70,11 +67,8 @@ export const Hero: React.FC<HeroProps> = ({
       {/* Mobile-first background framing & guaranteed high-contrast dark scrim */}
       <div className="absolute inset-0 z-0 overflow-hidden bg-[#090E19]" aria-hidden="true">
         <div className="w-full h-full opacity-35 sm:opacity-75 transition-opacity">
-          <motion.img
+          <img
             key={moodShowcases.image}
-            initial={prefersReduced ? false : { scale: 1.06 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 1.25, ease: [0.22, 1, 0.36, 1] }}
             src={moodShowcases.image}
             srcSet={moodShowcases.srcSet}
             sizes="100vw"
@@ -84,7 +78,7 @@ export const Hero: React.FC<HeroProps> = ({
             className="w-full h-full object-cover object-[72%_25%] sm:object-center"
             fetchPriority="high"
             loading="eager"
-            decoding="async"
+            decoding="sync"
           />
         </div>
         {/* Browser-safe rgba veil so mobile white text stays crisp regardless of iOS/Brave dark-mode engines */}
@@ -324,7 +318,7 @@ export const Hero: React.FC<HeroProps> = ({
                 <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden="true" />
                 <div className="leading-tight">
                   <strong className="text-white block font-bold">
-                    +<NumberTicker value={500} /> Proyectos
+                    +500 Proyectos
                   </strong>
                   <span className="text-slate-300">Desde {BUSINESS_INFO.foundationYear}</span>
                 </div>

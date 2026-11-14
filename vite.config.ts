@@ -160,6 +160,29 @@ function previewCompressionPlugin(): Plugin {
   };
 }
 
+function inlineCriticalCssPlugin(): Plugin {
+  return {
+    name: 'vite-plugin-inline-critical-css',
+    enforce: 'post',
+    closeBundle() {
+      const distIndex = path.resolve(__dirname, 'dist', 'index.html');
+      if (!fs.existsSync(distIndex)) return;
+      const html = fs.readFileSync(distIndex, 'utf8');
+      const cssMatch = html.match(
+        /<link\s+rel="stylesheet"\s+crossorigin\s+href="\/(assets\/index-[^"]+\.css)"\s*\/?>/
+      );
+      if (!cssMatch) return;
+      const cssRel = cssMatch[1];
+      const cssAbs = path.resolve(__dirname, 'dist', cssRel);
+      if (!fs.existsSync(cssAbs)) return;
+      const cssContent = fs.readFileSync(cssAbs, 'utf8');
+      const replacement = `<style id="inlined-app-css">${cssContent}</style><noscript><link rel="stylesheet" crossorigin href="/${cssRel}"></noscript>`;
+      const updated = html.replace(cssMatch[0], replacement);
+      fs.writeFileSync(distIndex, updated, 'utf8');
+    },
+  };
+}
+
 export default defineConfig(() => {
   return {
     base: '/',
@@ -169,6 +192,7 @@ export default defineConfig(() => {
       aistudioMediaPlugin(),
       apiBackendPlugin(),
       previewCompressionPlugin(),
+      inlineCriticalCssPlugin(),
     ],
     resolve: {
       alias: {

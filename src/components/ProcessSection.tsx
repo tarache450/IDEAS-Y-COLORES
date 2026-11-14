@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { PROCESS_STEPS } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
@@ -13,7 +12,6 @@ interface ProcessSectionProps {
 export const ProcessSection: React.FC<ProcessSectionProps> = ({ onQuoteClick }) => {
   const { currentMood } = useColorMood();
   const [activeStepIndex, setActiveStepIndex] = useState<number>(0);
-  const prefersReduced = useReducedMotion();
 
   return (
     <section id="proceso" className="py-20 sm:py-28 bg-white border-b border-[#E8E9EE]">
@@ -56,12 +54,8 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({ onQuoteClick }) 
             const isLightAccent = stepAccent === '#FAB82A' || stepAccent === '#00A3FF';
 
             return (
-              <motion.div
+              <div
                 key={item.step}
-                initial={prefersReduced ? false : { opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: 0.4, delay: prefersReduced ? 0 : idx * 0.08 }}
                 onClick={() => setActiveStepIndex(idx)}
                 className={`rounded-xl p-6 sm:p-7 border transition-all duration-200 flex flex-col justify-between cursor-pointer relative text-left ${
                   isActive
@@ -129,7 +123,7 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({ onQuoteClick }) 
                 >
                   {item.detail}
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

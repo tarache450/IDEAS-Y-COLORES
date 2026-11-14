@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import {
   Menu,
   X,
@@ -44,7 +43,6 @@ export const Header: React.FC<HeaderProps> = ({
   const [servicesMenuOpen, setServicesMenuOpen] = useState(false);
   const { currentMood } = useColorMood();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const prefersReduced = useReducedMotion();
 
   useEffect(() => {
     if (typeof document === 'undefined') return;
@@ -58,7 +56,6 @@ export const Header: React.FC<HeaderProps> = ({
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 32);
     };
-    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -402,37 +399,28 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Mobile Right Slide-Over Navigation Drawer */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: prefersReduced ? 0.01 : 0.22 }}
-              onClick={() => setMobileMenuOpen(false)}
-              className="fixed inset-0 bg-[#090E19]/70 backdrop-blur-xs"
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
+          {/* Backdrop */}
+          <div
+            onClick={() => setMobileMenuOpen(false)}
+            className="fixed inset-0 bg-[#090E19]/70 backdrop-blur-xs transition-opacity duration-200"
+            aria-hidden="true"
+          />
+
+          {/* Full-Height Editorial Right Panel */}
+          <aside
+            id="mobile-drawer-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menú de navegación móvil"
+            className="relative z-10 w-[85vw] max-w-[340px] h-[100dvh] bg-[#090E19] border-l border-[#27324D] shadow-2xl flex flex-col justify-between text-white overflow-y-auto"
+          >
+            <div
+              className="h-[3px] w-full shrink-0"
+              style={{ background: LOGO_SPECTRUM_GRADIENT }}
               aria-hidden="true"
             />
-
-            {/* Full-Height Editorial Right Panel */}
-            <motion.aside
-              id="mobile-drawer-menu"
-              role="dialog"
-              aria-modal="true"
-              aria-label="Menú de navegación móvil"
-              initial={prefersReduced ? false : { x: '100%' }}
-              animate={{ x: 0 }}
-              exit={prefersReduced ? undefined : { x: '100%' }}
-              transition={{ type: 'spring', stiffness: 360, damping: 36 }}
-              className="relative z-10 w-[85vw] max-w-[340px] h-[100dvh] bg-[#090E19] border-l border-[#27324D] shadow-2xl flex flex-col justify-between text-white overflow-y-auto"
-            >
-              <div
-                className="h-[3px] w-full shrink-0"
-                style={{ background: LOGO_SPECTRUM_GRADIENT }}
-                aria-hidden="true"
-              />
 
               <div className="flex flex-col justify-between flex-1 px-7 pt-5 pb-7 gap-6">
                 {/* Drawer Header with Top-Right Close Button */}
@@ -604,10 +592,9 @@ export const Header: React.FC<HeaderProps> = ({
                   </div>
                 </div>
               </div>
-            </motion.aside>
+            </aside>
           </div>
         )}
-      </AnimatePresence>
     </header>
   );
 };

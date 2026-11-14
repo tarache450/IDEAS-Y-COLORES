@@ -16,10 +16,10 @@ export const MoodColorPicker: React.FC<MoodColorPickerProps> = ({
   if (variant === 'compact') {
     return (
       <div
-        className={`surface-1 inline-flex items-center gap-1.5 p-1 rounded-full ${className}`}
+        className={`bg-[#0F172A] border border-white/20 inline-flex items-center gap-1.5 p-1 rounded-full ${className}`}
         id="mood-selector-compact"
       >
-        <span className="text-[10px] font-bold text-slate-300 pl-2 pr-1 uppercase tracking-wider hidden sm:inline">
+        <span className="text-[10px] font-bold text-white pl-2 pr-1 uppercase tracking-wider hidden sm:inline">
           Mood:
         </span>
         {allMoods.map((mood) => {

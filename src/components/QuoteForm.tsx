@@ -29,7 +29,6 @@ import {
 } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
-import { motion, AnimatePresence } from 'motion/react';
 import { submitQuoteRequest } from '../services/quotes';
 import { assetUrl } from '../utils/asset';
 import {
@@ -709,15 +708,10 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                   </div>
                 )}
 
-                <AnimatePresence mode="wait">
                   {/* STEP 1 */}
                   {currentStep === 1 && (
-                    <motion.div
+                    <div
                       key="step-1"
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.2 }}
                       className="space-y-6"
                     >
                       <div>
@@ -805,17 +799,13 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           <span>Siguiente: Tipo de espacio</span>
                         </button>
                       </div>
-                    </motion.div>
+                    </div>
                   )}
 
                   {/* STEP 2 */}
                   {currentStep === 2 && (
-                    <motion.div
+                    <div
                       key="step-2"
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.2 }}
                       className="space-y-6"
                     >
                       <div>
@@ -957,17 +947,13 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           <span>Siguiente: Datos de contacto</span>
                         </button>
                       </div>
-                    </motion.div>
+                    </div>
                   )}
 
                   {/* STEP 3 */}
                   {currentStep === 3 && (
-                    <motion.div
+                    <div
                       key="step-3"
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.2 }}
                       className="space-y-5"
                     >
                       <div>
@@ -1252,9 +1238,8 @@ export const QuoteForm: React.FC<QuoteFormProps> = ({
                           </button>
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   )}
-                </AnimatePresence>
               </form>
             )}
           </div>

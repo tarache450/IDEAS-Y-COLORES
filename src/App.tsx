@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ColorMoodProvider, useColorMood } from './context/ColorMoodContext';
 import { Header, NavPage } from './components/Header';
 import { Hero } from './components/Hero';
@@ -10,14 +9,18 @@ import { QuoteForm } from './components/QuoteForm';
 import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
-import { PrivacyPolicyModal } from './components/PrivacyPolicyModal';
-import { SubpageHero } from './components/SubpageHero';
 import { NAV_PAGE_ACCENTS } from './utils/logoPalette';
 import { MULTI_SERVICES_CATEGORIES } from './data/content';
 import { trackGaPageView } from './utils/analytics';
 import { registerWebMcpTools } from './utils/webmcp';
 
 // Separate views and navbar subpages remain code-split to keep initial Home JS lean
+const SubpageHero = lazy(() =>
+  import('./components/SubpageHero').then((m) => ({ default: m.SubpageHero }))
+);
+const PrivacyPolicyModal = lazy(() =>
+  import('./components/PrivacyPolicyModal').then((m) => ({ default: m.PrivacyPolicyModal }))
+);
 const ServiceCategoryPage = lazy(() =>
   import('./components/ServiceCategoryPage').then((m) => ({ default: m.ServiceCategoryPage }))
 );
@@ -138,7 +141,6 @@ function AppContent() {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const isProgrammaticScrollRef = useRef(false);
   const scrollLockTimeoutRef = useRef<number | null>(null);
-  const prefersReduced = useReducedMotion();
 
   const [isAdminView, setIsAdminView] = useState(() => {
     return (
@@ -476,17 +478,10 @@ function AppContent() {
         onOpenCategoryPage={openCategoryPage}
       />
 
-      {/* Main Content Area: Animated Transitions Between Services Home, Category Pages, and Navbar Subpages */}
+      {/* Main Content Area: Services Home, Category Pages, and Navbar Subpages */}
       <main id="main-content" className="flex-1 relative z-10">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentViewKey}
-            initial={prefersReduced ? false : { opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={prefersReduced ? undefined : { opacity: 0, y: -8 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {activeCategorySlug ? (
+        <div key={currentViewKey}>
+          {activeCategorySlug ? (
               <>
                 <Suspense fallback={<SectionSkeleton id="subpage-loading" minHeight="600px" />}>
                   <ServiceCategoryPage
@@ -517,18 +512,18 @@ function AppContent() {
               </>
             ) : activePage === 'proyectos' ? (
               <>
-                <SubpageHero
-                  eyebrow="Portafolio de Obras"
-                  title="Proyectos Realizados"
-                  subtitle="Resultados documentados en residencias de Carretera a El Salvador, condominios, oficinas corporativas, comercios e industria."
-                  breadcrumbLabel="Proyectos"
-                  accent={NAV_PAGE_ACCENTS.proyectos}
-                  activeNavId="proyectos"
-                  onBackToHome={() => scrollToSection('inicio')}
-                  onNavigateSubpage={scrollToSection}
-                  onQuoteClick={() => scrollToSection('cotizar')}
-                />
                 <Suspense fallback={<SectionSkeleton id="proyectos" minHeight="650px" />}>
+                  <SubpageHero
+                    eyebrow="Portafolio de Obras"
+                    title="Proyectos Realizados"
+                    subtitle="Resultados documentados en residencias de Carretera a El Salvador, condominios, oficinas corporativas, comercios e industria."
+                    breadcrumbLabel="Proyectos"
+                    accent={NAV_PAGE_ACCENTS.proyectos}
+                    activeNavId="proyectos"
+                    onBackToHome={() => scrollToSection('inicio')}
+                    onNavigateSubpage={scrollToSection}
+                    onQuoteClick={() => scrollToSection('cotizar')}
+                  />
                   <ProjectsGallery onRequestSimilar={handleRequestSimilarProject} />
                 </Suspense>
                 <QuoteForm
@@ -540,18 +535,18 @@ function AppContent() {
               </>
             ) : activePage === 'herramientas' ? (
               <>
-                <SubpageHero
-                  eyebrow="Herramientas Técnicas Interactivas"
-                  title="Estudio de Color & Calculadora m²"
-                  subtitle="Visualiza paletas arquitectónicas con iluminación real y calcula cuántos cubetas o galones necesita tu proyecto antes de cotizar."
-                  breadcrumbLabel="Color & Calculadora"
-                  accent={NAV_PAGE_ACCENTS.herramientas}
-                  activeNavId="herramientas"
-                  onBackToHome={() => scrollToSection('inicio')}
-                  onNavigateSubpage={scrollToSection}
-                  onQuoteClick={() => scrollToSection('cotizar')}
-                />
                 <Suspense fallback={<SectionSkeleton id="herramientas" minHeight="650px" />}>
+                  <SubpageHero
+                    eyebrow="Herramientas Técnicas Interactivas"
+                    title="Estudio de Color & Calculadora m²"
+                    subtitle="Visualiza paletas arquitectónicas con iluminación real y calcula cuántos cubetas o galones necesita tu proyecto antes de cotizar."
+                    breadcrumbLabel="Color & Calculadora"
+                    accent={NAV_PAGE_ACCENTS.herramientas}
+                    activeNavId="herramientas"
+                    onBackToHome={() => scrollToSection('inicio')}
+                    onNavigateSubpage={scrollToSection}
+                    onQuoteClick={() => scrollToSection('cotizar')}
+                  />
                   <InteractiveToolsHub
                     activeToolTab={activeToolTab}
                     onTabChange={setActiveToolTab}
@@ -568,18 +563,18 @@ function AppContent() {
               </>
             ) : activePage === 'nosotros' ? (
               <>
-                <SubpageHero
-                  eyebrow="Nuestra Empresa • Desde 2014"
-                  title="Nosotros, Sectores & Garantías"
-                  subtitle="Más de 10 años ejecutando obras limpias, garantizadas por escrito y facturadas bajo régimen FEL SAT en Guatemala."
-                  breadcrumbLabel="Nosotros"
-                  accent={NAV_PAGE_ACCENTS.nosotros}
-                  activeNavId="confianza"
-                  onBackToHome={() => scrollToSection('inicio')}
-                  onNavigateSubpage={scrollToSection}
-                  onQuoteClick={() => scrollToSection('cotizar')}
-                />
                 <Suspense fallback={<SectionSkeleton id="confianza" minHeight="650px" />}>
+                  <SubpageHero
+                    eyebrow="Nuestra Empresa • Desde 2014"
+                    title="Nosotros, Sectores & Garantías"
+                    subtitle="Más de 10 años ejecutando obras limpias, garantizadas por escrito y facturadas bajo régimen FEL SAT en Guatemala."
+                    breadcrumbLabel="Nosotros"
+                    accent={NAV_PAGE_ACCENTS.nosotros}
+                    activeNavId="confianza"
+                    onBackToHome={() => scrollToSection('inicio')}
+                    onNavigateSubpage={scrollToSection}
+                    onQuoteClick={() => scrollToSection('cotizar')}
+                  />
                   <BentoTrustGrid onQuoteClick={() => scrollToSection('cotizar')} />
                   <SectorsSection
                     onQuoteSector={(sectorTitle) => {
@@ -599,18 +594,18 @@ function AppContent() {
               </>
             ) : activePage === 'contacto' ? (
               <>
-                <SubpageHero
-                  eyebrow="Atención Directa & Cobertura"
-                  title="Contacto, Mapa Km 21.5 y FAQs"
-                  subtitle="Visítanos en Carretera a El Salvador Km 21.5, Fraijanes, o agenda una visita técnica sin costo por WhatsApp."
-                  breadcrumbLabel="Contacto"
-                  accent={NAV_PAGE_ACCENTS.contacto}
-                  activeNavId="contacto"
-                  onBackToHome={() => scrollToSection('inicio')}
-                  onNavigateSubpage={scrollToSection}
-                  onQuoteClick={() => scrollToSection('cotizar')}
-                />
                 <Suspense fallback={<SectionSkeleton id="contacto" minHeight="650px" />}>
+                  <SubpageHero
+                    eyebrow="Atención Directa & Cobertura"
+                    title="Contacto, Mapa Km 21.5 y FAQs"
+                    subtitle="Visítanos en Carretera a El Salvador Km 21.5, Fraijanes, o agenda una visita técnica sin costo por WhatsApp."
+                    breadcrumbLabel="Contacto"
+                    accent={NAV_PAGE_ACCENTS.contacto}
+                    activeNavId="contacto"
+                    onBackToHome={() => scrollToSection('inicio')}
+                    onNavigateSubpage={scrollToSection}
+                    onQuoteClick={() => scrollToSection('cotizar')}
+                  />
                   <ContactSection />
                   <FAQSection onOpenPrivacy={() => setIsPrivacyModalOpen(true)} />
                 </Suspense>
@@ -654,8 +649,7 @@ function AppContent() {
                 <FinalCTA onQuoteClick={() => scrollToSection('cotizar')} />
               </>
             )}
-          </motion.div>
-        </AnimatePresence>
+        </div>
       </main>
 
       {/* Footer */}
@@ -670,10 +664,14 @@ function AppContent() {
       <FloatingWhatsApp />
 
       {/* Modal de Política de Privacidad */}
-      <PrivacyPolicyModal
-        isOpen={isPrivacyModalOpen}
-        onClose={() => setIsPrivacyModalOpen(false)}
-      />
+      {isPrivacyModalOpen && (
+        <Suspense fallback={null}>
+          <PrivacyPolicyModal
+            isOpen={isPrivacyModalOpen}
+            onClose={() => setIsPrivacyModalOpen(false)}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

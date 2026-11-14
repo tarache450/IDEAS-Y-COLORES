@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
 
 interface FadeInProps {
   children: React.ReactNode;
@@ -12,26 +11,33 @@ interface FadeInProps {
 }
 
 /**
- * FadeIn – lightweight scroll-triggered reveal using motion/react.
- * No GSAP required. Replaces AnimatedContent from React Bits.
- * Respects prefers-reduced-motion.
+ * FadeIn – lightweight scroll-triggered reveal using pure CSS transitions.
+ * Zero external animation runtime required. Respects prefers-reduced-motion.
  */
 const FadeIn: React.FC<FadeInProps> = ({
   children,
   className = '',
   delay = 0,
   direction = 'up',
-  distance = 28,
-  duration = 0.55,
+  distance = 20,
+  duration = 0.45,
   once = true,
 }) => {
-  const [inView, setInView] = useState(false);
-  const reduceMotion = useReducedMotion();
+  const [inView, setInView] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight) {
+      setInView(true);
+      return;
+    }
+
+    setInView(false);
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -47,30 +53,26 @@ const FadeIn: React.FC<FadeInProps> = ({
     return () => obs.disconnect();
   }, [once]);
 
-  const initial: Record<string, string | number> = { opacity: 0, filter: 'blur(6px)' };
-  if (direction === 'up') initial.y = distance;
-  if (direction === 'down') initial.y = -distance;
-  if (direction === 'left') initial.x = distance;
-  if (direction === 'right') initial.x = -distance;
-
-  const animate = inView
-    ? { opacity: 1, y: 0, x: 0, filter: 'blur(0px)' }
-    : initial;
+  let translate = 'translate3d(0, 0, 0)';
+  if (!inView) {
+    if (direction === 'up') translate = `translate3d(0, ${distance}px, 0)`;
+    else if (direction === 'down') translate = `translate3d(0, -${distance}px, 0)`;
+    else if (direction === 'left') translate = `translate3d(${distance}px, 0, 0)`;
+    else if (direction === 'right') translate = `translate3d(-${distance}px, 0, 0)`;
+  }
 
   return (
-    <motion.div
+    <div
       ref={ref}
       className={className}
-      initial={reduceMotion ? false : initial}
-      animate={reduceMotion ? { opacity: 1, x: 0, y: 0, filter: 'none' } : animate}
-      transition={{
-        duration: reduceMotion ? 0 : duration,
-        delay: reduceMotion ? 0 : delay,
-        ease: [0.25, 0.46, 0.45, 0.94],
+      style={{
+        opacity: inView ? 1 : 0,
+        transform: translate,
+        transition: `opacity ${duration}s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}s, transform ${duration}s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}s`,
       }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 };
 

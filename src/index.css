@@ -262,3 +262,23 @@ main > section.bg-transparent {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee-scroll {
+  animation: marquee-scroll 28s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-scroll {
+    animation: none;
+  }
+}

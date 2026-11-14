@@ -31,6 +31,23 @@ export function assetUrl(path: string): string {
     }
   }
 
+  // Map optimized service and hero WebP assets to cache-busted -v2.webp binaries
+  const v2WebpMap: Record<string, string> = {
+    'logo-white.webp': 'logo-white-v2.webp',
+    'logo.webp': 'logo-v2.webp',
+    'hero-interior-sala.webp': 'hero-interior-sala-v2.webp',
+    'hero-interior-sala-mobile.webp': 'hero-interior-sala-mobile-v2.webp',
+    'services/servicio-carpinteria-medida.webp': 'services/servicio-carpinteria-medida-v2.webp',
+    'services/servicio-mantenimiento-oficinas.webp': 'services/servicio-mantenimiento-oficinas-v2.webp',
+    'services/servicio-plomeria-bano.webp': 'services/servicio-plomeria-bano-v2.webp',
+    'services/servicio-pintura-interiores.webp': 'services/servicio-pintura-interiores-v2.webp',
+    'services/servicio-piso-epoxico.webp': 'services/servicio-piso-epoxico-v2.webp',
+    'services/servicio-drywall-cielo-falso.webp': 'services/servicio-drywall-cielo-falso-v2.webp',
+  };
+  if (v2WebpMap[cleanPath]) {
+    cleanPath = v2WebpMap[cleanPath];
+  }
+
   if (base === './' || base === '.') {
     return `./${cleanPath}`;
   }

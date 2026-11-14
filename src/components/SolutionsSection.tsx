@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
 import {
   Paintbrush,
   Printer,
@@ -41,7 +40,6 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
 }) => {
   const { currentMood } = useColorMood();
   const [selectedFilter, setSelectedFilter] = useState<string>('todos');
-  const prefersReduced = useReducedMotion();
 
   const iconMap: Record<string, React.ReactNode> = {
     pintura: <Paintbrush className="w-5 h-5" aria-hidden="true" />,
@@ -204,23 +202,14 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
               : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
           }`}
         >
-          {visibleCategories.map((cat, idx) => {
+          {visibleCategories.map((cat) => {
             const icon = iconMap[cat.id];
             const catTheme = getCategoryLogoTheme(cat.id, cat.accentColor);
 
             return (
-              <motion.article
+              <article
                 key={cat.id}
-                initial={prefersReduced ? false : { opacity: 0, y: 22 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.12 }}
-                transition={{
-                  duration: 0.45,
-                  delay: prefersReduced ? 0 : idx * 0.06,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                whileHover={prefersReduced ? undefined : { y: -4 }}
-                className="rounded-xl bg-[#F4F5F7] border border-[#E8E9EE] hover:border-[#090E19]/45 shadow-xs hover:shadow-xl transition-shadow duration-200 overflow-hidden flex flex-col justify-between group text-left relative"
+                className="rounded-xl bg-[#F4F5F7] border border-[#E8E9EE] hover:border-[#090E19]/45 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col justify-between group text-left relative"
               >
                 {/* Logo-color top accent hairline */}
                 <div
@@ -366,7 +355,7 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
                     </a>
                   </div>
                 </div>
-              </motion.article>
+              </article>
             );
           })}
         </div>
