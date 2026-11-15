@@ -55,3 +55,13 @@ export function assetUrl(path: string): string {
   const cleanBase = base.endsWith('/') ? base : `${base}/`;
   return `${cleanBase}${cleanPath}`;
 }
+
+/**
+ * Generates responsive srcset candidates (390w card size & 662w Retina/detail size)
+ * for v2 service card WebPs so desktop 1x viewports never over-download pixels.
+ */
+export function serviceCardSrcSet(resolvedUrl: string): string | undefined {
+  if (!resolvedUrl || !resolvedUrl.includes('-v2.webp')) return undefined;
+  const smallUrl = resolvedUrl.replace(/-v2\.webp$/i, '-sm-v3.webp');
+  return `${smallUrl} 390w, ${resolvedUrl} 662w`;
+}

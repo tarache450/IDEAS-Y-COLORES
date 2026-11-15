@@ -24,7 +24,7 @@
 
   var gaLoaded = false;
   function loadGaScript() {
-    if (gaLoaded) return;
+    if (gaLoaded || document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) return;
     gaLoaded = true;
     var s = document.createElement('script');
     s.async = true;
@@ -32,7 +32,7 @@
     document.head.appendChild(s);
   }
 
-  var interactionEvents = ['pointerdown', 'keydown', 'touchstart', 'scroll', 'mousemove'];
+  var interactionEvents = ['pointerdown', 'keydown', 'touchstart', 'wheel'];
   interactionEvents.forEach(function (ev) {
     window.addEventListener(ev, loadGaScript, { once: true, passive: true });
   });

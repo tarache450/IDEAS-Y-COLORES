@@ -233,6 +233,7 @@ export const Hero: React.FC<HeroProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 id="hero-btn-whatsapp"
+                aria-label="WhatsApp Ideas & Colores"
                 className="inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 min-h-[48px] sm:min-h-[54px] rounded-md text-emerald-300 font-bold text-xs sm:text-sm border border-emerald-400/40 transition-all whitespace-nowrap hover:opacity-90"
                 style={{ backgroundColor: 'rgba(6, 78, 59, 0.82)' }}
               >

@@ -21,6 +21,7 @@ import { useColorMood } from '../context/ColorMoodContext';
 import { StaggeredText } from './ui/StaggeredText';
 import FadeIn from './ui/FadeIn';
 import { buildSafeWhatsAppUrl } from '../utils/security';
+import { serviceCardSrcSet } from '../utils/asset';
 import {
   getCategoryLogoTheme,
   LOGO_SPECTRUM_LIST,
@@ -233,12 +234,14 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
                   >
                     <img
                       src={cat.image}
+                      srcSet={serviceCardSrcSet(cat.image)}
+                      sizes="(max-width: 639px) 390px, (max-width: 1023px) 45vw, 387px"
                       alt={`${cat.title} en Ciudad de Guatemala y Carretera a El Salvador — Ideas & Colores`}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
                       loading="lazy"
                       decoding="async"
-                      width={1264}
-                      height={848}
+                      width={390}
+                      height={244}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#090E19] via-[#090E19]/30 to-transparent" />
 

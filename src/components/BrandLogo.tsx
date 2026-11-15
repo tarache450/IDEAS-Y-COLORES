@@ -17,7 +17,10 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   isPriority = true,
 }) => {
   const isLight = variant === 'light'; // Light variant is for dark backgrounds (Footer, dark banners)
-  const logoSrc = isLight ? assetUrl('logo-white.webp') : assetUrl('logo.webp');
+  const logo1x = isLight ? assetUrl('logo-white-1x-v3.webp') : assetUrl('logo-dark-1x-v3.webp');
+  const logo154 = isLight ? assetUrl('logo-white-154-v3.webp') : assetUrl('logo-dark-154-v3.webp');
+  const logo2x = isLight ? assetUrl('logo-white-2x-v3.webp') : assetUrl('logo-dark-2x-v3.webp');
+  const logoSrcSet = `${logo1x} 96w, ${logo154} 154w, ${logo2x} 192w`;
 
   // Dimension presets maintaining natural 2:1 aspect ratio
   const sizeClasses = {
@@ -33,7 +36,9 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       id="brand-logo-container"
     >
       <img
-        src={logoSrc}
+        src={logo1x}
+        srcSet={logoSrcSet}
+        sizes="(max-width: 639px) 88px, 96px"
         alt="Ideas & Colores Multi-Servicios Guatemala - Logotipo Oficial"
         width={96}
         height={48}

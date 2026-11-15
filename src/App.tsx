@@ -4,9 +4,6 @@ import { Header, NavPage } from './components/Header';
 import { Hero } from './components/Hero';
 import { ServicesMarquee } from './components/ui/ServicesMarquee';
 import { SolutionsSection } from './components/SolutionsSection';
-import { ProcessSection } from './components/ProcessSection';
-import { QuoteForm } from './components/QuoteForm';
-import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { NAV_PAGE_ACCENTS } from './utils/logoPalette';
@@ -14,7 +11,16 @@ import { MULTI_SERVICES_CATEGORIES } from './data/content';
 import { trackGaPageView } from './utils/analytics';
 import { registerWebMcpTools } from './utils/webmcp';
 
-// Separate views and navbar subpages remain code-split to keep initial Home JS lean
+// Below-the-fold and secondary views remain code-split to keep initial Mobile JS & TBT ultra-lean
+const ProcessSection = lazy(() =>
+  import('./components/ProcessSection').then((m) => ({ default: m.ProcessSection }))
+);
+const QuoteForm = lazy(() =>
+  import('./components/QuoteForm').then((m) => ({ default: m.QuoteForm }))
+);
+const FinalCTA = lazy(() =>
+  import('./components/FinalCTA').then((m) => ({ default: m.FinalCTA }))
+);
 const SubpageHero = lazy(() =>
   import('./components/SubpageHero').then((m) => ({ default: m.SubpageHero }))
 );
@@ -503,12 +509,14 @@ function AppContent() {
                   />
                 </Suspense>
 
-                <QuoteForm
-                  initialProjectType={selectedProjectForQuote || 'Residencial'}
-                  initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
-                  initialMessage={customQuoteMessage}
-                  onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
-                />
+                <Suspense fallback={<SectionSkeleton id="cotizar" minHeight="560px" />}>
+                  <QuoteForm
+                    initialProjectType={selectedProjectForQuote || 'Residencial'}
+                    initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
+                    initialMessage={customQuoteMessage}
+                    onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+                  />
+                </Suspense>
               </>
             ) : activePage === 'proyectos' ? (
               <>
@@ -526,12 +534,14 @@ function AppContent() {
                   />
                   <ProjectsGallery onRequestSimilar={handleRequestSimilarProject} />
                 </Suspense>
-                <QuoteForm
-                  initialProjectType={selectedProjectForQuote || 'Residencial'}
-                  initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
-                  initialMessage={customQuoteMessage}
-                  onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
-                />
+                <Suspense fallback={<SectionSkeleton id="cotizar" minHeight="560px" />}>
+                  <QuoteForm
+                    initialProjectType={selectedProjectForQuote || 'Residencial'}
+                    initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
+                    initialMessage={customQuoteMessage}
+                    onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+                  />
+                </Suspense>
               </>
             ) : activePage === 'herramientas' ? (
               <>
@@ -554,12 +564,14 @@ function AppContent() {
                     onTransferCalculatorToQuote={handleTransferCalculatorToQuote}
                   />
                 </Suspense>
-                <QuoteForm
-                  initialProjectType={selectedProjectForQuote || 'Residencial'}
-                  initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
-                  initialMessage={customQuoteMessage}
-                  onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
-                />
+                <Suspense fallback={<SectionSkeleton id="cotizar" minHeight="560px" />}>
+                  <QuoteForm
+                    initialProjectType={selectedProjectForQuote || 'Residencial'}
+                    initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
+                    initialMessage={customQuoteMessage}
+                    onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+                  />
+                </Suspense>
               </>
             ) : activePage === 'nosotros' ? (
               <>
@@ -585,12 +597,14 @@ function AppContent() {
                   <TestimonialsGuaranteesSection />
                   <PromoSection onQuoteClick={() => scrollToSection('cotizar')} />
                 </Suspense>
-                <QuoteForm
-                  initialProjectType={selectedProjectForQuote || 'Residencial'}
-                  initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
-                  initialMessage={customQuoteMessage}
-                  onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
-                />
+                <Suspense fallback={<SectionSkeleton id="cotizar" minHeight="560px" />}>
+                  <QuoteForm
+                    initialProjectType={selectedProjectForQuote || 'Residencial'}
+                    initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
+                    initialMessage={customQuoteMessage}
+                    onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+                  />
+                </Suspense>
               </>
             ) : activePage === 'contacto' ? (
               <>
@@ -609,12 +623,14 @@ function AppContent() {
                   <ContactSection />
                   <FAQSection onOpenPrivacy={() => setIsPrivacyModalOpen(true)} />
                 </Suspense>
-                <QuoteForm
-                  initialProjectType={selectedProjectForQuote || 'Residencial'}
-                  initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
-                  initialMessage={customQuoteMessage}
-                  onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
-                />
+                <Suspense fallback={<SectionSkeleton id="cotizar" minHeight="560px" />}>
+                  <QuoteForm
+                    initialProjectType={selectedProjectForQuote || 'Residencial'}
+                    initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
+                    initialMessage={customQuoteMessage}
+                    onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+                  />
+                </Suspense>
               </>
             ) : (
               /* HOME / INICIO — 100% enfocada en los Servicios + Marquee + Proceso + Cotizador */
@@ -637,16 +653,22 @@ function AppContent() {
                   onNavigate={scrollToSection}
                 />
 
-                <ProcessSection onQuoteClick={() => scrollToSection('cotizar')} />
+                <Suspense fallback={<SectionSkeleton id="proceso" minHeight="420px" />}>
+                  <ProcessSection onQuoteClick={() => scrollToSection('cotizar')} />
+                </Suspense>
 
-                <QuoteForm
-                  initialProjectType={selectedProjectForQuote || 'Residencial'}
-                  initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
-                  initialMessage={customQuoteMessage}
-                  onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
-                />
+                <Suspense fallback={<SectionSkeleton id="cotizar" minHeight="560px" />}>
+                  <QuoteForm
+                    initialProjectType={selectedProjectForQuote || 'Residencial'}
+                    initialService={selectedSolutionForQuote || 'Pintura y recubrimientos'}
+                    initialMessage={customQuoteMessage}
+                    onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+                  />
+                </Suspense>
 
-                <FinalCTA onQuoteClick={() => scrollToSection('cotizar')} />
+                <Suspense fallback={<div className="min-h-[340px] bg-[#090E19]" />}>
+                  <FinalCTA onQuoteClick={() => scrollToSection('cotizar')} />
+                </Suspense>
               </>
             )}
         </div>

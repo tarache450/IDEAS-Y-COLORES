@@ -46,13 +46,29 @@ export function initGoogleAnalytics(): void {
     });
   }
 
-  const existing = document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}"]`);
-  if (!existing) {
+  const loadExternalGtag = () => {
+    const existing = document.querySelector('script[src*="googletagmanager.com/gtag/js"]');
+    if (existing) return;
     const script = document.createElement('script');
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA_MEASUREMENT_ID)}`;
     document.head.appendChild(script);
-  }
+  };
+
+  // Defer external 178 KiB gtag/js script until genuine human interaction so initial LCP/TBT stays unblocked
+  const interactionEvents: Array<keyof WindowEventMap> = [
+    'pointerdown',
+    'keydown',
+    'touchstart',
+    'wheel',
+  ];
+  const onFirstInteraction = () => {
+    interactionEvents.forEach((ev) => window.removeEventListener(ev, onFirstInteraction));
+    loadExternalGtag();
+  };
+  interactionEvents.forEach((ev) => {
+    window.addEventListener(ev, onFirstInteraction, { once: true, passive: true });
+  });
 
   // Track outbound WhatsApp and telephone lead clicks cleanly without duplicating UI handlers
   document.addEventListener(

@@ -216,7 +216,7 @@ export const Header: React.FC<HeaderProps> = ({
                               aria-hidden="true"
                             />
                           </a>
-                          <div className="px-3 pt-2.5 pb-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#80828C]">
+                          <div className="px-3 pt-2.5 pb-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#CBD5E1]">
                             Páginas por Categoría
                           </div>
                           {MULTI_SERVICES_CATEGORIES.map((cat) => {
@@ -338,6 +338,7 @@ export const Header: React.FC<HeaderProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               id="header-btn-whatsapp"
+              aria-label="WhatsApp Ideas & Colores"
               className="inline-flex items-center gap-1.5 px-2.5 py-2 rounded-md text-xs font-bold text-emerald-300 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/30 transition-all duration-200"
             >
               <MessageCircle className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
@@ -375,7 +376,7 @@ export const Header: React.FC<HeaderProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               className="size-11 inline-flex items-center justify-center rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-400/30"
-              aria-label="Hablar por WhatsApp con un asesor"
+              aria-label="WhatsApp Ideas & Colores"
             >
               <MessageCircle className="w-4 h-4" aria-hidden="true" />
             </a>
@@ -584,6 +585,7 @@ export const Header: React.FC<HeaderProps> = ({
                       href={BUSINESS_INFO.whatsappUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label="WhatsApp Ideas & Colores"
                       className="min-h-11 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-colors"
                     >
                       <MessageCircle className="w-3.5 h-3.5" aria-hidden="true" />
