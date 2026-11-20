@@ -69,30 +69,38 @@ function apiBackendPlugin(): Plugin {
     name: 'vite-plugin-api-backend',
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
-        const rawUrl = req.url?.split('?')[0];
-        if (rawUrl === '/api/leads' || rawUrl === '/api/leads/') {
-          try {
+        const rawUrl = (req.url?.split('?')[0] || '').replace(/\/+$/, '') || '/';
+        try {
+          if (rawUrl === '/api/leads') {
             const { handleLeadsRequest } = await import('./src/server/handlers/leadsHandler');
             await handleLeadsRequest(req, res);
             return;
-          } catch (err) {
-            console.error('[API Backend Plugin Error]', err);
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ ok: false, error: 'Internal API Server Error' }));
-            return;
           }
-        }
-        if (rawUrl === '/api/health' || rawUrl === '/api/health/') {
-          try {
+          if (rawUrl === '/api/health') {
             const { handleHealthRequest } = await import('./src/server/handlers/healthHandler');
             await handleHealthRequest(req, res);
             return;
-          } catch (err) {
-            console.error('[API Health Plugin Error]', err);
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ ok: false, error: 'Health Check Failed' }));
+          }
+          if (rawUrl === '/api/catalog') {
+            const { handleCatalogRequest } = await import('./src/server/handlers/catalogHandler');
+            await handleCatalogRequest(req, res);
             return;
           }
+          if (rawUrl === '/api/calculate') {
+            const { handleCalculateRequest } = await import('./src/server/handlers/calculateHandler');
+            await handleCalculateRequest(req, res);
+            return;
+          }
+          if (rawUrl === '/api/admin' || rawUrl.startsWith('/api/admin/')) {
+            const { handleAdminRequest } = await import('./src/server/handlers/adminHandler');
+            await handleAdminRequest(req, res, rawUrl);
+            return;
+          }
+        } catch (err) {
+          console.error('[API Backend Plugin Error]', err);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ ok: false, error: 'Internal API Server Error' }));
+          return;
         }
         next();
       });

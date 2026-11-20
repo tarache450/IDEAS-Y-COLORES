@@ -27,8 +27,13 @@
   RewriteEngine On
   RewriteBase /
 
-  # 0. Block hidden dotfiles/directories except .well-known/
+  # Pass Authorization header reliably to PHP FastCGI/LiteSpeed
+  RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+  # 0. Block hidden dotfiles/directories (except .well-known/) and internal data/bootstrap paths
   RewriteRule (?:^|/)\.(?!well-known/) - [F,L]
+  RewriteRule ^api/bootstrap\.php$ - [F,L]
+  RewriteRule ^(?:data|storage|vendor)(?:/|$) - [F,L]
 
   # 1. Force HTTPS
   RewriteCond %{HTTPS} !=on
@@ -41,6 +46,9 @@
   # 3. Backend API Gateway Rewrites (Hostinger Apache/LiteSpeed)
   RewriteRule ^api/leads/?$ api/leads.php [QSA,L]
   RewriteRule ^api/health/?$ api/health.php [QSA,L]
+  RewriteRule ^api/catalog/?$ api/catalog.php [QSA,L]
+  RewriteRule ^api/calculate/?$ api/calculate.php [QSA,L]
+  RewriteRule ^api/admin(?:/.*)?$ api/admin.php [QSA,L]
 
   # 3b. Agentic Resource Discovery (ARD / ai-catalog.json / agent-card.json)
   RewriteRule ^\.well-known/ai-catalog\.json$ ai-catalog.json [L]
@@ -121,8 +129,14 @@
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-XSS-Protection "1; mode=block"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
   # microphone=(self) habilita el "Comando de voz" (Web Speech API) del propio sitio
   Header always set Permissions-Policy "camera=(), microphone=(self), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+
+  <FilesMatch "\.php$">
+    Header always set Cache-Control "no-cache, no-store, must-revalidate"
+    Header always set X-Robots-Tag "noindex, nofollow"
+  </FilesMatch>
 
   # Long-term immutable caching for hashed production assets
   <FilesMatch "\.(js|css|webp|png|jpe?g|svg|woff2?)$">

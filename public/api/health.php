@@ -1,85 +1,63 @@
 <?php
 declare(strict_types=1);
 
-/**
- * Ideas & Colores Multi-Servicios - API Health Check (Orca T2-WATCHDOG)
- * Compatible con Hostinger LiteSpeed / Apache
- */
+define('IYC_API', true);
+require_once __DIR__ . '/bootstrap.php';
 
-header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, OPTIONS');
-header('Cache-Control: no-cache, no-store, must-revalidate');
+iyc_send_security_headers();
+iyc_handle_cors_and_method(['GET', 'HEAD']);
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(204);
-    exit;
-}
+$env = iyc_load_env();
+$smtpUser = iyc_env('HOSTINGER_SMTP_USER');
+$smtpPass = iyc_env('HOSTINGER_SMTP_PASS');
+$adminConfigured = iyc_env('ADMIN_PASSWORD_HASH') !== '' || iyc_env('ADMIN_PASSWORD') !== '';
 
-$rootPath = dirname(__DIR__, 2);
+$envLoaded = count($env) > 0 || $smtpUser !== '';
+$smtpConfigured = $smtpUser !== '' && $smtpPass !== '';
 
-// Carga simple de .env si existe
-function loadEnvSimple(string $filePath): array {
-    $env = [];
-    if (!file_exists($filePath) || !is_readable($filePath)) {
-        return $env;
-    }
-    $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        $line = trim($line);
-        if ($line === '' || str_starts_with($line, '#')) continue;
-        $parts = explode('=', $line, 2);
-        if (count($parts) === 2) {
-            $key = trim($parts[0]);
-            $val = trim($parts[1]);
-            if ((str_starts_with($val, '"') && str_ends_with($val, '"')) ||
-                (str_starts_with($val, "'") && str_ends_with($val, "'"))) {
-                $val = substr($val, 1, -1);
-            }
-            $env[$key] = $val;
-            if (!isset($_ENV[$key])) {
-                $_ENV[$key] = $val;
-            }
-        }
-    }
-    return $env;
-}
-
-$loadedEnv = loadEnvSimple($rootPath . '/.env');
-
-$smtpUser = $_ENV['HOSTINGER_SMTP_USER'] ?? getenv('HOSTINGER_SMTP_USER') ?: '';
-$smtpPass = $_ENV['HOSTINGER_SMTP_PASS'] ?? getenv('HOSTINGER_SMTP_PASS') ?: '';
-
-$envLoaded = count($loadedEnv) > 0 || !empty(getenv('HOSTINGER_SMTP_USER'));
-$smtpConfigured = !empty($smtpUser) && !empty($smtpPass);
-
-// Verificación de escritura en data/
-$dataDir = $rootPath . '/data';
-if (!is_dir($dataDir)) {
-    @mkdir($dataDir, 0750, true);
-}
-
+$dataDir = iyc_data_dir();
 $storageWritable = false;
-$testFile = $dataDir . '/.health_test_' . bin2hex(random_bytes(4));
+$testFile = $dataDir . '/.health_' . bin2hex(random_bytes(4));
 if (@file_put_contents($testFile, 'ok') !== false) {
     @unlink($testFile);
     $storageWritable = true;
 }
 
-$isHealthy = $storageWritable;
-$status = $isHealthy ? 'HEALTHY' : 'DEGRADED';
+$db = iyc_get_db();
+$databaseReady = $db['pdo'] instanceof PDO;
+$leadsStored = 0;
 
-http_response_code($isHealthy ? 200 : 503);
+if ($db['pdo'] instanceof PDO) {
+    try {
+        $stmt = $db['pdo']->query('SELECT COUNT(*) AS total FROM leads');
+        $row = $stmt ? $stmt->fetch() : null;
+        $leadsStored = (int)($row['total'] ?? 0);
+    } catch (Throwable) {
+        $leadsStored = 0;
+    }
+}
 
-$isoDate = (new DateTime('now', new DateTimeZone('UTC')))->format('c');
+$isHealthy = $storageWritable && $databaseReady;
+$status = $isHealthy ? 'HEALTHY' : ($storageWritable ? 'DEGRADED' : 'UNHEALTHY');
+
+http_response_code($storageWritable ? 200 : 503);
+
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'HEAD') {
+    exit;
+}
 
 echo json_encode([
     'status' => $status,
     'service' => 'ideas-y-colores-backend',
-    'timestamp' => $isoDate,
+    'timestamp' => gmdate('c'),
     'checks' => [
         'envLoaded' => $envLoaded,
         'storageWritable' => $storageWritable,
+        'databaseReady' => $databaseReady,
+        'dbDriver' => $db['driver'],
+        'leadsStored' => $leadsStored,
+        'rateLimiterActive' => true,
         'smtpConfigured' => $smtpConfigured,
+        'adminAuthConfigured' => $adminConfigured,
     ],
 ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);

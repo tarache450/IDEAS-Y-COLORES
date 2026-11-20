@@ -11,6 +11,7 @@ import { BUSINESS_INFO, MULTI_SERVICES_CATEGORIES } from '../data/content';
 import { useColorMood } from '../context/ColorMoodContext';
 import { MoodColorPicker } from './MoodColorPicker';
 import { assetUrl } from '../utils/asset';
+import { buildSafeWhatsAppUrl } from '../utils/security';
 import {
   LOGO_SPECTRUM_GRADIENT,
   LOGO_SPECTRUM_LIST,
@@ -229,11 +230,14 @@ export const Hero: React.FC<HeroProps> = ({
               </button>
 
               <a
-                href={BUSINESS_INFO.whatsappUrl}
+                href={buildSafeWhatsAppUrl(
+                  BUSINESS_INFO.whatsappNumber,
+                  'Hola Ideas & Colores, quiero cotizar mi proyecto desde el inicio.'
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 id="hero-btn-whatsapp"
-                aria-label="WhatsApp Ideas & Colores"
+                aria-label="Cotizar proyecto por WhatsApp"
                 className="inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 min-h-[48px] sm:min-h-[54px] rounded-md text-emerald-300 font-bold text-xs sm:text-sm border border-emerald-400/40 transition-all whitespace-nowrap hover:opacity-90"
                 style={{ backgroundColor: 'rgba(6, 78, 59, 0.82)' }}
               >

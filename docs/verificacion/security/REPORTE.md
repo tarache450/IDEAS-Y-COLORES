@@ -1,7 +1,7 @@
 # Reporte Automatizado de Verificación de Seguridad — Ideas & Colores
 
-- **Fecha:** 2026-11-11T17:45:32.782Z
-- **Rama:** `fix/security-hardening` (`c24654e`)
+- **Fecha:** 2026-11-20T19:29:13.593Z
+- **Rama:** `fix/security-hardening` (`7f5dd48`)
 - **Dominio:** https://ideasycoloresgt.site
 - **Veredicto:** **APTO**
 

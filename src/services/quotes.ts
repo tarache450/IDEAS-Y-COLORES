@@ -163,6 +163,10 @@ export async function submitQuoteRequest(
     servicio: sanitizeString(input.service, 150) || 'Pintura Airless',
     ubicacion: sanitizeString(input.location, 200) || 'Carretera a El Salvador',
     metrosCuadrados,
+    spaceType: input.spaceType ? sanitizeString(input.spaceType, 80) : null,
+    estimatedArea: input.estimatedArea ? sanitizeString(input.estimatedArea, 80) : null,
+    desiredTimeline: input.desiredTimeline ? sanitizeString(input.desiredTimeline, 80) : null,
+    source: input.source || 'website_quote_wizard',
     mensaje: compositeMessage || 'Cotización solicitada desde asistente web.',
     website_hp: input.honeypot || '',
   };

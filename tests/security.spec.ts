@@ -16,6 +16,17 @@ import {
   buildSafeWhatsAppUrl,
   sanitizeCsvCell,
 } from '../src/utils/security';
+import {
+  leadPayloadSchema,
+  calculatePayloadSchema,
+  sanitizeHeaderValue,
+  isSafeWebhookUrl,
+  checkIpRateLimit,
+} from '../src/server/validators/leadSchema';
+import { computePaintEstimate } from '../src/server/handlers/calculateHandler';
+import { signAdminToken, verifyAdminToken } from '../src/server/handlers/adminHandler';
+import backendServer from '../src/server/index';
+import type { AddressInfo } from 'node:net';
 
 const ROOT_DIR = process.cwd();
 
@@ -247,6 +258,138 @@ describe('ORCA Security Suite — IDEAS & COLORES (ideasycoloresgt.site)', () =>
       const html = fs.readFileSync(path.join(ROOT_DIR, 'index.html'), 'utf8');
       assert.ok(!/\son[a-z]+\s*=/i.test(html));
       assert.ok(fs.existsSync(path.join(ROOT_DIR, 'public', 'font-loader.js')));
+    });
+
+    it('PHP backend endpoints & bootstrap protection exist in public/api/', () => {
+      for (const file of ['bootstrap.php', 'health.php', 'catalog.php', 'calculate.php', 'leads.php', 'admin.php']) {
+        assert.ok(fs.existsSync(path.join(ROOT_DIR, 'public', 'api', file)), `Missing public/api/${file}`);
+      }
+      const htaccess = fs.readFileSync(path.join(ROOT_DIR, 'public', '.htaccess'), 'utf8');
+      assert.ok(htaccess.includes('Cross-Origin-Opener-Policy "same-origin"'));
+      assert.ok(htaccess.includes('RewriteRule ^api/bootstrap\\.php$ - [F,L]'));
+    });
+  });
+
+  describe('8. Backend Validation, SSRF, CRLF, Estimator & Admin Token Security', () => {
+    it('validates clean lead payloads and strips XSS without mutating valid business text', () => {
+      const parsed = leadPayloadSchema.safeParse({
+        nombre: 'Carlos <script>alert(1)</script> Pérez',
+        telefono: '55551234',
+        email: 'carlos@ejemplo.com',
+        servicio: 'Pintura y recubrimientos',
+        ubicacion: 'Fraijanes',
+        metrosCuadrados: '120 m2',
+        mensaje: 'Casa de 2 niveles & pérgola',
+      });
+      assert.equal(parsed.success, true);
+      if (parsed.success) {
+        assert.equal(parsed.data.nombre, 'Carlos  Pérez');
+        assert.equal(parsed.data.servicio, 'Pintura Airless');
+        assert.equal(parsed.data.ubicacion, 'Carretera a El Salvador');
+        assert.equal(parsed.data.metrosCuadrados, 120);
+        assert.equal(parsed.data.mensaje, 'Casa de 2 niveles & pérgola');
+      }
+    });
+
+    it('rejects malformed phones and strips SMTP CRLF header injection', () => {
+      const badPhone = leadPayloadSchema.safeParse({
+        nombre: 'Test Usuario',
+        telefono: '12345678',
+      });
+      assert.equal(badPhone.success, false);
+      const header = sanitizeHeaderValue("Asunto\r\nBcc: attacker@evil.test\r\n");
+      assert.ok(!header.includes('\r'));
+      assert.ok(!header.includes('\n'));
+    });
+
+    it('blocks private RFC1918, loopback, and metadata IPs against SSRF webhooks', () => {
+      assert.equal(isSafeWebhookUrl('http://169.254.169.254/latest/meta-data'), false);
+      assert.equal(isSafeWebhookUrl('https://10.0.0.5/hook'), false);
+      assert.equal(isSafeWebhookUrl('https://192.168.1.10/hook'), false);
+      assert.equal(isSafeWebhookUrl('https://internal.service.local/hook'), false);
+      assert.equal(isSafeWebhookUrl('https://hooks.example.com/crm/leads'), true);
+    });
+
+    it('enforces estimator numeric bounds and returns accurate gallon calculations', () => {
+      assert.equal(calculatePayloadSchema.safeParse({ areaM2: -10, coats: 2 }).success, false);
+      assert.equal(calculatePayloadSchema.safeParse({ areaM2: 999999, coats: 2 }).success, false);
+      const parsed = calculatePayloadSchema.parse({ areaM2: 100, coats: 2, surfaceType: 'liso' });
+      const estimate = computePaintEstimate(parsed);
+      assert.equal(estimate.totalGallons, 7);
+      assert.equal(estimate.buckets5Gal, 1);
+      assert.equal(estimate.remainingGallons, 2);
+    });
+
+    it('signs and verifies HMAC-SHA256 admin tokens and rejects tampered tokens', () => {
+      const secret = '0123456789abcdef0123456789abcdef';
+      const token = signAdminToken('admin@ideasycoloresgt.site', 300, secret);
+      const claims = verifyAdminToken(token, secret);
+      assert.ok(claims !== null);
+      assert.equal(claims?.sub, 'admin@ideasycoloresgt.site');
+
+      const [payload, sig] = token.split('.');
+      const tampered = `${payload}.${sig.slice(0, -1)}${sig.endsWith('a') ? 'b' : 'a'}`;
+      assert.equal(verifyAdminToken(tampered, secret), null);
+      assert.equal(verifyAdminToken(token, 'wrong-secret-0123456789abcdef012345'), null);
+    });
+
+    it('enforces per-bucket IP rate limits independently', () => {
+      const testIp = '198.51.100.77';
+      assert.equal(checkIpRateLimit(testIp, 'test_bucket', 2, 60_000).allowed, true);
+      assert.equal(checkIpRateLimit(testIp, 'test_bucket', 2, 60_000).allowed, true);
+      assert.equal(checkIpRateLimit(testIp, 'test_bucket', 2, 60_000).allowed, false);
+      assert.equal(checkIpRateLimit(testIp, 'other_bucket', 2, 60_000).allowed, true);
+    });
+
+    it('runs end-to-end Node backend endpoints (/api/health, /api/catalog, /api/calculate, /api/leads, /api/admin)', async () => {
+      await new Promise<void>((resolve) => backendServer.listen(0, '127.0.0.1', () => resolve()));
+      try {
+        const port = (backendServer.address() as AddressInfo).port;
+        const base = `http://127.0.0.1:${port}`;
+
+        const healthRes = await fetch(`${base}/api/health`);
+        assert.equal(healthRes.status, 200);
+        const health = await healthRes.json();
+        assert.equal(health.status, 'HEALTHY');
+        assert.equal(health.checks.databaseReady, true);
+        assert.equal(health.checks.dbDriver, 'sqlite');
+
+        const catalogRes = await fetch(`${base}/api/catalog`);
+        assert.equal(catalogRes.status, 200);
+        const catalog = await catalogRes.json();
+        assert.equal(catalog.divisions.length, 6);
+
+        const calcRes = await fetch(`${base}/api/calculate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ areaM2: 70, coats: 2, surfaceType: 'exterior' }),
+        });
+        assert.equal(calcRes.status, 200);
+        const calc = await calcRes.json();
+        assert.equal(calc.ok, true);
+        assert.ok(calc.estimate.totalGallons > 0);
+
+        const adminUnauth = await fetch(`${base}/api/admin/leads`);
+        assert.equal(adminUnauth.status, 401);
+
+        const leadsBadOrigin = await fetch(`${base}/api/leads`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Origin: 'https://evil-attacker.example' },
+          body: JSON.stringify({ nombre: 'Juan Perez', telefono: '55551234' }),
+        });
+        assert.equal(leadsBadOrigin.status, 403);
+
+        const leadsHoneypot = await fetch(`${base}/api/leads`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Origin: 'https://ideasycoloresgt.site' },
+          body: JSON.stringify({ nombre: 'Bot Spam', telefono: '55551234', website_hp: 'http://spam.test' }),
+        });
+        assert.equal(leadsHoneypot.status, 200);
+        const hpJson = await leadsHoneypot.json();
+        assert.equal(hpJson.leadId, 'IYC-2026-HP01');
+      } finally {
+        await new Promise<void>((resolve) => backendServer.close(() => resolve()));
+      }
     });
   });
 });

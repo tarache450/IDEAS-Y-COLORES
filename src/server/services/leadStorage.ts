@@ -1,7 +1,12 @@
-import fs from 'fs';
-import path from 'path';
-import crypto from 'crypto';
-import { ValidatedLeadPayload, normalizeGuatemalaPhone } from '../validators/leadSchema';
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import {
+  ValidatedLeadPayload,
+  normalizeGuatemalaPhone,
+  isSafeWebhookUrl,
+} from '../validators/leadSchema';
+import { getSqliteDb } from './sqliteDb';
 
 export type LeadPriority = 'HIGH' | 'STANDARD';
 
@@ -11,9 +16,15 @@ export interface StoredLead {
   timestamp: string;
   timestampGT: string;
   ip: string;
+  ipHash: string;
   userAgent?: string;
   data: ValidatedLeadPayload;
   whatsappRedirectUrl: string;
+}
+
+export function hashClientIp(ip: string): string {
+  const salt = process.env.IP_HASH_SALT || 'iyc-gt-2026-audit-salt';
+  return crypto.createHmac('sha256', salt).update(ip).digest('hex').slice(0, 16);
 }
 
 /**
@@ -104,6 +115,7 @@ export async function persistLead(
   const priority = classifyLeadPriority(payload);
   const { iso, formatted: formattedGT } = getGuatemalaTimestamp();
   const whatsappRedirectUrl = buildWhatsAppRedirectUrl(leadId, payload);
+  const ipHash = hashClientIp(ip);
 
   const leadRecord: StoredLead = {
     leadId,
@@ -111,29 +123,78 @@ export async function persistLead(
     timestamp: iso,
     timestampGT: formattedGT,
     ip,
+    ipHash,
     userAgent,
     data: payload,
     whatsappRedirectUrl,
   };
 
-  // Directorio de persistencia seguro (fuera de public y dist)
+  // 1. Persistencia relacional transaccional en SQLite (fuera de public/ y dist/)
+  try {
+    const db = getSqliteDb();
+    db.prepare(`
+      INSERT INTO leads (
+        lead_id, name, phone, email, service, space_type, estimated_area,
+        desired_timeline, location, metros_cuadrados, message, priority,
+        status, source, ip_hash, user_agent, whatsapp_url, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'new', ?, ?, ?, ?, ?, ?)
+    `).run(
+      leadId,
+      payload.nombre,
+      payload.telefono,
+      payload.email ?? null,
+      payload.servicio,
+      payload.spaceType ?? null,
+      payload.estimatedArea ?? null,
+      payload.desiredTimeline ?? null,
+      payload.ubicacion,
+      payload.metrosCuadrados ?? null,
+      payload.mensaje ?? '',
+      priority,
+      payload.source ?? 'website_quote_wizard',
+      ipHash,
+      (userAgent || '').slice(0, 250),
+      whatsappRedirectUrl,
+      iso,
+      iso
+    );
+
+    db.prepare(`
+      INSERT INTO audit_events (event_type, actor, target_id, detail, created_at)
+      VALUES ('LEAD_CREATED', ?, ?, ?, ?)
+    `).run(ipHash, leadId, `${payload.servicio} (${payload.ubicacion})`, iso);
+  } catch (dbErr) {
+    console.warn('[SQLite Persist Warning] Guardando en respaldo JSONL:', dbErr);
+  }
+
+  // 2. Directorio de persistencia de respaldo JSONL (sin PII de IP en claro)
   const storageDir = path.resolve(process.cwd(), 'data');
   if (!fs.existsSync(storageDir)) {
     fs.mkdirSync(storageDir, { recursive: true });
   }
 
   const logFilePath = path.join(storageDir, 'leads.jsonl');
-  const line = JSON.stringify(leadRecord) + '\n';
+  const sanitizedLogRecord = {
+    leadId: leadRecord.leadId,
+    priority: leadRecord.priority,
+    timestamp: leadRecord.timestamp,
+    timestampGT: leadRecord.timestampGT,
+    ipHash: leadRecord.ipHash,
+    data: leadRecord.data,
+    whatsappRedirectUrl: leadRecord.whatsappRedirectUrl,
+  };
+  const line = JSON.stringify(sanitizedLogRecord) + '\n';
 
   await fs.promises.appendFile(logFilePath, line, { encoding: 'utf8' });
 
-  // Disparador de Webhook CRM asíncrono opcional
-  const crmWebhook = process.env.WEBHOOK_CRM_URL;
-  if (crmWebhook && crmWebhook.startsWith('http')) {
+  // 3. Disparador de Webhook CRM asíncrono opcional con protección SSRF + timeout 5s
+  const crmWebhook = process.env.WEBHOOK_CRM_URL || '';
+  if (crmWebhook && isSafeWebhookUrl(crmWebhook)) {
     fetch(crmWebhook, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(leadRecord),
+      body: JSON.stringify(sanitizedLogRecord),
+      signal: AbortSignal.timeout(5000),
     }).catch((err) => {
       console.warn('[CRM Webhook] Error al enviar lead a webhook:', err?.message || err);
     });

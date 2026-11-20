@@ -48,18 +48,35 @@ export async function handleLeadsRequest(
     return;
   }
 
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+
   if (origin) {
     res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
   }
-  res.setHeader('Content-Type', 'application/json');
+
+  // Verificación estricta de Content-Type JSON
+  const contentType = String(req.headers['content-type'] || '').toLowerCase();
+  if (!contentType.includes('application/json')) {
+    res.writeHead(415);
+    res.end(JSON.stringify({ ok: false, error: 'Tipo de contenido no soportado. Use application/json.' }));
+    return;
+  }
 
   // Extracción de IP y Rate Limiting
   const clientIp = getClientIp(req);
-  const rateLimit = checkIpRateLimit(clientIp);
+  const rateLimit = checkIpRateLimit(clientIp, 'leads', 3, 10 * 60 * 1000);
+  res.setHeader('X-RateLimit-Limit', '3');
+  res.setHeader('X-RateLimit-Remaining', String(rateLimit.remaining));
 
   if (!rateLimit.allowed) {
     res.writeHead(429, {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
       'Retry-After': String(rateLimit.retryAfterSeconds),
     });
     res.end(
@@ -71,18 +88,22 @@ export async function handleLeadsRequest(
     return;
   }
 
-  // Lectura del cuerpo de la solicitud (Buffer stream)
+  // Lectura exacta de bytes del cuerpo (Buffer stream, máx 64KB)
   let rawBody = '';
+  let byteCount = 0;
   try {
+    const chunks: Buffer[] = [];
     for await (const chunk of req) {
-      rawBody += chunk;
-      // Protección contra payloads masivos (máx 64KB)
-      if (rawBody.length > 65536) {
-        res.writeHead(413, { 'Content-Type': 'application/json' });
+      const buf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+      byteCount += buf.length;
+      if (byteCount > 65536) {
+        res.writeHead(413, { 'Content-Type': 'application/json; charset=utf-8' });
         res.end(JSON.stringify({ ok: false, error: 'Cuerpo de solicitud demasiado grande.' }));
         return;
       }
+      chunks.push(buf);
     }
+    rawBody = Buffer.concat(chunks).toString('utf8');
   } catch {
     res.writeHead(400, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ ok: false, error: 'Error al leer el cuerpo de la solicitud.' }));
@@ -147,6 +168,8 @@ export async function handleLeadsRequest(
       JSON.stringify({
         ok: true,
         leadId: storedLead.leadId,
+        priority: storedLead.priority,
+        estimatedResponse: '< 24 horas hábiles',
         whatsappRedirectUrl: storedLead.whatsappRedirectUrl,
       })
     );

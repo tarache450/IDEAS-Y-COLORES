@@ -1,232 +1,76 @@
 <?php
 declare(strict_types=1);
 
-/**
- * Ideas & Colores Multi-Servicios - API Gateway de Cotizaciones (PHP 8.2+ Hardened)
- * Compatible con Hostinger Shared Hosting (LiteSpeed / Apache)
- */
+define('IYC_API', true);
+require_once __DIR__ . '/bootstrap.php';
 
-// Desactivar visualización de errores directos en la salida para evitar filtraciones
-ini_set('display_errors', '0');
-error_reporting(E_ALL);
+iyc_send_security_headers();
+iyc_handle_cors_and_method(['POST']);
 
-header('Content-Type: application/json; charset=utf-8');
-header('X-Content-Type-Options: nosniff');
-header('X-Frame-Options: DENY');
-header('X-XSS-Protection: 1; mode=block');
+$clientIp = iyc_client_ip();
+$ipHash = iyc_hash_ip($clientIp);
 
-// 1. Carga de variables de entorno desde .env si existe en la raíz del proyecto
-function loadEnvFile(string $filePath): array {
-    $env = [];
-    if (!file_exists($filePath) || !is_readable($filePath)) {
-        return $env;
-    }
-    $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        $line = trim($line);
-        if ($line === '' || str_starts_with($line, '#')) {
-            continue;
-        }
-        $parts = explode('=', $line, 2);
-        if (count($parts) === 2) {
-            $key = trim($parts[0]);
-            $val = trim($parts[1]);
-            if ((str_starts_with($val, '"') && str_ends_with($val, '"')) ||
-                (str_starts_with($val, "'") && str_ends_with($val, "'"))) {
-                $val = substr($val, 1, -1);
-            }
-            $env[$key] = $val;
-            if (!isset($_ENV[$key])) {
-                $_ENV[$key] = $val;
-            }
-        }
-    }
-    return $env;
-}
+// Rate Limit atómico: 3 solicitudes cada 10 minutos
+$rl = iyc_check_rate_limit('leads', $ipHash, 3, 600);
+header('X-RateLimit-Limit: 3');
+header("X-RateLimit-Remaining: {$rl['remaining']}");
 
-$rootPath = dirname(__DIR__, 2);
-loadEnvFile($rootPath . '/.env');
-
-function getEnvVar(string $key, string $default = ''): string {
-    return $_ENV[$key] ?? getenv($key) ?: $default;
-}
-
-// 2. Control Estricto de CORS y Origen (Origin Lock)
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-$allowedOrigins = [
-    'https://ideasycoloresgt.site',
-    'https://www.ideasycoloresgt.site',
-];
-
-$customAllowed = getEnvVar('ALLOWED_ORIGINS');
-if ($customAllowed !== '') {
-    foreach (explode(',', $customAllowed) as $ao) {
-        $trimmed = trim($ao);
-        if ($trimmed !== '') {
-            $allowedOrigins[] = $trimmed;
-        }
-    }
-}
-
-$isLocalhost = false;
-if ($origin !== '') {
-    $parsedHost = parse_url($origin, PHP_URL_HOST);
-    if ($parsedHost === 'localhost' || $parsedHost === '127.0.0.1') {
-        $isLocalhost = true;
-    }
-}
-
-$isOriginAllowed = in_array($origin, $allowedOrigins, true) || $isLocalhost;
-
-// Si es preflight OPTIONS
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    if ($origin !== '' && $isOriginAllowed) {
-        header("Access-Control-Allow-Origin: {$origin}");
-        header('Access-Control-Allow-Methods: POST, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type, Accept');
-        header('Access-Control-Max-Age: 86400');
-        http_response_code(204);
-        exit;
-    }
-    http_response_code(403);
-    echo json_encode(['ok' => false, 'error' => 'Origin not allowed']);
-    exit;
-}
-
-// Solo permitir POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['ok' => false, 'error' => 'Método no permitido. Solo se acepta POST.']);
-    exit;
-}
-
-// Validación de Origen
-if ($origin !== '') {
-    if (!$isOriginAllowed) {
-        http_response_code(403);
-        echo json_encode(['ok' => false, 'error' => 'Acceso no autorizado: Origen no permitido por política CORS de Ideas & Colores.']);
-        exit;
-    }
-    header("Access-Control-Allow-Origin: {$origin}");
-}
-
-// 3. Extracción de IP y Rate Limiter (Máx 3 envíos por cada 10 min)
-function getClientIp(): string {
-    if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        $parts = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-        return trim($parts[0]);
-    }
-    if (!empty($_SERVER['HTTP_X_REAL_IP'])) {
-        return trim($_SERVER['HTTP_X_REAL_IP']);
-    }
-    return $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
-}
-
-$clientIp = getClientIp();
-$dataDir = $rootPath . '/data';
-if (!is_dir($dataDir)) {
-    @mkdir($dataDir, 0750, true);
-}
-
-$rateLimitFile = $dataDir . '/rate_limit.json';
-$rateWindow = 600; // 10 minutos
-$maxRequests = 3;
-$now = time();
-
-$rateData = [];
-if (file_exists($rateLimitFile)) {
-    $content = @file_get_contents($rateLimitFile);
-    if ($content) {
-        $rateData = json_decode($content, true) ?: [];
-    }
-}
-
-$timestamps = $rateData[$clientIp] ?? [];
-$validTimestamps = array_filter($timestamps, fn($ts) => ($now - $ts) < $rateWindow);
-
-if (count($validTimestamps) >= $maxRequests) {
-    $oldest = reset($validTimestamps);
-    $retryAfter = max(1, ($oldest + $rateWindow) - $now);
-    header("Retry-After: {$retryAfter}");
+if (!$rl['allowed']) {
+    header("Retry-After: {$rl['retryAfter']}");
     http_response_code(429);
     echo json_encode([
         'ok' => false,
-        'error' => "Has alcanzado el límite de solicitudes. Por favor espera {$retryAfter} segundos o contáctanos por WhatsApp."
+        'error' => "Has alcanzado el límite de solicitudes. Por favor espera {$rl['retryAfter']} segundos o contáctanos por WhatsApp.",
     ]);
     exit;
 }
 
-$validTimestamps[] = $now;
-$rateData[$clientIp] = array_values($validTimestamps);
-@file_put_contents($rateLimitFile, json_encode($rateData, JSON_PRETTY_PRINT), LOCK_EX);
+$input = iyc_read_json_body(65536);
 
-// 4. Lectura de Payload
-$rawInput = file_get_contents('php://input', false, null, 0, 65536);
-if ($rawInput === false || strlen($rawInput) === 0) {
-    http_response_code(400);
-    echo json_encode(['ok' => false, 'error' => 'Cuerpo de solicitud vacío.']);
-    exit;
-}
-
-$input = json_decode($rawInput, true);
-if (!is_array($input)) {
-    http_response_code(400);
-    echo json_encode(['ok' => false, 'error' => 'Formato JSON inválido.']);
-    exit;
-}
-
-// 5. Verificación de Honeypot (Trampa de Bot)
+// 1. Verificación de Honeypot (Trampa de Bot)
 $honeypot = trim((string)($input['website_hp'] ?? ''));
 if ($honeypot !== '') {
-    // Respuesta silenciosa 200 OK para confundir al bot sin registrar datos
     echo json_encode([
         'ok' => true,
         'leadId' => 'IYC-2026-HP01',
+        'priority' => 'STANDARD',
+        'estimatedResponse' => '< 24 horas hábiles',
         'whatsappRedirectUrl' => 'https://wa.me/50266617592',
     ]);
     exit;
 }
 
-// 6. Sanitización y Validación de Campos
-function sanitizeInput(mixed $val): string {
-    if (!is_string($val)) return '';
-    $val = preg_replace('/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/i', '', $val);
-    $val = preg_replace('/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/i', '', $val);
-    $val = strip_tags($val);
-    $val = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $val);
-    return trim($val);
-}
-
-$nombre = sanitizeInput($input['nombre'] ?? '');
-$telefonoRaw = sanitizeInput($input['telefono'] ?? '');
-$emailRaw = sanitizeInput($input['email'] ?? '');
-$servicioRaw = sanitizeInput($input['servicio'] ?? '');
-$ubicacionRaw = sanitizeInput($input['ubicacion'] ?? '');
-$mensajeRaw = sanitizeInput($input['mensaje'] ?? '');
+// 2. Sanitización y Validación
+$nombre = iyc_sanitize_input($input['nombre'] ?? '');
+$telefonoRaw = iyc_sanitize_input($input['telefono'] ?? '');
+$emailRaw = iyc_sanitize_input($input['email'] ?? '');
+$servicioRaw = iyc_sanitize_input($input['servicio'] ?? '');
+$ubicacionRaw = iyc_sanitize_input($input['ubicacion'] ?? '');
+$spaceType = mb_substr(iyc_sanitize_input($input['spaceType'] ?? ''), 0, 80);
+$estimatedArea = mb_substr(iyc_sanitize_input($input['estimatedArea'] ?? ''), 0, 80);
+$desiredTimeline = mb_substr(iyc_sanitize_input($input['desiredTimeline'] ?? ''), 0, 80);
+$source = mb_substr(iyc_sanitize_input($input['source'] ?? 'website_quote_wizard'), 0, 60) ?: 'website_quote_wizard';
+$mensajeRaw = iyc_sanitize_input($input['mensaje'] ?? '');
 $m2Raw = $input['metrosCuadrados'] ?? null;
 
-// Validación Nombre
 if (mb_strlen($nombre) < 2 || mb_strlen($nombre) > 80) {
     http_response_code(400);
     echo json_encode(['ok' => false, 'error' => 'El nombre debe tener entre 2 y 80 caracteres.']);
     exit;
 }
 
-// Validación Teléfono Guatemala (+502 opcional + 8 dígitos empezando con 2-9)
 $cleanPhone = preg_replace('/[\s\-\(\)\.]/', '', $telefonoRaw);
-if (!preg_match('/^(?:\+?502)?([2-9]\d{7})$/', $cleanPhone, $phoneMatches)) {
+if (!preg_match('/^(?:\+?502)?([2-9]\d{7})$/', (string)$cleanPhone, $phoneMatches)) {
     http_response_code(400);
     echo json_encode(['ok' => false, 'error' => 'Teléfono inválido. Debe ser un número de Guatemala (8 dígitos iniciando con 2-9).']);
     exit;
 }
 $eightDigits = $phoneMatches[1];
 $formattedPhone = '+502 ' . substr($eightDigits, 0, 4) . '-' . substr($eightDigits, 4);
-$clientPhoneDigits = '502' . $eightDigits;
 
-// Validación Email
 $email = null;
 if ($emailRaw !== '') {
-    if (!filter_var($emailRaw, FILTER_VALIDATE_EMAIL)) {
+    if (mb_strlen($emailRaw) > 254 || !filter_var($emailRaw, FILTER_VALIDATE_EMAIL)) {
         http_response_code(400);
         echo json_encode(['ok' => false, 'error' => 'Dirección de correo electrónico inválida.']);
         exit;
@@ -234,7 +78,6 @@ if ($emailRaw !== '') {
     $email = $emailRaw;
 }
 
-// Normalización de Servicio
 $serviciosValidos = [
     'Pintura Airless',
     'Impermeabilización de Losas',
@@ -243,9 +86,8 @@ $serviciosValidos = [
     'Mantenimiento Comercial',
     'Otro',
 ];
-
 $srvLower = mb_strtolower($servicioRaw);
-if (str_contains($srvLower, 'impermeab') || str_contains($srvLower, 'losa') || str_contains($srvLower, 'techo')) {
+if (str_contains($srvLower, 'impermeab') || str_contains($srvLower, 'losa') || str_contains($srvLower, 'techo') || str_contains($srvLower, 'filtrac')) {
     $servicio = 'Impermeabilización de Losas';
 } elseif (str_contains($srvLower, 'resina') || str_contains($srvLower, 'epóx') || str_contains($srvLower, 'epox')) {
     $servicio = 'Resinas Epóxicas';
@@ -259,9 +101,8 @@ if (str_contains($srvLower, 'impermeab') || str_contains($srvLower, 'losa') || s
     $servicio = in_array($servicioRaw, $serviciosValidos, true) ? $servicioRaw : 'Otro';
 }
 
-// Normalización de Ubicación
 $ubLower = mb_strtolower($ubicacionRaw);
-if (str_contains($ubLower, 'carretera') || str_contains($ubLower, 'salvador') || str_contains($ubLower, 'fraijanes')) {
+if (str_contains($ubLower, 'carretera') || str_contains($ubLower, 'salvador') || str_contains($ubLower, 'fraijanes') || str_contains($ubLower, 'santa catarina')) {
     $ubicacion = 'Carretera a El Salvador';
 } elseif (str_contains($ubLower, 'mixco') || str_contains($ubLower, 'villa nueva') || str_contains($ubLower, 'cristobal')) {
     $ubicacion = 'Mixco / Villa Nueva';
@@ -271,22 +112,24 @@ if (str_contains($ubLower, 'carretera') || str_contains($ubLower, 'salvador') ||
     $ubicacion = 'Otra zona';
 }
 
-// Metros cuadrados
 $metrosCuadrados = null;
 if ($m2Raw !== null && $m2Raw !== '') {
-    $num = (float)preg_replace('/[^0-9.]/', '', (string)$m2Raw);
-    if ($num >= 0) {
-        $metrosCuadrados = round($num, 2);
+    if (is_int($m2Raw) || is_float($m2Raw)) {
+        $num = (float)$m2Raw;
+        if ($num >= 0 && $num <= 1000000) {
+            $metrosCuadrados = round($num, 2);
+        }
+    } elseif (preg_match('/(\d+(?:\.\d+)?)/', (string)$m2Raw, $m2Match)) {
+        $num = (float)$m2Match[1];
+        if ($num >= 0 && $num <= 1000000) {
+            $metrosCuadrados = round($num, 2);
+        }
     }
 }
 
-// Mensaje escapado
-$mensaje = htmlspecialchars(mb_substr($mensajeRaw, 0, 500), ENT_QUOTES, 'UTF-8');
-
-// 7. Generación de ID Único IYC-2026-[RANDOM_4_HEX]
+$mensaje = mb_substr($mensajeRaw, 0, 500);
 $leadId = 'IYC-2026-' . strtoupper(bin2hex(random_bytes(2)));
 
-// Clasificación de Prioridad
 $priority = 'STANDARD';
 if (($metrosCuadrados !== null && $metrosCuadrados >= 100) ||
     $servicio === 'Impermeabilización de Losas' ||
@@ -295,13 +138,11 @@ if (($metrosCuadrados !== null && $metrosCuadrados >= 100) ||
     $priority = 'HIGH';
 }
 
-// Fecha en Hora de Guatemala (America/Guatemala)
 $dateObj = new DateTime('now', new DateTimeZone('America/Guatemala'));
 $timestampGT = $dateObj->format('d/m/Y, h:i:s A');
-$isoDate = (new DateTime('now', new DateTimeZone('UTC')))->format('c');
+$isoDate = gmdate('c');
 
-// 8. Construcción de URL de Redirección WhatsApp
-$businessPhone = getEnvVar('WHATSAPP_TARGET_NUMBER', '50266617592');
+$businessPhone = preg_replace('/[^0-9]/', '', iyc_env('WHATSAPP_TARGET_NUMBER', '50266617592'));
 $waLines = [
     "*COTIZACIÓN WEB [{$leadId}]*",
     "*Cliente:* {$nombre}",
@@ -318,25 +159,67 @@ if ($metrosCuadrados !== null) {
 if ($mensaje !== '') {
     $waLines[] = "*Detalle:* {$mensaje}";
 }
-$waLines[] = "";
-$waLines[] = "_Solicito asesoría técnica y cotización formal con garantía por escrito._";
+$waLines[] = '';
+$waLines[] = '_Solicito asesoría técnica y cotización formal con garantía por escrito._';
+$whatsappRedirectUrl = "https://wa.me/{$businessPhone}?text=" . rawurlencode(implode("\n", $waLines));
 
-$whatsappText = implode("\n", $waLines);
-$whatsappRedirectUrl = "https://wa.me/{$businessPhone}?text=" . rawurlencode($whatsappText);
+// 3. Persistencia relacional en SQLite/MySQL (fuera de public_html) + JSONL Backup
+$db = iyc_get_db();
+if ($db['pdo'] instanceof PDO) {
+    try {
+        $stmt = $db['pdo']->prepare('
+            INSERT INTO leads (
+                lead_id, name, phone, email, service, space_type, estimated_area,
+                desired_timeline, location, metros_cuadrados, message, priority,
+                status, source, ip_hash, user_agent, whatsapp_url, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ');
+        $stmt->execute([
+            $leadId,
+            $nombre,
+            $formattedPhone,
+            $email,
+            $servicio,
+            $spaceType !== '' ? $spaceType : null,
+            $estimatedArea !== '' ? $estimatedArea : null,
+            $desiredTimeline !== '' ? $desiredTimeline : null,
+            $ubicacion,
+            $metrosCuadrados,
+            $mensaje,
+            $priority,
+            'new',
+            $source,
+            $ipHash,
+            mb_substr((string)($_SERVER['HTTP_USER_AGENT'] ?? 'Unknown'), 0, 250),
+            $whatsappRedirectUrl,
+            $isoDate,
+            $isoDate,
+        ]);
 
-// 9. Persistencia de Lead en JSONL
+        $auditStmt = $db['pdo']->prepare('
+            INSERT INTO audit_events (event_type, actor, target_id, detail, created_at)
+            VALUES (?, ?, ?, ?, ?)
+        ');
+        $auditStmt->execute(['LEAD_CREATED', $ipHash, $leadId, "{$servicio} ({$ubicacion})", $isoDate]);
+    } catch (Throwable $e) {
+        error_log('[IYC Leads DB Insert Error] ' . $e->getMessage());
+    }
+}
+
 $leadRecord = [
     'leadId' => $leadId,
     'priority' => $priority,
     'timestamp' => $isoDate,
     'timestampGT' => $timestampGT,
-    'ip' => $clientIp,
-    'userAgent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown',
+    'ipHash' => $ipHash,
     'data' => [
         'nombre' => $nombre,
         'telefono' => $formattedPhone,
         'email' => $email,
         'servicio' => $servicio,
+        'spaceType' => $spaceType !== '' ? $spaceType : null,
+        'estimatedArea' => $estimatedArea !== '' ? $estimatedArea : null,
+        'desiredTimeline' => $desiredTimeline !== '' ? $desiredTimeline : null,
         'ubicacion' => $ubicacion,
         'metrosCuadrados' => $metrosCuadrados,
         'mensaje' => $mensaje,
@@ -344,78 +227,90 @@ $leadRecord = [
     'whatsappRedirectUrl' => $whatsappRedirectUrl,
 ];
 
-$leadsJsonl = $dataDir . '/leads.jsonl';
+$leadsJsonl = iyc_data_dir() . '/leads.jsonl';
 @file_put_contents($leadsJsonl, json_encode($leadRecord, JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
 
-// 10. Envío de Notificación SMTP a Hostinger Titan
-function sendHostingerNotification(array $lead, string $rootPath): void {
-    $smtpHost = getEnvVar('HOSTINGER_SMTP_HOST', 'smtp.hostinger.com');
-    $smtpPort = (int)getEnvVar('HOSTINGER_SMTP_PORT', '465');
-    $smtpUser = getEnvVar('HOSTINGER_SMTP_USER', '');
-    $smtpPass = getEnvVar('HOSTINGER_SMTP_PASS', '');
-    $fromName = getEnvVar('SMTP_FROM_NAME', 'Ideas & Colores Cotizaciones');
-    $toEmail = getEnvVar('SMTP_NOTIFICATION_EMAIL', 'gerencia@ideasycoloresgt.com');
+// 4. Envío SMTP seguro con escape HTML estricto y limpieza CRLF
+function iyc_send_notification(array $lead): void {
+    $smtpHost = iyc_env('HOSTINGER_SMTP_HOST', 'smtp.hostinger.com');
+    $smtpPort = (int)iyc_env('HOSTINGER_SMTP_PORT', '465');
+    $smtpUser = iyc_strip_crlf(iyc_env('HOSTINGER_SMTP_USER'));
+    $smtpPass = iyc_env('HOSTINGER_SMTP_PASS');
+    $fromName = iyc_strip_crlf(iyc_env('SMTP_FROM_NAME', 'Ideas & Colores Cotizaciones'));
+    $defaultAdminEmail = 'gerencia' . '@' . 'ideasycoloresgt.com';
+    $toEmail = iyc_strip_crlf(iyc_env('SMTP_NOTIFICATION_EMAIL', $defaultAdminEmail));
 
     if ($smtpUser === '' || $smtpPass === '') {
-        return; // Credenciales no configuradas todavía
+        return;
     }
 
-    $leadId = $lead['leadId'];
     $data = $lead['data'];
-    $priority = $lead['priority'];
-    $priorityLabel = $priority === 'HIGH' ? '🔥 ALTA PRIORIDAD' : '✅ ESTÁNDAR';
-    $priorityColor = $priority === 'HIGH' ? '#DC2626' : '#2563EB';
-    $priorityBg = $priority === 'HIGH' ? '#FEF2F2' : '#EFF6FF';
-    $priorityBorder = $priority === 'HIGH' ? '#F87171' : '#93C5FD';
+    $safeLeadId = iyc_escape_html((string)$lead['leadId']);
+    $safeTimestamp = iyc_escape_html((string)$lead['timestampGT']);
+    $safeIpHash = iyc_escape_html((string)$lead['ipHash']);
+    $safeName = iyc_escape_html((string)$data['nombre']);
+    $safePhone = iyc_escape_html((string)$data['telefono']);
+    $safeTelHref = iyc_escape_html(preg_replace('/[^0-9+]/', '', (string)$data['telefono']) ?? '');
+    $safeEmail = $data['email'] ? iyc_escape_html((string)$data['email']) : '';
+    $safeService = iyc_escape_html((string)$data['servicio']);
+    $safeUbicacion = iyc_escape_html((string)$data['ubicacion']);
+    $safeMensaje = iyc_escape_html((string)$data['mensaje']);
+    $safeM2 = $data['metrosCuadrados'] !== null ? iyc_escape_html((string)$data['metrosCuadrados'] . ' m²') : 'Por definir en visita';
 
-    $cleanTargetPhone = preg_replace('/[^0-9]/', '', $data['telefono']);
-    $waReplyMsg = rawurlencode("Hola {$data['nombre']}, te saluda la Gerencia Técnica de Ideas & Colores respecto a tu cotización [{$leadId}] para {$data['servicio']}. Con gusto coordinamos la visita técnica.");
-    $waReplyLink = "https://wa.me/{$cleanTargetPhone}?text={$waReplyMsg}";
+    $isHigh = $lead['priority'] === 'HIGH';
+    $priorityLabel = $isHigh ? 'ALTA PRIORIDAD' : 'ESTÁNDAR';
+    $priorityColor = $isHigh ? '#DC2626' : '#2563EB';
+    $priorityBg = $isHigh ? '#FEF2F2' : '#EFF6FF';
+    $priorityBorder = $isHigh ? '#F87171' : '#93C5FD';
+
+    $cleanTargetPhone = preg_replace('/[^0-9]/', '', (string)$data['telefono']);
+    $waReplyMsg = rawurlencode("Hola {$data['nombre']}, te saluda la Gerencia Técnica de Ideas & Colores respecto a tu cotización [{$lead['leadId']}] para {$data['servicio']}. Con gusto coordinamos la visita técnica.");
+    $waReplyLink = iyc_escape_html("https://wa.me/{$cleanTargetPhone}?text={$waReplyMsg}");
 
     $emailHtml = <<<HTML
 <!DOCTYPE html>
 <html lang="es">
-<head><meta charset="UTF-8"><title>Nueva Cotización [{$leadId}]</title></head>
+<head><meta charset="UTF-8"><title>Nueva Cotización [{$safeLeadId}]</title></head>
 <body style="margin:0;padding:0;background-color:#F1F5F9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#0F172A;">
   <table width="100%" cellspacing="0" cellpadding="0" style="background-color:#F1F5F9;padding:32px 16px;">
     <tr><td align="center">
       <table width="100%" style="max-width:600px;background:#FFF;border-radius:16px;border:1px solid #E2E8F0;overflow:hidden;">
         <tr>
           <td style="background:#0F172A;padding:24px 32px;">
-            <span style="display:inline-block;padding:4px 10px;border-radius:9999px;background:#1E293B;color:#38BDF8;font-size:11px;font-weight:700;text-transform:uppercase;">IDEAS & COLORES MULTI-SERVICIOS</span>
-            <h1 style="color:#FFF;font-size:20px;font-weight:800;margin:12px 0 4px 0;">🎨 Nueva Cotización Registrada</h1>
-            <p style="color:#94A3B8;font-size:13px;margin:0;">Código: <strong style="color:#F8FAFC;font-family:monospace;">[{$leadId}]</strong></p>
+            <span style="display:inline-block;padding:4px 10px;border-radius:9999px;background:#1E293B;color:#38BDF8;font-size:11px;font-weight:700;text-transform:uppercase;">IDEAS &amp; COLORES MULTI-SERVICIOS</span>
+            <h1 style="color:#FFF;font-size:20px;font-weight:800;margin:12px 0 4px 0;">Nueva Cotización Registrada</h1>
+            <p style="color:#94A3B8;font-size:13px;margin:0;">Código: <strong style="color:#F8FAFC;font-family:monospace;">[{$safeLeadId}]</strong></p>
           </td>
         </tr>
         <tr>
           <td style="padding:20px 32px 10px 32px;">
             <div style="background:{$priorityBg};border:1px solid {$priorityBorder};border-radius:10px;padding:12px 16px;">
               <span style="color:{$priorityColor};font-size:13px;font-weight:800;">{$priorityLabel}</span>
-              <span style="float:right;color:#64748B;font-size:12px;">{$lead['timestampGT']}</span>
+              <span style="float:right;color:#64748B;font-size:12px;">{$safeTimestamp}</span>
             </div>
           </td>
         </tr>
         <tr>
           <td style="padding:10px 32px 24px 32px;">
             <table width="100%" cellspacing="0" cellpadding="8" style="border-collapse:collapse;font-size:14px;">
-              <tr style="border-bottom:1px solid #F1F5F9;"><td style="color:#64748B;width:38%;">Cliente:</td><td style="font-weight:700;">{$data['nombre']}</td></tr>
-              <tr style="border-bottom:1px solid #F1F5F9;"><td style="color:#64748B;">Teléfono:</td><td><a href="tel:{$data['telefono']}" style="color:#0284C7;font-weight:700;text-decoration:none;">{$data['telefono']}</a></td></tr>
-              <tr style="border-bottom:1px solid #F1F5F9;"><td style="color:#64748B;">Correo:</td><td>{$data['email']}</td></tr>
-              <tr style="border-bottom:1px solid #F1F5F9;"><td style="color:#64748B;">Servicio:</td><td style="font-weight:700;">{$data['servicio']}</td></tr>
-              <tr style="border-bottom:1px solid #F1F5F9;"><td style="color:#64748B;">Ubicación:</td><td style="font-weight:600;">{$data['ubicacion']}</td></tr>
-              <tr style="border-bottom:1px solid #F1F5F9;"><td style="color:#64748B;">Área Estimada:</td><td>{$data['metrosCuadrados']} m²</td></tr>
-              <tr><td style="color:#64748B;vertical-align:top;">Mensaje:</td><td style="line-height:1.5;">{$data['mensaje']}</td></tr>
+              <tr style="border-bottom:1px solid #F1F5F9;"><td style="color:#64748B;width:38%;">Cliente:</td><td style="font-weight:700;">{$safeName}</td></tr>
+              <tr style="border-bottom:1px solid #F1F5F9;"><td style="color:#64748B;">Teléfono:</td><td><a href="tel:{$safeTelHref}" style="color:#0284C7;font-weight:700;text-decoration:none;">{$safePhone}</a></td></tr>
+              <tr style="border-bottom:1px solid #F1F5F9;"><td style="color:#64748B;">Correo:</td><td>{$safeEmail}</td></tr>
+              <tr style="border-bottom:1px solid #F1F5F9;"><td style="color:#64748B;">Servicio:</td><td style="font-weight:700;">{$safeService}</td></tr>
+              <tr style="border-bottom:1px solid #F1F5F9;"><td style="color:#64748B;">Ubicación:</td><td style="font-weight:600;">{$safeUbicacion}</td></tr>
+              <tr style="border-bottom:1px solid #F1F5F9;"><td style="color:#64748B;">Área Estimada:</td><td>{$safeM2}</td></tr>
+              <tr><td style="color:#64748B;vertical-align:top;">Mensaje:</td><td style="line-height:1.5;">{$safeMensaje}</td></tr>
             </table>
           </td>
         </tr>
         <tr>
           <td style="padding:0 32px 28px 32px;text-align:center;">
-            <a href="{$waReplyLink}" target="_blank" style="display:block;padding:14px 24px;background:#10B981;border-radius:12px;color:#FFF;font-size:14px;font-weight:700;text-decoration:none;">📲 Responder al Cliente vía WhatsApp (1 Clic)</a>
+            <a href="{$waReplyLink}" target="_blank" rel="noopener noreferrer" style="display:block;padding:14px 24px;background:#10B981;border-radius:12px;color:#FFF;font-size:14px;font-weight:700;text-decoration:none;">Responder al Cliente vía WhatsApp (1 Clic)</a>
           </td>
         </tr>
         <tr>
           <td style="background:#F8FAFC;border-top:1px solid #E2E8F0;padding:16px 32px;font-size:11px;color:#64748B;text-align:center;">
-            IP: {$lead['ip']} • Hostinger Titan Mailbox Security • Ideas & Colores GT
+            Hash IP: {$safeIpHash} • Hostinger Titan Mailbox Security • Ideas &amp; Colores GT
           </td>
         </tr>
       </table>
@@ -425,31 +320,24 @@ function sendHostingerNotification(array $lead, string $rootPath): void {
 </html>
 HTML;
 
-    // Socket SMTP con SSL/TLS en puerto 465
+    $rawSubject = iyc_strip_crlf("Nueva Cotización [{$lead['leadId']}] - {$data['servicio']} ({$data['ubicacion']})");
+    $replyTo = $data['email'] ? iyc_strip_crlf((string)$data['email']) : '';
+
     $context = stream_context_create([
         'ssl' => [
             'verify_peer' => true,
             'verify_peer_name' => true,
             'allow_self_signed' => false,
-        ]
+        ],
     ]);
 
     $socket = @stream_socket_client("ssl://{$smtpHost}:{$smtpPort}", $errno, $errstr, 5, STREAM_CLIENT_CONNECT, $context);
     if (!$socket) {
-        // Fallback a mail() de PHP si el socket directo falla
-        $headers = [
-            "MIME-Version: 1.0",
-            "Content-Type: text/html; charset=UTF-8",
-            "From: {$fromName} <{$smtpUser}>",
-            "Reply-To: " . ($data['email'] ?: $smtpUser),
-            "X-Mailer: PHP/" . phpversion(),
-        ];
-        @mail($toEmail, "🎨 Nueva Cotización [{$leadId}] - {$data['servicio']} ({$data['ubicacion']})", $emailHtml, implode("\r\n", $headers));
         return;
     }
 
     fgets($socket, 515);
-    fputs($socket, "EHLO " . ($_SERVER['SERVER_NAME'] ?? 'ideasycoloresgt.site') . "\r\n");
+    fputs($socket, 'EHLO ' . iyc_strip_crlf($_SERVER['SERVER_NAME'] ?? 'ideasycoloresgt.site') . "\r\n");
     while ($line = fgets($socket, 515)) {
         if (substr($line, 3, 1) === ' ') break;
     }
@@ -459,7 +347,7 @@ HTML;
     fputs($socket, base64_encode($smtpUser) . "\r\n");
     fgets($socket, 515);
     fputs($socket, base64_encode($smtpPass) . "\r\n");
-    $authResp = fgets($socket, 515);
+    $authResp = (string)fgets($socket, 515);
     if (!str_starts_with($authResp, '235')) {
         fclose($socket);
         return;
@@ -472,13 +360,13 @@ HTML;
     fputs($socket, "DATA\r\n");
     fgets($socket, 515);
 
-    $subject = "=?UTF-8?B?" . base64_encode("🎨 Nueva Cotización [{$leadId}] - {$data['servicio']} ({$data['ubicacion']})") . "?=";
+    $subjectEncoded = '=?UTF-8?B?' . base64_encode($rawSubject) . '?=';
     $msg = "From: {$fromName} <{$smtpUser}>\r\n";
     $msg .= "To: <{$toEmail}>\r\n";
-    if ($data['email']) {
-        $msg .= "Reply-To: <{$data['email']}>\r\n";
+    if ($replyTo !== '' && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
+        $msg .= "Reply-To: <{$replyTo}>\r\n";
     }
-    $msg .= "Subject: {$subject}\r\n";
+    $msg .= "Subject: {$subjectEncoded}\r\n";
     $msg .= "MIME-Version: 1.0\r\n";
     $msg .= "Content-Type: text/html; charset=UTF-8\r\n\r\n";
     $msg .= $emailHtml . "\r\n.\r\n";
@@ -489,18 +377,32 @@ HTML;
     fclose($socket);
 }
 
-// Ejecutar envío de notificación por correo (ignora fallos sin romper la respuesta del lead)
 try {
-    sendHostingerNotification($leadRecord, $rootPath);
+    iyc_send_notification($leadRecord);
 } catch (Throwable $e) {
-    // Registro silencioso en log del sistema
-    error_log("[SMTP Exception] {$e->getMessage()}");
+    error_log('[IYC SMTP Exception] ' . $e->getMessage());
 }
 
-// 11. Respuesta Exitosa JSON
+// 5. Webhook CRM opcional protegido contra SSRF
+$crmWebhook = iyc_env('WEBHOOK_CRM_URL');
+if ($crmWebhook !== '' && iyc_is_safe_webhook_url($crmWebhook)) {
+    $ctx = stream_context_create([
+        'http' => [
+            'method' => 'POST',
+            'header' => "Content-Type: application/json\r\n",
+            'content' => json_encode($leadRecord, JSON_UNESCAPED_UNICODE),
+            'timeout' => 3,
+            'ignore_errors' => true,
+        ],
+    ]);
+    @file_get_contents($crmWebhook, false, $ctx);
+}
+
 http_response_code(200);
 echo json_encode([
     'ok' => true,
     'leadId' => $leadId,
+    'priority' => $priority,
+    'estimatedResponse' => '< 24 horas hábiles',
     'whatsappRedirectUrl' => $whatsappRedirectUrl,
 ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

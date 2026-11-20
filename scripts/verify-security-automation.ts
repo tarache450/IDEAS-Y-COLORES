@@ -211,8 +211,9 @@ async function main() {
     const xfo = Boolean(homeProbe.headers.get('x-frame-options'));
     const xcto = Boolean(homeProbe.headers.get('x-content-type-options'));
     const csp = Boolean(homeProbe.headers.get('content-security-policy'));
+    const coop = homeProbe.headers.get('cross-origin-opener-policy') === 'same-origin';
 
-    const sensitivePaths = ['/.env', '/.git/config', '/tsconfig.json', '/package-lock.json'];
+    const sensitivePaths = ['/.env', '/.git/config', '/tsconfig.json', '/package-lock.json', '/api/bootstrap.php'];
     const exposed: string[] = [];
     for (const p of sensitivePaths) {
       const r = await probeUrl(`${TARGET_URL}${p}`);
@@ -221,14 +222,43 @@ async function main() {
         exposed.push(`${p}(200)`);
       }
     }
-    const healthProbe = await probeUrl(`${TARGET_URL}/api/health`);
 
-    const liveOk = homeProbe.status === 200 && hsts && xfo && xcto && csp && exposed.length === 0 && healthProbe.status === 200;
+    const healthProbe = await probeUrl(`${TARGET_URL}/api/health`);
+    const catalogProbe = await probeUrl(`${TARGET_URL}/api/catalog`);
+
+    let leadsMethodStatus = 0;
+    let adminAuthStatus = 0;
+    let calcValidStatus = 0;
+    try {
+      const lm = await fetch(`${TARGET_URL}/api/leads`, { method: 'GET' });
+      leadsMethodStatus = lm.status;
+    } catch { leadsMethodStatus = 0; }
+    try {
+      const ad = await fetch(`${TARGET_URL}/api/admin/leads`, { method: 'GET' });
+      adminAuthStatus = ad.status;
+    } catch { adminAuthStatus = 0; }
+    try {
+      const calcRes = await fetch(`${TARGET_URL}/api/calculate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Origin: TARGET_URL },
+        body: JSON.stringify({ areaM2: 100, coats: 2, surfaceType: 'liso' }),
+      });
+      calcValidStatus = calcRes.status;
+    } catch { calcValidStatus = 0; }
+
+    const apiChecksOk =
+      healthProbe.status === 200 &&
+      catalogProbe.status === 200 &&
+      calcValidStatus === 200 &&
+      leadsMethodStatus === 405 &&
+      adminAuthStatus === 401;
+
+    const liveOk = homeProbe.status === 200 && hsts && xfo && xcto && csp && coop && exposed.length === 0 && apiChecksOk;
     rows.push({
       id: 'SEC-08',
-      area: 'Cabeceras & Rutas Sensibles en Producción',
+      area: 'Cabeceras, API Backend & Rutas Sensibles en Producción',
       status: liveOk ? 'PASS' : exposed.length > 0 ? 'FAIL' : 'WARN',
-      detail: `HTTP=${homeProbe.status} | HSTS=${hsts} XFO=${xfo} XCTO=${xcto} CSP=${csp} | /api/health=${healthProbe.status} | archivos_expuestos=${exposed.length === 0 ? 'ninguno' : exposed.join(',')}`,
+      detail: `HTTP=${homeProbe.status} | HSTS=${hsts} XFO=${xfo} XCTO=${xcto} CSP=${csp} COOP=${coop} | health=${healthProbe.status} catalog=${catalogProbe.status} calc=${calcValidStatus} leadsGET=${leadsMethodStatus} adminUnauth=${adminAuthStatus} | expuestos=${exposed.length === 0 ? 'ninguno' : exposed.join(',')}`,
     });
   }
 

@@ -212,7 +212,7 @@ export const Footer: React.FC<FooterProps> = ({
                 <a
                   href={buildSafeWhatsAppUrl(
                     BUSINESS_INFO.whatsappNumber,
-                    'Hola Ideas & Colores, quiero cotizar mi proyecto.'
+                    'Hola Ideas & Colores, solicito asesoría técnica desde el pie de página.'
                   )}
                   target="_blank"
                   rel="noopener noreferrer"

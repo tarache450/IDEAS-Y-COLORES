@@ -1,6 +1,10 @@
 import nodemailer, { type Transporter } from 'nodemailer';
 import { StoredLead } from './leadStorage';
-import { normalizeGuatemalaPhone } from '../validators/leadSchema';
+import {
+  normalizeGuatemalaPhone,
+  escapeHtml,
+  sanitizeHeaderValue,
+} from '../validators/leadSchema';
 
 /**
  * Obtiene la configuración SMTP desde variables de entorno con fallbacks para Hostinger
@@ -96,13 +100,24 @@ export async function sendLeadNotificationEmail(lead: StoredLead): Promise<{ sen
   const priorityBorder = lead.priority === 'HIGH' ? '#F87171' : '#93C5FD';
   const priorityLabel = lead.priority === 'HIGH' ? '🔥 ALTA PRIORIDAD (Comercial / Gran Escala)' : '✅ ESTÁNDAR';
 
+  const safeLeadId = escapeHtml(lead.leadId);
+  const safeTimestamp = escapeHtml(lead.timestampGT);
+  const safeName = escapeHtml(lead.data.nombre);
+  const safePhoneDisplay = escapeHtml(phoneInfo.valid ? phoneInfo.normalized : lead.data.telefono);
+  const safePhoneTel = escapeHtml(lead.data.telefono.replace(/[^0-9+]/g, ''));
+  const safeEmail = lead.data.email ? escapeHtml(lead.data.email) : '';
+  const safeService = escapeHtml(lead.data.servicio);
+  const safeLocation = escapeHtml(lead.data.ubicacion);
+  const safeMensaje = lead.data.mensaje ? escapeHtml(lead.data.mensaje) : '';
+  const safeIpHash = escapeHtml(lead.ipHash || 'n/a');
+
   const htmlContent = `
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nueva Cotización [${lead.leadId}]</title>
+  <title>Nueva Cotización [${safeLeadId}]</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #F1F5F9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #0F172A;">
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #F1F5F9; padding: 32px 16px;">
@@ -113,13 +128,13 @@ export async function sendLeadNotificationEmail(lead: StoredLead): Promise<{ sen
           <tr>
             <td style="background-color: #0F172A; padding: 24px 32px; text-align: left;">
               <span style="display: inline-block; padding: 4px 10px; border-radius: 9999px; background-color: #1E293B; color: #38BDF8; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">
-                IDEAS & COLORES MULTI-SERVICIOS
+                IDEAS &amp; COLORES MULTI-SERVICIOS
               </span>
               <h1 style="color: #FFFFFF; font-size: 20px; font-weight: 800; margin: 12px 0 4px 0; letter-spacing: -0.02em;">
-                🎨 Nueva Cotización Registrada
+                Nueva Cotización Registrada
               </h1>
               <p style="color: #94A3B8; font-size: 13px; margin: 0;">
-                Código de Seguimiento: <strong style="color: #F8FAFC; font-family: monospace;">[${lead.leadId}]</strong>
+                Código de Seguimiento: <strong style="color: #F8FAFC; font-family: monospace;">[${safeLeadId}]</strong>
               </p>
             </td>
           </tr>
@@ -132,7 +147,7 @@ export async function sendLeadNotificationEmail(lead: StoredLead): Promise<{ sen
                   ${priorityLabel}
                 </span>
                 <span style="float: right; color: #64748B; font-size: 12px;">
-                  ${lead.timestampGT}
+                  ${safeTimestamp}
                 </span>
               </div>
             </td>
@@ -144,38 +159,38 @@ export async function sendLeadNotificationEmail(lead: StoredLead): Promise<{ sen
               <table width="100%" cellspacing="0" cellpadding="8" style="border-collapse: collapse; font-size: 14px;">
                 <tr style="border-bottom: 1px solid #F1F5F9;">
                   <td style="color: #64748B; font-weight: 600; width: 38%;">Cliente:</td>
-                  <td style="color: #0F172A; font-weight: 700;">${lead.data.nombre}</td>
+                  <td style="color: #0F172A; font-weight: 700;">${safeName}</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #F1F5F9;">
                   <td style="color: #64748B; font-weight: 600;">Teléfono / WhatsApp:</td>
                   <td style="color: #0F172A; font-weight: 700;">
-                    <a href="tel:${lead.data.telefono}" style="color: #0284C7; text-decoration: none;">${phoneInfo.valid ? phoneInfo.normalized : lead.data.telefono}</a>
+                    <a href="tel:${safePhoneTel}" style="color: #0284C7; text-decoration: none;">${safePhoneDisplay}</a>
                   </td>
                 </tr>
                 <tr style="border-bottom: 1px solid #F1F5F9;">
                   <td style="color: #64748B; font-weight: 600;">Correo Electrónico:</td>
                   <td style="color: #0F172A;">
-                    ${lead.data.email ? `<a href="mailto:${lead.data.email}" style="color: #0284C7; text-decoration: none;">${lead.data.email}</a>` : '<span style="color: #94A3B8;">No especificado</span>'}
+                    ${safeEmail ? `<a href="mailto:${safeEmail}" style="color: #0284C7; text-decoration: none;">${safeEmail}</a>` : '<span style="color: #94A3B8;">No especificado</span>'}
                   </td>
                 </tr>
                 <tr style="border-bottom: 1px solid #F1F5F9;">
                   <td style="color: #64748B; font-weight: 600;">Servicio Solicitado:</td>
-                  <td style="color: #0F172A; font-weight: 700;">${lead.data.servicio}</td>
+                  <td style="color: #0F172A; font-weight: 700;">${safeService}</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #F1F5F9;">
                   <td style="color: #64748B; font-weight: 600;">Ubicación del Proyecto:</td>
-                  <td style="color: #0F172A; font-weight: 600;">${lead.data.ubicacion}</td>
+                  <td style="color: #0F172A; font-weight: 600;">${safeLocation}</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #F1F5F9;">
                   <td style="color: #64748B; font-weight: 600;">Área Estimada:</td>
                   <td style="color: #0F172A;">
-                    ${lead.data.metrosCuadrados ? `<strong>${lead.data.metrosCuadrados} m²</strong>` : '<span style="color: #94A3B8;">Por determinar en visita</span>'}
+                    ${lead.data.metrosCuadrados !== null && lead.data.metrosCuadrados !== undefined ? `<strong>${lead.data.metrosCuadrados} m²</strong>` : '<span style="color: #94A3B8;">Por determinar en visita</span>'}
                   </td>
                 </tr>
                 <tr>
                   <td style="color: #64748B; font-weight: 600; vertical-align: top;">Descripción / Mensaje:</td>
                   <td style="color: #334155; line-height: 1.5;">
-                    ${lead.data.mensaje ? lead.data.mensaje : '<em style="color: #94A3B8;">Sin mensaje adicional</em>'}
+                    ${safeMensaje ? safeMensaje : '<em style="color: #94A3B8;">Sin mensaje adicional</em>'}
                   </td>
                 </tr>
               </table>
@@ -189,13 +204,13 @@ export async function sendLeadNotificationEmail(lead: StoredLead): Promise<{ sen
                 <tr>
                   <td align="center" style="background-color: #10B981; border-radius: 12px;">
                     <a href="${replyWhatsappLink}" target="_blank" rel="noopener noreferrer" style="display: block; padding: 14px 24px; color: #FFFFFF; font-size: 14px; font-weight: 700; text-decoration: none; letter-spacing: 0.02em;">
-                      📲 Responder al Cliente vía WhatsApp (1 Clic)
+                      Responder al Cliente vía WhatsApp (1 Clic)
                     </a>
                   </td>
                 </tr>
               </table>
               <p style="color: #94A3B8; font-size: 11px; margin-top: 10px;">
-                Incluye automáticamente el saludo oficial y el código de seguimiento [${lead.leadId}].
+                Incluye automáticamente el saludo oficial y el código de seguimiento [${safeLeadId}].
               </p>
             </td>
           </tr>
@@ -203,7 +218,7 @@ export async function sendLeadNotificationEmail(lead: StoredLead): Promise<{ sen
           <!-- Technical Footer -->
           <tr>
             <td style="background-color: #F8FAFC; border-top: 1px solid #E2E8F0; padding: 16px 32px; font-size: 11px; color: #64748B; text-align: center;">
-              IP de Origen: ${lead.ip} • Hostinger Titan Mailbox Security • Sistema Ideas & Colores
+              Hash IP: ${safeIpHash} • Hostinger Titan Mailbox Security • Sistema Ideas &amp; Colores
             </td>
           </tr>
         </table>
@@ -215,11 +230,18 @@ export async function sendLeadNotificationEmail(lead: StoredLead): Promise<{ sen
   `.trim();
 
   try {
+    const safeFromName = sanitizeHeaderValue(config.fromName, 100);
+    const safeSubject = sanitizeHeaderValue(
+      `Nueva Cotización [${lead.leadId}] - ${lead.data.servicio} (${lead.data.ubicacion})`,
+      180
+    );
+    const safeReplyTo = lead.data.email ? sanitizeHeaderValue(lead.data.email, 254) : undefined;
+
     const info = await transporter.sendMail({
-      from: `"${config.fromName}" <${config.user}>`,
+      from: `"${safeFromName}" <${config.user}>`,
       to: config.toEmail,
-      replyTo: lead.data.email || undefined,
-      subject: `🎨 Nueva Cotización [${lead.leadId}] - ${lead.data.servicio} (${lead.data.ubicacion})`,
+      replyTo: safeReplyTo,
+      subject: safeSubject,
       html: htmlContent,
     });
 
